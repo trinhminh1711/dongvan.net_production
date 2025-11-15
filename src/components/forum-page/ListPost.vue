@@ -197,7 +197,7 @@ function goToProfile(params) {
     router.push({ name: 'user', params: { id: params } })
 }
 function convertJsonData(data) {
-    return JSON.parse(data)
+    return (data)
 }
 watch(currentPage, (newPage) => {
     getAllPostByTopic(newPage)

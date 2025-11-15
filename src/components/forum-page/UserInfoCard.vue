@@ -7,7 +7,7 @@
             <div>
                 <p> <span class="fw-bold text-color_primary">{{ dataUser.username }}</span><span style="color: #667085;"> (ID: 2025{{ dataUser.user_id }})</span></p>
                 <p style="color: #667085;">Người đọc cấp 2</p>
-                 <p style="color: #667085;">Ngày tham gia: {{ dataUser.created_at.split("T")[0] }}</p>
+                 
             </div>
         </div>
         <div style="background-color: white;" class="d-flex gap-2 justify-content-between px-2 py-2">
