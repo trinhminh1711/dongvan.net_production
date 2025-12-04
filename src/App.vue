@@ -26,10 +26,14 @@ const dialogVisible = ref(false)
     <header v-if="route.name !== 'chap-detail'" class="pt-3">
       <Header />
     </header>
-    <main class="mt-3 main">
+    <main :class="[
+      !['payment', 'login', 'chap-detail'].includes(route.name) ? 'mt-mid-4 pb-4' : '',
+      !['payment', 'login', 'chap-detail'].includes(route.name) ? 'main' : '',
+      route.name === 'payment' ? 'payment-bg' : ''
+    ]">
       <RouterView />
     </main>
-    <footer v-if="route.name !== 'chap-detail'" class="bg-footer border-top mt-4">
+    <footer style="margin-top: 100px;" v-if="route.name !== 'chap-detail'" class="bg-footer border-top">
       <Footer />
     </footer>
   </div>
@@ -51,8 +55,12 @@ const dialogVisible = ref(false)
   /* chiếm hết không gian còn lại giữa header và footer */
 }
 
+.payment-bg {
+  background-color: #F9FAFB
+}
+
 .bg-footer {
-  background-color: #E7E7E7
+  background-color: #E8F8F8
 }
 
 .pb-8 {
@@ -67,5 +75,16 @@ const dialogVisible = ref(false)
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+.mt-mid-4 {
+  padding-top: 40px;
+
+}
+@media (max-width: 768px) {
+.mt-mid-4 {
+  padding-top: 40px;
+
+}
 }
 </style>

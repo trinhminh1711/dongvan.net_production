@@ -6,11 +6,26 @@
             <div class="edit-background">
                 <p class="fw-bold">Nền</p>
                 <div class="d-flex gap-2 mt-3">
-                    <button @click="selectTheme('white', 'black')"
-                        style="background-color: white; border: solid 1px;"></button>
-                    <button @click="selectTheme('black', 'white')" style="background-color: black"></button>
-                    <button @click="selectTheme('#1e1e1e', '#f5f5f5')" style="background-color: #E0E0E0"></button>
-                    <button @click="selectTheme('#fffae6', '#333')" style="background-color: #FFF3D3"></button>
+                    <button class="btn-edit-ui" :class="{ active: selectedTheme === 'white' }"
+                        @click="selectTheme('white', 'black')"
+                        style="background-color: white; border: solid 1px #E4E7EC;">
+                        <img width="24px" src="@/assets/icon/check-select.png" alt="">
+                    </button>
+
+                    <button class="btn-edit-ui" :class="{ active: selectedTheme === 'black' }"
+                        @click="selectTheme('black', 'white')" style="background-color: black">
+                        <img width="24px" src="@/assets/icon/check-select.png" alt="">
+                    </button>
+
+                    <button class="btn-edit-ui" :class="{ active: selectedTheme === '#E0E0E0' }"
+                        @click="selectTheme('#E0E0E0', '#f5f5f5')" style="background-color: #E0E0E0">
+                        <img width="24px" src="@/assets/icon/check-select.png" alt="">
+                    </button>
+
+                    <button class="btn-edit-ui" :class="{ active: selectedTheme === '#FFF3D3' }"
+                        @click="selectTheme('#FFF3D3', '#333')" style="background-color: #FFF3D3">
+                        <img width="24px" src="@/assets/icon/check-select.png" alt="">
+                    </button>
                 </div>
             </div>
         </div>
@@ -18,13 +33,15 @@
         <div class="edit-ui mt-5">
             <p class="fw-bold">Dàn trang</p>
             <div class="d-flex gap-2 align-items-center justify-content-between">
-                <div @click="emit('set-layout', false)" class="ui-dantrang">
+                <div @click="setLayout(false)" class="ui-dantrang" :class="{ active: selectedLayout === false }">
                     <svg width="26" height="18" viewBox="0 0 26 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M1 9H25M1 1H25M1 17H25" stroke="#344054" stroke-width="2" stroke-linecap="round"
                             stroke-linejoin="round" />
                     </svg>
                 </div>
-                <div @click="emit('set-layout', true)" class="ui-dantrang">
+
+                <!-- layout 2 cột -->
+                <div @click="setLayout(true)" class="ui-dantrang" :class="{ active: selectedLayout === true }">
                     <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M2 16H14M2 8H14M2 24H14" stroke="#344054" stroke-width="2" stroke-linecap="round"
                             stroke-linejoin="round" />
@@ -40,16 +57,39 @@
                 <button @click="adjustFontSize('decrease')" class="fw-bold">A-</button>
                 <button @click="adjustFontSize('increase')" class="fw-bold">A+</button>
             </div>
-            <button @click="selectFont('')">Mặc định</button>
-            <button style="font-family: 'Times New Roman', Times, serif;"
-                @click="selectFont('Times New Roman, serif')">Times New Roman</button>
-            <button style="font-family: Arial, Helvetica, sans-serif;"
-                @click="selectFont('Arial, sans-serif')">Arial</button>
-            <button style="font-family: Georgia, 'Times New Roman', Times, serif;"
-                @click="selectFont('Georgia, Times New Roman, serif')">Georgia</button>
-            <button style="font-family: 'Courier New', Courier, monospace;"
-                @click="selectFont('Courier New, Courier, monospace')">Courier</button>
-            <button @click="selectFont('Playfair Display, serif')">Playfair Display</button>
+            <div class="edit-font-style d-flex flex-column">
+                <button class="" @click="selectFont('')" :class="{ active: selectedFont === '' }">
+                    Mặc định
+                </button>
+
+                <button style="font-family: 'Times New Roman', Times, serif;"
+                    @click="selectFont('Times New Roman, serif')"
+                    :class="{ active: selectedFont === 'Times New Roman, serif' }">
+                    Times New Roman
+                </button>
+
+                <button style="font-family: Arial, Helvetica, sans-serif;" @click="selectFont('Arial, sans-serif')"
+                    :class="{ active: selectedFont === 'Arial, sans-serif' }">
+                    Arial
+                </button>
+
+                <button style="font-family: Georgia, 'Times New Roman', Times, serif;"
+                    @click="selectFont('Georgia, Times New Roman, serif')"
+                    :class="{ active: selectedFont === 'Georgia, Times New Roman, serif' }">
+                    Georgia
+                </button>
+
+                <button style="font-family: 'Courier New', Courier, monospace;"
+                    @click="selectFont('Courier New, Courier, monospace')"
+                    :class="{ active: selectedFont === 'Courier New, Courier, monospace' }">
+                    Courier
+                </button>
+
+                <button style="font-family: 'Playfair Display', serif;" @click="selectFont('Playfair Display, serif')"
+                    :class="{ active: selectedFont === 'Playfair Display, serif' }">
+                    Playfair Display
+                </button>
+            </div>
         </div>
     </div>
 </template>
@@ -61,21 +101,30 @@ const backgroundColor = ref("white");
 const fontSize = ref("16px");
 const fontFamily = ref("Arial");
 const value1 = ref(false)
+const selectedLayout = ref(false)
+const selectedTheme = ref('white')
+const selectedFont = ref('')
 function handleChange(val) {
-  // val = true nếu bật, false nếu tắt
-  emit('set-layout', val)
+    // val = true nếu bật, false nếu tắt
+    emit('set-layout', val)
 }
 const changeBackground = (color) => {
     backgroundColor.value = color;
 };
 function selectFont(font) {
     emit("changeFont", font);
+    selectedFont.value = font
 }
 function adjustFontSize(action) {
     emit("changeFontSize", action); // action = "increase" hoặc "decrease"
 }
 function selectTheme(bg, color) {
+    selectedTheme.value = bg
     emit("changeTheme", { background: bg, text: color });
+}
+function setLayout(value) {
+    selectedLayout.value = value     // cập nhật active
+    emit('set-layout', value)        // emit ra ngoài
 }
 // Đổi kích thước chữ (toggle nhỏ ↔ to)
 const toggleFontSize = () => {
@@ -112,8 +161,8 @@ const toggleFontSize = () => {
     color: #344054;
     margin: 5px 0;
 }
-.ui-dantrang
-{
+
+.ui-dantrang {
     width: 50%;
     display: flex;
     margin-top: 20px;
@@ -122,5 +171,34 @@ const toggleFontSize = () => {
     height: 50px;
     align-items: center;
     justify-content: center;
+}
+
+.btn-edit-ui {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-edit-ui img {
+    display: none;
+}
+
+.btn-edit-ui.active img {
+    display: block;
+}
+.edit-font-style button
+{
+    font-size: 18px;
+}
+.edit-font-style button.active
+{
+ border: 2px solid #0CA876 !important;
+}
+.btn-edit-ui.active,
+.ui-dantrang.active
+{
+    border: 2px solid #0CA876 !important;
+
+
 }
 </style>

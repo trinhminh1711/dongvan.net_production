@@ -3,7 +3,7 @@
         <LoadingSpiner :show="loading" />
     </div>
     <div style="margin-top: -15px;"
-        :style="{ backgroundColor: backgroundColor, color: textColor, transition: 'all 0.3s ease' }" v-if="!loading">
+        :style="{ backgroundColor: backgroundColor, transition: 'all 0.3s ease' }" v-if="!loading">
         <div class="tab-bar">
             <button class="hover_link" @click="goBack"><el-icon style="color: white; font-size: 24px;">
                     <ArrowLeft />
@@ -12,22 +12,22 @@
             <h4 @click="gotoStory(chapterData?.story_id)" class="text-white fw-bold text-md hover-link">{{
                 chapterData?.story_title }}</h4>
             <div class="button-function">
-                <button :class="{ 'yellow-filter': isBookmark }" class="hover_link" @click="addBookMark()"><img
+                <button :class="{ 'yellow-filter': Bookmarked }" class="hover_link cursor-pointer" @click="addBookMark()"><img
                         style="max-width: 40px;" src="@/assets/icon/bookmark-add.png" alt=""></img></button>
-                <button @click="drawer = true, showOption = true"><img style="max-width: 40px;"
+                <button class="cursor-pointer" @click="drawer = true, showOption = true"><img style="max-width: 40px;"
                         src="@/assets/icon/icon-list.png" alt=""></img></button>
-                <button @click="drawer = true, showOption = false"><img style="max-width: 40px;"
+                <button class="cursor-pointer" @click="drawer = true, showOption = false"><img style="max-width: 40px;"
                         src="@/assets/icon/icon-fontsize.png" alt=""></img></button>
-                <button @click="toggleFullScreen"><img style="max-width: 40px;" src="@/assets/icon/icon-maximize.png"
+                <button class="cursor-pointer" @click="toggleFullScreen"><img style="max-width: 40px;" src="@/assets/icon/icon-maximize.png"
                         alt=""></img></button>
             </div>
         </div>
         <div style="padding-bottom: 140px;" class="container mt-3">
-            <div class="story story-content" :class="['story-content', { 'two-column': isTwoColumn }]">
+            <div :style="{color: textColor}" class="story" :class="['story-content', { 'two-column': isTwoColumn }]">
                 <div :style="{ fontFamily: fontFamily, fontSize: fontSize + 'px', marginTop: '20px' }"
                     v-html="chapterData?.content"></div>
             </div>
-            <div v-if="!IsPurchased">
+            <div v-if="!IsPurchased && isVip">
                 <div class="unlock-chapter">
                     <img src="@/assets/icon/lock.png" alt="">
                 </div>
@@ -84,14 +84,14 @@
                 </div>
             </div>
         </div>
-        <el-drawer v-model="drawer" direction="rtl" size="350px">
+        <el-drawer v-model="drawer" direction="rtl" size="400px">
             <template #header>
                 <div class="flex items-center justify-between w-full">
                     <!-- <h3 class="text-lg fw-bold">Danh sách</h3> -->
                 </div>
             </template>
             <MenuBar :user-id="auth.userId" :storyId="Number(route.params.id)" :chapterId="Number(route.params.chapId)"
-                @update:isBookmark="isBookmark = $event" v-show="showOption" />
+                @update:isBookmark="isBookmark = $event" v-show="showOption" :bookmark-value="listBookMark" />
             <MenuEditUI @set-layout="setLayout" :isTwoColumn="isTwoColumn" @change-font="handleFontChange"
                 @changeTheme="handleTheme" @changeFontSize="handleFontSize" v-if="!showOption" />
         </el-drawer>
@@ -159,6 +159,7 @@ const drawer = ref(false);
 const cointUser = ref();
 const chapterData = ref(null)
 const loginModal = useLoginModal()
+const isVip = ref(1)
 const IsPurchased = ref(false)
 const loading = ref(true);
 const chapterNumber = ref();
@@ -170,6 +171,8 @@ const textColor = ref("black");
 const showOption = ref(false)
 const fontFamily = ref("");
 const isBookmark = ref(false);
+const listBookMark = ref()
+const Bookmarked = ref(false);
 const fontSize = ref(18); // px
 const liveTimeReadStory = ref();
 const startTime = ref(null)
@@ -189,6 +192,7 @@ async function fetchChapter() {
         const res = await getChapterWithId(storyId, chapterId, auth.userId)
         chapterData.value = res.data
         IsPurchased.value = res.IsPurchased
+        isVip.value = res.data.is_vip
         required_time_seconds.value = (res.data.word_count / 1000) * 2
     } catch (err) {
         console.error("Lỗi API:", err);
@@ -256,7 +260,14 @@ function toggleFullScreen() {
         document.exitFullscreen();
     }
 }
-
+async function getBookMark() {
+    const res = await getReadingProgress(auth.userId, route.params.id)
+    listBookMark.value = res.data
+    Bookmarked.value = isBookmarked(res.data, route.params.chapId)
+}
+function isBookmarked(bookmarks, currentChapterId) {
+  return Array.isArray(bookmarks) && bookmarks.some(item => item.chapter_id == currentChapterId);
+}
 async function unlockChap(chapter) {
     if (auth.userId) {
         const listChap = [chapter]
@@ -350,7 +361,17 @@ async function addBookMark() {
             chapter_id: chapterId,
             scroll: window.scrollY,
         })
-        toast.success("Đã lưu dấu trang");
+        await getBookMark();
+        if(Bookmarked.value)
+        {
+            toast.success("Đã lưu dấu trang");
+        }
+        else
+        {
+            toast.success("Đã xóa dấu trang");
+        }
+
+
     }
     else {
         toast.info("Bạn cần đăng nhập");
@@ -449,6 +470,7 @@ onMounted(async () => {
     await updateReadingUser()
     await fetchChapter();
     await getChaptersAround()
+    await getBookMark();
     scrollToBookmark()
     const res = await getUserInfo(auth.userId);
     cointUser.value = res.coin_balance
@@ -550,7 +572,7 @@ nextTick(() => {
 .unlock-chapter img {
     position: relative;
     z-index: 10;
-    background-color: #AEAEAE;
+    background-color: #EEEEEE;
     padding: 10px;
     border-radius: 50%;
     width: 50px;
@@ -564,7 +586,7 @@ nextTick(() => {
     width: 100%;
     height: 2px;
     top: 50%;
-    background-color: #AEAEAE;
+    background-color: #EEEEEE;
 }
 
 .unlock-span {
@@ -575,11 +597,12 @@ nextTick(() => {
 
 .unlock-span span:hover {
     cursor: pointer;
+    border: solid 1px #AEAEAE;
 }
 
 .unlock-span span {
     margin: 0 20px;
-    border: solid 1px #AEAEAE;
+    border: solid 1px #E4E7EC;
     padding: 5px 20px;
     border-radius: 30px;
     display: flex;
@@ -644,6 +667,6 @@ nextTick(() => {
 }
 
 .yellow-filter {
-    filter: sepia(1) saturate(8) hue-rotate(10deg) brightness(0.9);
+filter: sepia(1) saturate(8) hue-rotate(36deg) brightness(1.1);
 }
 </style>

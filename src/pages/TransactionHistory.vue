@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="d-flex align-items-center justify-content-between mt-4">
-            <h2>Tang diệp hiện có {{ auth.user.coin_balance }} <img src="@/assets/icon/tamdiep-icon.png">
+            <h2>Tang diệp hiện có: {{ auth.user.coin_balance }} <img src="@/assets/icon/tamdiep-icon.png">
             </h2>
             <div class="filter-container">
                 <el-date-picker v-model="dateRange" type="daterange" range-separator="đến"
@@ -10,9 +10,9 @@
             </div>
         </div>
         <div class="mt-4">
-            <el-table v-if="tableData.length" :data="tableData" style="width: 100%">
+            <el-table  class="custom-table" v-if="tableData.length" :data="tableData" style="width: 100%">
                 <el-table-column prop="id" label="ID" width="180" />
-                <el-table-column prop="created_at" label="Thời gian" width="180">
+                <el-table-column prop="created_at" label="Thời gian" width="300">
                     <template #default="{ row }">
                         {{ formatDate(row.created_at) }}
                     </template>
@@ -91,4 +91,25 @@ onMounted(() => {
 })
 </script>
 
-<style scoped></style>
+<style scoped>
+.custom-table ::v-deep(.el-table__header th) {
+  background-color: #F9FAFB;  /* hoặc #2f2f2f tuỳ tone */
+  color: #344054;
+  font-weight: 600;
+   height: 56px;
+}
+.custom-table ::v-deep(.el-table__cell) {
+  padding: 12px 16px; /* tăng padding để row cao hơn, gọn hơn height cứng */
+  vertical-align: middle;
+}
+/* ✅ Thêm border và bo góc cho bảng */
+.custom-table {
+  border: 1px solid #E4E7EC;
+  border-radius: 8px;
+  overflow: hidden; /* để border-radius áp dụng cả header + body */
+}
+
+/* ✅ Viền giữa các ô (nếu muốn rõ hơn) */
+.custom-table ::v-deep(.el-table__cell) {
+  border-color: #E4E7EC; /* màu viền giữa các ô */
+}</style>

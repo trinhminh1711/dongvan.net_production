@@ -2,38 +2,44 @@
     <el-form ref="ruleFormRef" style="max-width: 800px" :model="ruleForm" status-icon :rules="rules" label-width="auto"
         class="demo-ruleForm">
         <el-form-item prop="userName">
-            <el-input v-model="ruleForm.userName" placeholder="Tên tài khoản" type="text" autocomplete="off">
+            <el-input :style="{ height: '40px' }" v-model="ruleForm.userName" placeholder="Tên tài khoản" type="text"
+                autocomplete="off">
                 <template #prefix>
-                    <el-icon style="color:black">
-                        <User />
-                    </el-icon>
+                    <img src="@/assets/icon/icon-user-2.svg" alt="">
                 </template>
             </el-input>
         </el-form-item>
         <el-form-item prop="email">
-            <el-input v-model="ruleForm.email" placeholder="Email">
+            <el-input :style="{ height: '40px' }" v-model="ruleForm.email" placeholder="Email">
                 <template #prefix>
-                    <el-icon style="color:black">
-                        <Message />
-                    </el-icon></template>
+                    <img src="@/assets/icon/icon-email.svg" alt="" /></template>
             </el-input>
         </el-form-item>
         <el-form-item prop="password">
-            <el-input v-model="ruleForm.password" placeholder="Mật khẩu" type="password" autocomplete="off">
+            <el-input v-model="ruleForm.password" :type="showPassword ? 'text' : 'password'" placeholder="Mật khẩu"
+                autocomplete="off" :style="{ height: '40px' }">
+                <!-- Icon đầu -->
                 <template #prefix>
-                    <el-icon style="color:black">
-                        <Key />
-                    </el-icon>
+                    <img src="@/assets/icon/icon-password.svg" alt="" />
+                </template>
+                <!-- Icon cuối toggle -->
+                <template #suffix>
+                    <img :src="showPassword ? iconEye : iconEyeOff" alt="" @click="togglePassword"
+                        style="cursor: pointer;" />
                 </template>
             </el-input>
         </el-form-item>
+
+        <!-- Input xác nhận mật khẩu -->
         <el-form-item prop="retypePassword">
-            <el-input v-model="ruleForm.retypePassword" placeholder="Xác nhận Mật khẩu" type="password"
-                autocomplete="off">
+            <el-input v-model="ruleForm.retypePassword" :type="showRetypePassword ? 'text' : 'password'"
+                placeholder="Xác nhận Mật khẩu" autocomplete="off" :style="{ height: '40px' }">
                 <template #prefix>
-                    <el-icon style="color:black">
-                        <Key />
-                    </el-icon>
+                    <img src="@/assets/icon/icon-password.svg" alt="" />
+                </template>
+                <template #suffix>
+                    <img :src="showRetypePassword ? iconEye : iconEyeOff" alt="" @click="toggleRetypePassword"
+                        style="cursor: pointer;" />
                 </template>
             </el-input>
         </el-form-item>
@@ -50,12 +56,23 @@ import authService from "@/api/authService";
 import { reactive, ref, nextTick } from 'vue'
 import { toast } from "vue3-toastify"
 import { useAuthStore } from "@/stores/auth";
+import iconEyeOff from "@/assets/icon/icon-user.svg";
+import iconEye from "@/assets/icon/icon-eye-off.svg";
+import type { FormInstance, FormRules } from 'element-plus'
 const auth = useAuthStore()
 const success = ref();
 const error = ref("");
 const errorMsg = ref("");
-import type { FormInstance, FormRules } from 'element-plus'
 
+const showPassword = ref(false);
+const showRetypePassword = ref(false);
+
+function togglePassword() {
+  showPassword.value = !showPassword.value;
+}
+function toggleRetypePassword() {
+  showRetypePassword.value = !showRetypePassword.value;
+}
 const ruleFormRef = ref<FormInstance>()
 
 const validateUsername = (rule: any, value: any, callback: any) => {
@@ -164,8 +181,10 @@ const handleRegister = async () => {
 </script>
 <style>
 .btn-login {
-    background-color: red;
+    background: linear-gradient(to right, #E60000, #FF6114);
     width: 100%;
+    height: 40px;
+    margin-bottom: 10px;
 }
 
 .d-block {

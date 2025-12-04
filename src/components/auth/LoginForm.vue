@@ -1,21 +1,24 @@
 <template>
     <el-form ref="ruleFormRef" style="max-width: 800px" :model="ruleForm" status-icon :rules="rules" label-width="auto"
-        class="demo-ruleForm">
+        class="demo-ruleForm mt-2">
         <el-form-item prop="email">
-            <el-input v-model="ruleForm.email" placeholder="Email" type="text" autocomplete="off">
+            <el-input :style="{ height: '40px' }" v-model="ruleForm.email" placeholder="Email" type="text"
+                autocomplete="off">
                 <template #prefix>
-                    <el-icon style="color:black">
-                        <User />
-                    </el-icon>
+                    <img src="@/assets/icon/icon-user-2.svg" alt="">
                 </template>
             </el-input>
         </el-form-item>
         <el-form-item prop="password">
-            <el-input v-model="ruleForm.password" placeholder="Mật khẩu" type="password" autocomplete="off">
+            <el-input :style="{ height: '40px' }" v-model="ruleForm.password" placeholder="Mật khẩu"
+                :type="showPassword ? 'text' : 'password'" autocomplete="off">
                 <template #prefix>
-                    <el-icon style="color:black">
-                        <Key />
-                    </el-icon>
+                    <img src="@/assets/icon/icon-password.svg" alt="">
+                </template>
+                <template #suffix>
+                    <img @click="togglePassword" :src="showPassword ? iconEye : iconEyeOff" alt=""
+                        style="cursor: pointer;" />
+
                 </template>
             </el-input>
         </el-form-item>
@@ -32,27 +35,25 @@
         <el-button class="btn-login" type="primary" @click="submitForm(ruleFormRef)">
             Đăng nhập
         </el-button>
-        <el-button class="btn-login-google" @click="handleGoogleLogin">
-            <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google"
-                style="width: 20px; margin-right: 8px;">
-            Đăng nhập với Google
-        </el-button>
+        <div id="googleBtn"></div>
 
     </el-form>
 </template>
 
 <script lang="ts" setup>
 declare const google: any;
-import { reactive, ref } from 'vue'
+import { reactive, ref, onMounted } from 'vue'
 import { useAuthStore } from "@/stores/auth";
 import { useRouter } from "vue-router";
 import { toast } from "vue3-toastify"
 import type { FormInstance, FormRules } from 'element-plus'
 import authService from "@/api/authService";
+import iconEyeOff from "@/assets/icon/icon-user.svg";
+import iconEye from "@/assets/icon/icon-eye-off.svg";
 const ruleFormRef = ref<FormInstance>()
 const router = useRouter();
 const auth = useAuthStore();
-
+const showPassword = ref(false);
 const validateUsername = (rule: any, value: any, callback: any) => {
     if (value === '') {
         callback(new Error('Vui lòng nhập tên đăng nhập'))
@@ -60,7 +61,9 @@ const validateUsername = (rule: any, value: any, callback: any) => {
     callback()
 
 }
-
+function togglePassword() {
+    showPassword.value = !showPassword.value;
+}
 const validatePass = (rule: any, value: any, callback: any) => {
     if (value === '') {
         callback(new Error('Vui lòng nhập mật khẩu'))
@@ -74,28 +77,29 @@ const ruleForm = reactive({
     password: '',
 })
 const handleGoogleLogin = () => {
-    /* global google */
     google.accounts.id.initialize({
-        client_id: "1048571701439-un9b90ipid7e36p1nl4vc15pk5aeo6kg.apps.googleusercontent.com", // 🔹 Thay bằng client ID bạn lấy ở Google Cloud
+        client_id: "838745549366-bh964pq8dc6888q0g1ker5bcl0ctcgl8.apps.googleusercontent.com", // 🔹 Thay bằng client ID bạn lấy ở Google Cloud
         callback: handleCredentialResponse,
-        ux_mode: "popup"
+        ux_mode: "popup" // tạm thời
     });
 
-    google.accounts.id.prompt(); // hiển thị popup chọn tài khoản Google
+    google.accounts.id.prompt((notification) => {
+    });
 };
 
 const handleCredentialResponse = async (response: any) => {
-     console.log("Google response:", response); 
+    if (!response?.credential) {
+        console.error("No credential returned!");
+        return;
+    }
     try {
-        // response.credential là token JWT của Google
-        const res = await authService.loginGoogle({ credential: response.credential });
-
+        const res = await authService.loginGoogle({ token: response.credential });
         auth.setAuth(res.data.token, res.data.user.user_id);
         await auth.fetchProfile();
-
-        toast.success("Đăng nhập bằng Google thành công!");
-        router.push({ name: "Home" });
-    } catch (error) {
+        toast.success("Đăng nhập Google thành công!");
+        window.location.reload()
+    } catch (err) {
+        console.error(err);
         toast.error("Đăng nhập Google thất bại!");
     }
 };
@@ -144,11 +148,26 @@ const handleLogin = async () => {
 
     }
 };
+onMounted(() => {
+    google.accounts.id.initialize({
+        client_id: "838745549366-bh964pq8dc6888q0g1ker5bcl0ctcgl8.apps.googleusercontent.com",
+        callback: handleCredentialResponse,
+    });
+
+    google.accounts.id.renderButton(
+        document.getElementById("googleBtn"),
+        { theme: "outline", size: "large" }
+    );
+
+    google.accounts.id.prompt(); // gợi ý đăng nhập
+});
 </script>
 <style>
 .btn-login {
-    background-color: red;
+    background: linear-gradient(to right, #E60000, #FF6114);
     width: 100%;
+    height: 40px;
+    margin-bottom: 10px;
 }
 
 .d-block {
@@ -157,5 +176,10 @@ const handleLogin = async () => {
 
 .d-block .el-form-item__content {
     display: block;
+}
+</style>
+<style>
+.demo-tabs .el-input__validateIcon {
+    display: none !important;
 }
 </style>

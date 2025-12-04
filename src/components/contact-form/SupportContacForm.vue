@@ -7,13 +7,13 @@
         <el-form class="contact-form" :model="form" :rules="rules" label-position="top" ref="formRef">
 
             <el-row :gutter="20">
-                <el-col :span="12">
+                <el-col :xs="24" :sm="24" :md="12">
                     <el-form-item label="Họ tên" prop="name">
                         <el-input v-model="form.name" placeholder="Nhập họ tên"></el-input>
                     </el-form-item>
                 </el-col>
 
-                <el-col :span="12">
+              <el-col :xs="24" :sm="24" :md="12">
                     <el-form-item label="Email" prop="email">
                         <el-input v-model="form.email" placeholder="Nhập email"></el-input>
                     </el-form-item>
@@ -21,13 +21,13 @@
             </el-row>
 
             <el-row :gutter="20">
-                <el-col :span="12">
+               <el-col :xs="24" :sm="24" :md="12">
                     <el-form-item label="Tiêu đề" prop="title">
                         <el-input v-model="form.title" placeholder="Nhập tiêu đề"></el-input>
                     </el-form-item>
                 </el-col>
 
-                <el-col :span="12">
+                <el-col :xs="24" :sm="24" :md="12">
                     <el-form-item label="Loại vấn đề" prop="issue">
                         <el-select v-model="form.issue" placeholder="Chọn loại vấn đề">
                             <el-option label="Yêu cầu quảng cáo truyện" value="tech" />

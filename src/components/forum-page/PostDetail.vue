@@ -2,7 +2,7 @@
     <div v-if="postData">
         <div>
             <div>
-                <h2 class="text-color_primary fw-bold d-flex gap-2 align-items-center cursor-pointer">
+                <h2 class="text-color_primary fw-bold d-flex gap-2 align-items-center cursor-pointer post-title">
                     <div @click="goBack()">
                         <el-icon>
                             <Back />
@@ -23,7 +23,7 @@
                         </el-icon> {{ timeAgo(postData[0].created_at) }}</p>
                 </div>
             </div>
-            <div class="post-main__content text-sm ps-5 pe-3 mt-3">
+            <div class="post-main__content text-sm ps-md-5 pe-md-3 mt-3">
                 <div v-html="postData[0].content"></div>
                 <div class="post-comment">
                     <p class="like-share d-flex gap-4 py-4">
@@ -37,7 +37,7 @@
                             </svg>
                             {{ listLiked?.total_likes || 0 }}
                         </span>
-                        <span class="d-flex align-items-center gap-2 text-md">
+                        <span @click="!auth.userId && loginModal.open()" class="d-flex align-items-center gap-2 text-md cursor-pointer">
                             <svg width="21" height="20" viewBox="0 0 21 20" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path
@@ -56,7 +56,7 @@
             <h4 v-if="showComment" class=" mb-3 fw-bold">Bình luận ({{ listComment.length }})</h4>
         </div>
     </div>
-    <PostComment v-if="showComment" v-for="value in listComment" :comment_id="value.comment_id"
+    <PostComment v-if="showComment" v-for="value in listComment" :user_id="value.comment_user_id" :comment_id="value.comment_id"
         :like="value.comment_total_likes" :user="value.comment_username" :user_thumbnail="value.comment_link_thumbnail"
         :comment="value.comment_content" :date="value.comment_created_at" />
     <div class="post__comment">
@@ -103,6 +103,8 @@ onMounted(async () => {
         comment_created_at: item.comment_created_at,
         comment_total_likes: item.comment_total_likes
     }));
+    console.log(1,listComment.value);
+    
     getListLike()
 })
 async function getListLike() {
@@ -161,5 +163,11 @@ async function likePost(id) {
 
 .cursor-pointer:hover {
     cursor: pointer;
+}
+@media (max-width: 768px) {
+    .post-title
+    {
+        font-size: 16px;
+    }
 }
 </style>

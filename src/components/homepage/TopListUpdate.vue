@@ -1,7 +1,7 @@
 <template>
-    <h3 class="list-title text-color_primary border-b mb-4">{{ content }}</h3>
+    <h3 class="list-title text-color_primary border-b mb-4 pb-2">{{ content }}</h3>
     <div class="row">
-        <div v-for="(item, index) in items" class="list-container col-6">
+        <div v-for="(item, index) in items" class="list-container col-md-6">
             <div  :key="index" class="list-item">
                 <span @click="goToStory(item.story_id)" class="hover-link text-one-line">{{ item.title }}</span>
                 <span class="text-color__tertiary text-nowrap">{{ formatDateTime(item.create_at) }}</span>

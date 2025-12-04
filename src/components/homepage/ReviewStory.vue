@@ -1,5 +1,5 @@
 <template>
-    <h3 class="list-title text-color_primary border-b">Review tác phẩm</h3>
+    <h3 class="list-title text-color_primary border-b pb-2">Review tác phẩm</h3>
     <div class="list-container">
         <div @click="gotoPost(value.post_id)" class="list-item" v-for="value in items">
             <p class="text-ellipsis" style="max-width: 60%;;">{{ value.title }}</p>
@@ -30,7 +30,7 @@ function gotoPost(id) {
 }
 onMounted(async () => {
     try {
-        const res = await getPostForumByTopic(2)
+        const res = await getPostForumByTopic(2,1,14)
         items.value = res.data
     } catch (err) {
         console.error("Lỗi khi fetch API:", err);

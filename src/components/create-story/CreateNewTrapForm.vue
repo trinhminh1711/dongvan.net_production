@@ -45,13 +45,11 @@
             </el-form-item>
         </el-form>
         <!-- Button submit -->
-        <div class="d-flex gap-4 justify-content-end">
+        <div class="d-flex gap-4 justify-content-end btn-create-chap">
             <button class="btn-outline-primary my-4 align-middle" @click="goBack">
-                <el-icon>
-                    <Back />
-                </el-icon><span class="fw-semibold ms-1">Quay lại</span>
+                <img src="@/assets/icon/back-icon.svg" alt=""><span class="fw-semibold ms-1 text-16">Quay lại</span>
             </button>
-            <button @click="validateForm()" style="display: block;" class="btn-alert my-4 fw-semibold">
+            <button @click="validateForm()" style="display: block;" class="btn-alert my-4 fw-semibold lh-2 text-16">
                 Đăng chương
             </button>
         </div>
@@ -71,7 +69,7 @@
         </el-dialog>
     </div>
     <div v-show="showCommitPage" class="container">
-        <h2>Cam kết</h2>
+        <h2 class="text-center fw-bold">Cam kết</h2>
         <div style="line-height: 2;">
             <p>
                 Tôi. [Tên tác giả/Bút danh], chủ tài khoản [Tên tài khoản tác giả] tại Đông Văn, xin cam kết tuân thủ
@@ -95,13 +93,11 @@
                 Tôi
                 chịu trách nhiệm hoàn toàn về nội dung mà tôi đăng tải trên nền tảng Đông Văn.</p>
         </div>
-        <div class="d-flex gap-4 justify-content-end">
-            <button class="btn-outline-primary my-4 align-middle" @click="showCommitPage = false">
-                <el-icon>
-                    <Back />
-                </el-icon><span class="fw-semibold ms-1">Quay lại</span>
+        <div class="d-flex gap-4 justify-content-end btn-create-chap">
+            <button class="btn-outline-primary my-4 align-middle" @click="goBack">
+                <img src="@/assets/icon/back-icon.svg" alt=""><span class="fw-semibold ms-1 text-16">Quay lại</span>
             </button>
-            <button @click="submitForm()" style="display: block;" class="btn-alert my-4 fw-semibold">
+            <button @click="submitForm()" style="display: block;" class="btn-alert my-4 fw-semibold text-16">
                 Xác nhận
             </button>
         </div>
@@ -221,7 +217,6 @@ function countWordsFromHtml(html) {
 onMounted(
     async () => {
         const res = await getLastChapter(route.params.storyId)
-        console.log(res);
 
         if (res.status == 404) {
             newChapForm.chapNumber = 1;
@@ -231,4 +226,22 @@ onMounted(
         }
     })
 </script>
-<style></style>
+<style scoped>
+.btn-create-chap button {
+    padding: 15px 30px;
+    border-radius: 50px;
+    border: solid 1px #E4E7EC;
+    display: flex;
+    gap: 5px
+}
+
+.btn-create-chap .btn-outline-primary:hover img {
+    filter: invert(92%) sepia(80%) saturate(500%) hue-rotate(10deg);
+}
+</style>
+<style>
+.el-form-item.is-required:not(.is-no-asterisk).asterisk-left>.el-form-item__label-wrap>.el-form-item__label:before,
+.el-form-item.is-required:not(.is-no-asterisk).asterisk-left>.el-form-item__label:before {
+    display: none;
+}
+</style>

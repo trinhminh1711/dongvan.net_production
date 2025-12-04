@@ -1,16 +1,15 @@
 <template>
     <div class="container">
         <div class="row mt-4">
-            <div v-for="stories in categoryList" :key="stories.id" class="box-left__content col-6 py-3">
-                <img style="width: 150px; height: 180px; border-radius: 10px;" :src="stories.urlImg">
+            <div v-for="stories in categoryList" :key="stories.id" class="box-left__content col-md-6 py-3">
+                <img style="width: 150px; height: 100%; border-radius: 10px; border: solid 2px #E4E7EC;" :src="stories.urlImg">
                 <div class="left-content">
-                    <h4 class="text-color_primary fw-bold">{{ stories.title }}</h4>
-                    <p class="left-content__author text-color__tertiary text-md">{{ stories.author }}</p>
+                    <h4 @click="goToStory(stories.story_id)"  class="text-color_primary fw-bold hover-link">{{ stories.title }}</h4>
                     <p class="color-red fst-italic"><span class="fw-bold text-md">
                         {{ stories.last_chap_number > 0 ? stories.last_chap_number + ' Chương' : 'Chưa đăng chương' }}</span><span class="text-md"></span></p>
-                    <p class="text-sm"> Chương đang đọc: [Chương 1] Trùng Sinh Tỉnh Lại </p>
+                    <p class="text-sm"> Chương đang viết: [Chương 1] Trùng Sinh Tỉnh Lại </p>
                      <button  @click="$router.push(`/create-story/new-chap/${stories.story_id}`)" v-if="!stories.last_chapter_is_final" class="btn-alert my-3">Đăng Chương</button>
-                    <button v-if="stories.last_chapter_is_final" class="btn-success my-3">Hoành thành</button>
+                    <button v-if="stories.last_chapter_is_final" class="btn-success my-3">Hoàn thành</button>
                 </div>
             </div>
         </div>
@@ -27,6 +26,8 @@ import { ref, onMounted } from 'vue';
 import { useAuthStore } from "@/stores/auth";
 const auth = useAuthStore()
 const categoryList = ref([]);
+import { useRouter } from "vue-router";
+const router = useRouter();
 import { getStory } from "@/api/stories"
 function handlePageChange(page) {
   console.log('Trang mới:', page) // In ra số trang
@@ -36,6 +37,12 @@ onMounted(async () => {
     categoryList.value = res
     
 })
+function goToStory(post_id) {
+    router.push({
+        name: 'story',   // Tên route bạn đã định nghĩa trong router/index.js
+        params: { id: post_id }       // Truyền param id
+    })
+}
 </script>
 
 <style scoped>

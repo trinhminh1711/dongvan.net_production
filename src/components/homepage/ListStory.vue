@@ -27,8 +27,7 @@ function gotoChapDetail(storyId, chapterId) {
 }
 onMounted(async () => {
     try {
-        const res = await getListChapterUpdate()
-
+        const res = await getListChapterUpdate()        
         const result = res.map((bItem) => ({
             title: bItem.title,
             text: "Chương " + bItem.chap_number,

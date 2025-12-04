@@ -26,11 +26,9 @@
         </div>
         <div class="d-flex gap-4 justify-content-end">
             <button class="btn-outline-primary my-4 align-middle" @click="goBack">
-                <el-icon>
-                    <Back />
-                </el-icon><span class="fw-semibold ms-1">Quay lại</span>
+                <img src="@/assets/icon/back-icon.svg" alt=""><span class="fw-semibold ms-1 text-16">Quay lại</span>
             </button>
-            <button @click="submitForm" style="display: block;" class="btn-alert my-4 fw-semibold">
+            <button @click="submitForm()" style="display: block;" class="btn-alert my-4 fw-semibold">
                 Xác nhận
             </button>
         </div>
@@ -42,7 +40,7 @@
 import { useRouter } from "vue-router";
 const router = useRouter();
 function goBack() {
-   router.back()  
+    router.back()
 }
 </script>
 

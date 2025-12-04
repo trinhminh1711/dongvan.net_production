@@ -1,9 +1,9 @@
 <template>
     <div class="container text-center">
-        <div class="row align-items-start  justify-content-between">
-            <div class="row col-3 col d-flex align-items-center menu-category">
+        <div class="row align-items-stretch justify-content-between mobile-center">
+            <div class="row col-md-3 d-flex menu-category">
                 <div @click="goToCategory(item)" v-for="(item, index) in items" :key="index"
-                    class="col-6 d-flex align-items-center menu-category__item">
+                    class="col-md-6 col-6 d-flex align-items-center menu-category__item">
                     <span>
                         <img :src="item.image" alt="Logo">
                     </span>
@@ -13,7 +13,7 @@
                     </span>
                 </div>
             </div>
-            <div class="col-6 el-menu-story">
+            <div class="col-md-6  d-flex flex-column justify-content-between el-menu-story">
                 <div class="banner-top" :style="{ backgroundImage: `url(${currentBg})` }">
                     <div class="buttons">
                         <button v-for="(bg, index) in backgrounds" :key="index"
@@ -29,20 +29,29 @@
 
                 </div>
             </div>
-            <div class="col-3 p-0 banner-newfeeds">
-                <h3 class="text-start new-feed_title d-flex align-items-center text-color_primary fw-bold">
-                    <img src="@/assets/icon/newfeed.png" alt=""> Tin tức mới
-                </h3>
-                <ul class="m-0 p-0">
-                    <li @click="goToPost(item.link)" v-for="(item, index) in newFeeds" :key="index"
-                        class="d-flex align-items-center topic-item hover_link">
-                        <span class="text-black">[{{ item.topic }}]</span>
-                        <span class="text-color__tertiary">{{ item.text }}</span>
-                    </li>
-                </ul>
-                <img src="@/assets/image/image-banner2.png" alt="">
+            <div class="col-md-3 d-flex flex-column justify-content-between">
+                <div class="banner-newfeeds ">
+                    <div class=" p-2">
+                        <div class="text-start new-feed_title d-flex align-items-center text-color_primary fw-bold">
+                            <img src="@/assets/icon/newfeed.png" alt="">
+                            <h3 style="color: #344054;" class="fw-semibold">Tin tức mới</h3>
+                        </div>
+                        <ul class="m-0 p-0">
+                            <li @click="goToPost(item.link)" v-for="(item, index) in newFeeds" :key="index"
+                                class="d-flex align-items-center topic-item hover_link">
+                                <span class="text-color_primary fw-semibold mx-1">[{{ item.topic }}]</span>
+                                <span class="text-color_primary">{{ item.text }}</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <img style="width: 100%;" src="@/assets/image/image-banner2.png" alt="">
+                </div>
+
             </div>
+
         </div>
+        
     </div>
 </template>
 
@@ -151,11 +160,11 @@ function changeBackground(index) {
 }
 let timer = null
 function autoChange() {
-  timer = setTimeout(() => {
-    currentIndex.value = (currentIndex.value + 1) % backgrounds.length
-    currentBg.value = backgrounds[currentIndex.value]
-    autoChange() // gọi lại chính nó
-  }, 2000)
+    timer = setTimeout(() => {
+        currentIndex.value = (currentIndex.value + 1) % backgrounds.length
+        currentBg.value = backgrounds[currentIndex.value]
+        autoChange() // gọi lại chính nó
+    }, 2000)
 }
 
 const handleIconClick = (ev: Event) => {
@@ -230,7 +239,7 @@ onUnmounted(() => clearTimeout(timer))
 
 .el-menu-story .list-img img {
     width: 100%;
-    height: auto;
+    height: 100%;
     object-fit: cover;
     display: block;
 }
@@ -243,7 +252,7 @@ onUnmounted(() => clearTimeout(timer))
 }
 
 .banner-top button.active {
-    background-color: #BF2C24;
+    background: #BF2C24
 }
 
 .banner-top .buttons {
@@ -300,21 +309,30 @@ onUnmounted(() => clearTimeout(timer))
     padding: 0 10px;
 }
 
+.banner-newfeeds {
+    background-color: #f9fafb;
+    border: solid 1px #E4E7EC;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
 .banner-newfeeds img {
-    width: 100%;
-    height: 150px;
+    object-fit: cover;
+    /* giữ tỉ lệ ảnh */
+    flex-grow: 1;
 }
 
 .topic-item {
     font-size: 12px;
-    line-height: 3;
+    line-height: 3.1;
 }
 
 .topic-item .text-black {
     white-space: nowrap;
 }
 
-.topic-item .text-color__tertiary {
+.topic-item .text-color_primary {
     margin-left: 2px;
     display: block;
     white-space: nowrap;
@@ -328,6 +346,11 @@ onUnmounted(() => clearTimeout(timer))
     color: #ff6114;
 }
 
+.new-feed_title {
+    padding-bottom: 5px;
+    border-bottom: solid 1px #E4E7EC;
+}
+
 .new-feed_title img {
     max-width: 20px;
     height: auto;
@@ -338,5 +361,22 @@ onUnmounted(() => clearTimeout(timer))
     cursor: pointer;
     background-color: #f7f6f2;
     transition: all .2s ease-in;
+}
+
+@media (max-width: 768px) {
+    .banner-top .buttons {
+        top: 85%;
+
+    }
+
+    .banner-top .buttons button{
+      font-size: 8px;
+    }
+
+    .banner-newfeeds
+    {
+      margin-top: 30px;
+    }
+    
 }
 </style>

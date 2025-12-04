@@ -1,5 +1,5 @@
 <template>
-    <h3 class="list-title text-color_primary border-b mb-4">{{ content }}</h3>
+    <h3 class="list-title text-color_primary border-b mb-4 pb-2">{{ content }}</h3>
     <div class="list-container">
         <slot name="author-top3">
         </slot>

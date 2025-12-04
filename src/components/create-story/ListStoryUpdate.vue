@@ -14,68 +14,71 @@
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
         </div>
-        <el-table class="story-table" :data="paginatedData" style="width: 100%" :fit="true">
-            <el-table-column type="index" label="STT" width="80" />
-            <el-table-column prop="title" width="300">
-                <template #header>
-                    <span class="table-header">Tên truyện</span>
-                </template>
-                <template #default="scope">
-                    <div class="d-flex align-items-center gap-2">
-                        <img class="story-thumnail" :src="scope.row.urlImg" alt="">
-                        {{ scope.row.title }}
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column prop="last_chapter_id">
-                <template #header>
-                    <span class="table-header">Số chương</span>
-                </template>
-                <template #default="scope">
-                    {{ scope.row.last_chap_number ?? 1 }} Chương
-                </template>
-            </el-table-column>
+        <div class="table-responsive">
+            <el-table class="story-table" :data="paginatedData" style="width: 100%" :fit="true">
+                <el-table-column type="index" label="STT" width="80" />
+                <el-table-column prop="title" width="500">
+                    <template #header>
+                        <span class="table-header">Tên truyện</span>
+                    </template>
+                    <template #default="scope">
+                        <div class="d-flex align-items-center gap-2">
+                            <img class="story-thumnail" :src="scope.row.urlImg" alt="">
+                            {{ scope.row.title }}
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="last_chapter_id" width="250">
+                    <template #header>
+                        <span class="table-header">Số chương</span>
+                    </template>
+                    <template #default="scope">
+                        {{ scope.row.last_chap_number ?? 1 }} Chương
+                    </template>
+                </el-table-column>
 
-            <el-table-column label="Date" prop="create_at">
-                <template #header>
-                    <span class="table-header">Ngày tháng đăng</span>
-                </template>
-                <template #default="scope">
-                    {{ formatDateVN(scope.row.create_at) }}
-                </template>
-            </el-table-column>
-            <el-table-column align="center" width="250">
-                <template #default="scope">
-                    <el-tooltip class="box-item" effect="dark" content="Thêm chương" placement="top-start">
-                        <el-button @click="handleAdd(scope.row.story_id)">
-                            <img src="@/assets/icon/plus.svg" alt="">
-                        </el-button>
-                    </el-tooltip>
-                    <el-tooltip class="box-item" effect="dark" content="Danh sách chương" placement="top-start">
-                        <el-button @click="goToListChap(scope.row.story_id)">
-                            <img src="@/assets/icon/menu-04.svg" alt="">
-                        </el-button>
-                    </el-tooltip>
-                    <el-tooltip class="box-item" effect="dark" content="Chỉnh sửa truyện" placement="top-start">
-                        <el-button @click="handleEdit(scope.$index, scope.row)">
-                            <img src="@/assets/icon/edit-05.svg" alt="">
-                        </el-button>
-                    </el-tooltip>
-                    <el-tooltip class="box-item" effect="dark" content="Hỗ trợ" placement="top-start">
-                        <el-button @click="handleSupport(scope.$index, scope.row)">
-                            <img src="@/assets/icon/message-check-circle.svg" alt="">
-                        </el-button>
-                    </el-tooltip>
-                </template>
-            </el-table-column>
-        </el-table>
+                <el-table-column label="Date" prop="create_at" width="250">
+                    <template #header>
+                        <span class="table-header">Ngày tháng đăng</span>
+                    </template>
+                    <template #default="scope">
+                        {{ formatDateVN(scope.row.create_at) }}
+                    </template>
+                </el-table-column>
+                <el-table-column align="center" width="250">
+                    <template #default="scope">
+                        <el-tooltip class="box-item" effect="dark" content="Thêm chương" placement="top-start">
+                            <el-button @click="handleAdd(scope.row.story_id)">
+                                <img src="@/assets/icon/plus.svg" alt="">
+                            </el-button>
+                        </el-tooltip>
+                        <el-tooltip class="box-item" effect="dark" content="Danh sách chương" placement="top-start">
+                            <el-button @click="goToListChap(scope.row.story_id)">
+                                <img src="@/assets/icon/menu-04.svg" alt="">
+                            </el-button>
+                        </el-tooltip>
+                        <el-tooltip class="box-item" effect="dark" content="Chỉnh sửa truyện" placement="top-start">
+                            <el-button @click="handleEdit(scope.$index, scope.row)">
+                                <img src="@/assets/icon/edit-05.svg" alt="">
+                            </el-button>
+                        </el-tooltip>
+                        <el-tooltip class="box-item" effect="dark" content="Hỗ trợ" placement="top-start">
+                            <el-button @click="handleSupport(scope.$index, scope.row)">
+                                <img src="@/assets/icon/message-check-circle.svg" alt="">
+                            </el-button>
+                        </el-tooltip>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </div>
         <div style="display: flex; justify-content: center;" class="mt-4 d-flex">
             <el-pagination v-model:current-page="currentPage" v-model:page-size="pageSize" :page-sizes="[5, 10, 20, 50]"
                 :total="tableData.length" layout=" prev, pager, next" />
         </div>
         <el-dialog v-model="dialogVisible" width="500">
             <span class="text-color_primary fw-bold">Gửi yêu cầu hỗ trợ</span>
-            <p class="text-sm mt-2">Trước khi gửi câu hỏi, vui lòng đọc hết mục Hướng dẫn, nếu bạn vẫn không tìm thấy
+            <p class="text-sm mt-2">Trước khi gửi câu hỏi, vui lòng đọc hết mục <span @click="goToSupportPage()"
+                    class="text-underline fw-semibold cursor-pointer">Hướng dẫn</span> , nếu bạn vẫn không tìm thấy
                 câu trả
                 lời,
                 hãy gửi câu hỏi cho chúng tôi.</p>
@@ -117,7 +120,8 @@
                     </ul>
                 </div>
                 <div class="mt-4">
-                    <button style="border-radius: 5px; width: 100%;" class="btn-alert fw-bold py-3" type="button">Gửi
+                    <button style="border-radius: 5px; width: 100%;" class="btn-alert fw-bold py-3 text-16"
+                        type="button">Gửi
                         yêu
                         cầu</button>
                 </div>
@@ -193,9 +197,9 @@ const filterTableData = computed(() =>
     )
 )
 const paginatedData = computed(() => {
-  const start = (currentPage.value - 1) * pageSize.value
-  const end = start + pageSize.value
-  return filterTableData.value.slice(start, end)
+    const start = (currentPage.value - 1) * pageSize.value
+    const end = start + pageSize.value
+    return filterTableData.value.slice(start, end)
 })
 async function handleSelectStoryStatus(val) {
     getDataStoryApi(val)
@@ -246,7 +250,11 @@ function formatDateVN(isoString) {
     }).format(date)
     return formatted
 }
+function goToSupportPage() {
 
+    router.push({ name: 'instruct' }) // dựa trên name của route
+
+}
 </script>
 <style>
 .story-table .table-header {
@@ -277,5 +285,17 @@ function formatDateVN(isoString) {
     padding: 0 2px;
     font-size: 18px;
 
+}
+@media (max-width: 768px) {
+
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    /* cho phép scroll ngang */
+}
+.el-dialog
+{
+    max-width: 90%;
+}
 }
 </style>

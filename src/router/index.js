@@ -108,8 +108,17 @@ const routes = [
 ]
 
 const router = createRouter({
-    history: createWebHistory(), // dùng HTML5 history mode
-    routes
+  history: createWebHistory(),
+  routes,
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      // 👇 Quay lại trang trước sẽ giữ đúng vị trí cuộn
+      return savedPosition
+    } else {
+      // 👇 Nếu là trang mới, cuộn lên đầu
+      return { top: 0 }
+    }
+  },
 })
 router.beforeEach((to, from, next) => {
   const auth = useAuthStore()

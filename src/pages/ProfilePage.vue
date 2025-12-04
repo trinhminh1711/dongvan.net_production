@@ -1,4 +1,5 @@
 <template>
+    <LoadingSpiner :show="loading" />
     <div v-if="auth.user" class="profile-page container">
         <!-- Header banner -->
         <div class="profile-banner" style="position: relative;">
@@ -8,16 +9,16 @@
             <div class="d-flex infomation">
                 <div class="d-flex infomation_avatar">
                     <div>
-                        <img :src="user.link_thumbnail" alt="" srcset="">
+                        <img :src="auth.user.link_thumbnail" alt="" srcset="">
                     </div>
                     <div>
-                        <h2 class="fw-bold text-color_primary mt-2">{{ user.username }}</h2>
-                        <p class="text-secondary">ID:2025{{ user.id }}</p>
-                        <p class="text-secondary">{{ user.user_description }}</p>
+                        <h2 class="fw-bold text-color_primary mt-2">{{ auth.user.username }}</h2>
+                        <p class="text-secondary">ID:2025{{ auth.user.user_id }}</p>
+                        <p class="text-secondary">{{ auth.user.user_description }}</p>
                     </div>
                 </div>
                 <div class="mt-2 pe-3">
-                    <button class="btn-outline me-3">Hủy</button>
+                    <button class="btn-outline-gray me-3">Hủy</button>
                     <button @click="changeInfoApi()" class="btn-alert">Lưu thay đổi</button>
                 </div>
             </div>
@@ -77,10 +78,14 @@
                                 <el-descriptions-item>
                                     <template #label>
                                         <p class="d-flex align-items-center gap-1 fw-bold">
-                                            Cấp độ
-                                            <el-icon>
-                                                <InfoFilled />
-                                            </el-icon>
+                                            Cấp độ người đọc
+                                            <el-tooltip class="box-item" effect="dark"
+                                                content="<p>Để lên hạng Cấp 2 (Độc giả Tiềm Năng)<br> và được tặng 50 Tang Diệp, bạn cần đạt <br>1000 điểm đọc.</p>"
+                                                placement="top-start" raw-content>
+                                                <el-icon>
+                                                    <InfoFilled />
+                                                </el-icon>
+                                            </el-tooltip>
                                         </p>
                                     </template>
                                     Cấp 1 (Độc giả mới)</el-descriptions-item>
@@ -88,18 +93,19 @@
                                     <template #label>
                                         <p class="d-flex align-items-center gap-1 fw-bold">
                                             Cấp độ tác giả
-                                            <el-icon>
-                                                <InfoFilled />
-                                            </el-icon>
+                                            <el-tooltip class="box-item" effect="dark"
+                                                content="<p>Để lên hạng Cấp 1 (Tân Bút)<br> và tác phẩm được ưu tiên hiển thị và quảng bá, <br> bạn cần đăng ít nhất 1 chương truyện.</p>"
+                                                placement="top-start" raw-content>
+                                                <el-icon>
+                                                    <InfoFilled />
+                                                </el-icon>
+                                            </el-tooltip>
                                         </p>
                                     </template>Chưa có</el-descriptions-item>
                                 <el-descriptions-item>
                                     <template #label>
                                         <p class="d-flex align-items-center gap-1 fw-bold">
                                             Số Tang Diệp đang có
-                                            <el-icon>
-                                                <InfoFilled />
-                                            </el-icon>
                                         </p>
                                     </template><span>
                                         {{ user.coin_balance }} <img src="@/assets/icon/tamdiep-icon.png">
@@ -155,12 +161,14 @@
 </template>
 
 <script setup>
+import LoadingSpiner from '@/components/loadding/LoadingSpiner.vue';
 import { reactive, ref, watch, onMounted } from 'vue';
 import { ElAvatar, ElButton, ElTabs, ElTabPane, ElForm, ElFormItem, ElInput, ElSelect, ElOption } from 'element-plus';
 import Infomation from '@/components/profile/Infomation.vue';
 import { useAuthStore } from "@/stores/auth";
 import { changePassword, updateUserInfo } from '@/api/users';
 const auth = useAuthStore();
+const loading = ref(false)
 import { toast } from "vue3-toastify";
 const activeTab = ref('personal');
 const defaultAvatar = "https://cdn-icons-png.freepik.com/512/3607/3607444.png";
@@ -212,8 +220,6 @@ const handleAvatarChange = (file) => {
 };
 function loadUserInfo() {
     const newUser = auth.user;
-    console.log(auth.user);
-
     if (newUser) {
         user.id = newUser.user_id;
         user.username = newUser.username;
@@ -227,7 +233,7 @@ function loadUserInfo() {
     }
 }
 const changeInfoApi = async () => {
-
+    loading.value = true
     try {
         // Gộp thông tin user vào object
         formUser.phone_number = otherInfo.phone;
@@ -248,13 +254,15 @@ const changeInfoApi = async () => {
         else {
             payload = formUser;
         }
-        console.log(payload);
         const res = await updateUserInfo(payload);
+        loading.value = false
         toast.success(res.message);
+
 
     } catch (err) {
         console.error(err);
         toast.error(err.message || "Cập nhật thất bại");
+        loading.value = false
     }
 };
 const updatePassword = async () => {
@@ -358,4 +366,18 @@ onMounted(() => {
     top: -50px;
 
 }
+.btn-outline-gray {
+  border: solid 1px #E4E7Ec;
+  border-radius: 20px;
+  padding: 8px 20px;
+  font-size: 16px;
+  background: none;
+  color: #3f5a93;
+}
+.btn-outline:hover {
+  background-color: #3f5a93;
+  cursor: pointer;
+  color: #fff;
+}
+
 </style>

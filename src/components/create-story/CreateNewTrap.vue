@@ -1,19 +1,19 @@
 <template>
     <div v-if="categoryList?.length > 0" class="container">
         <div class="row mt-4">
-            <div v-for="stories in categoryList" :key="stories.id" class="box-left__content col-6">
+            <div v-for="stories in categoryList" :key="stories.id" class="box-left__content col-md-6">
                 <img class="img-cover" :src="stories.urlImg" alt="">
                 <div class="left-content">
-                    <router-link :to="{ name: 'story', params: { id: stories.story_id } }">
-                        <h4 class="text-color_primary fw-bold hover_link">{{ stories.title }}</h4>
-                    </router-link>
+                    <h4 class="text-color_primary fw-bold hover_link" @click="gotoStory(stories.story_id)">
+                        {{ stories.title }}
+                    </h4>
                     <p class="color-red fst-italic">
                         <span class="text-md">
                             <span class="fw-bold">{{ stories.last_chap_number ?? 1 }}</span> chương</span>
                     </p>
-                    <p class="text-md fw-semibold py-2"> Chương đang viết: [Chương {{ stories.last_chap_number ?? 1 }}]
+                    <p class="text-md py-2"> Chương đang viết: [Chương {{ stories.last_chap_number ?? 1 }}]
                         {{ stories.last_chapter_title }} </p>
-                    <button  @click="createNewTrap(stories.story_id, stories)" class="btn-alert my-4">Đăng
+                    <button @click="createNewTrap(stories.story_id, stories)" class="btn-alert my-4">Đăng
                         chương</button>
                 </div>
             </div>
@@ -45,6 +45,9 @@ onMounted(async () => {
 function handlePageChange(page) {
     console.log('Trang mới:', page) // In ra số trang
 }
+function gotoStory(id) {
+  router.push({ name: 'story', params: { id } });
+}
 function createNewTrap(story_id, stories) {
     if (stories.last_chapter_is_final) {
         toast.info("Bạn đã hoàn thành bộ truyện!")
@@ -54,6 +57,7 @@ function createNewTrap(story_id, stories) {
     }
 
 }
+
 </script>
 
 <style scoped>

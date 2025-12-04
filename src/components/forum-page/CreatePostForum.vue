@@ -1,7 +1,7 @@
 <template>
     <div>
-        <h4 class="text-md fw-bold"> Đăng bài mới</h4>
-        <p class="text-sm">Chia sẻ những câu chuyện thú vị và tương tác với các độc giả khác trên diễn đàn!</p>
+        <h4 class="text-20 fw-bold"> Đăng bài mới</h4>
+        <p class="text-16">Chia sẻ những câu chuyện thú vị và tương tác với các độc giả khác trên diễn đàn!</p>
 
         <div class="py-2">
             <p class="mb-1 fw-semibold text-md">Tiêu đề</p>
@@ -33,7 +33,7 @@ const router = useRouter()
 import Quill from "quill";
 import { useAuthStore } from "@/stores/auth";
 import { createPost } from "@/api/forum";
-const Size = Quill.import('formats/size');
+const Size = Quill.import('attributors/style/size');
 const auth = useAuthStore();
 const postData = ref({
     title: '',
@@ -68,7 +68,7 @@ const editorOptions = {
 const text = ref("")
 const selected = ref("")
 const options = [
-    { value: "1", label: "Luận truyện" },
+    { value: "1", label: "Thể loại khác" },
     { value: "2", label: "Ngôn Đề cử và Review truyện" },
     { value: "3", label: "Nhập môn sáng tác" },
     { value: "4", label: "Tìm bạn đồng sáng tác" },
@@ -149,9 +149,5 @@ async function upPost() {
     content: "36";
 }
 
-/* Ẩn nhãn Normal mặc định nếu vẫn còn */
-.ql-snow .ql-picker.ql-size .ql-picker-label::before,
-.ql-snow .ql-picker.ql-size .ql-picker-item::before {
-    content: "Cỡ chữ" !important;
-}
+
 </style>

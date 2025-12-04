@@ -1,5 +1,5 @@
     <template>
-        <el-form class="form-createstory mt-5" ref="ruleFormRef" :model="ruleForm" :rules="rules" label-width="auto">
+        <el-form class="form-createstory mt-md-5" ref="ruleFormRef" :model="ruleForm" :rules="rules" label-width="auto">
             <el-form-item prop="storyName">
                 <template #label>
                     <span class="form-createstory__label">
@@ -11,10 +11,10 @@
             <el-form-item prop="storyAuthor">
                 <template #label>
                     <span class="form-createstory__label">
-                        Tác giả
+                        Bút danh
                     </span>
                 </template>
-                <el-input size="large" :value="auth.user?.username" disabled />
+                <el-input size="large" v-model="ruleForm.pen_name" />
             </el-form-item>
             <el-form-item prop="storyGenre">
                 <template #label>
@@ -57,9 +57,17 @@
                     <div>
                         <p class="mb-3">Hoặc chọn một poster dưới đây</p>
                         <div class="preset-images">
-                            <el-carousel :autoplay="false" arrow="always">
+                            <el-carousel class="d-none d-md-block" :autoplay="false" arrow="always">
                                 <el-carousel-item v-for="(carosel, index) in presetImages" :key="index">
-                                    <img v-for="imgUrl in carosel" :src="imgUrl" class="preset-img mx-2"
+                                    <img v-for="imgUrl in carosel" :key="imgUrl" :src="imgUrl" class="preset-img mx-2"
+                                        :class="{ active: selectedImage === imgUrl }" @click="selectPreset(imgUrl)" />
+                                </el-carousel-item>
+                            </el-carousel>
+
+                            <!-- Mobile carousel: 1 ảnh 1 slide -->
+                            <el-carousel class="d-block d-md-none" :autoplay="false" arrow="always">
+                                <el-carousel-item v-for="imgUrl in presetImagesFlat" :key="imgUrl">
+                                    <img :src="imgUrl" class="preset-img mx-2"
                                         :class="{ active: selectedImage === imgUrl }" @click="selectPreset(imgUrl)" />
                                 </el-carousel-item>
                             </el-carousel>
@@ -77,12 +85,13 @@
                 <el-input size="large" placeholder="Link thảo luận forum (nếu có)" v-model="ruleForm.storyLinkForum" />
             </el-form-item>
         </el-form>
-        <button type="button" @click="submitForm()" style="display: block; margin-left: auto;"
-            class="btn-alert my-4 fw-semibold">Đăng truyện</button>
+        <button type="button" @click="submitForm()"
+            style="display: block; margin-left: auto; border-radius: 50px; height: 40px;"
+            class="btn-alert my-4 fw-semibold text-16 lh-2 px-4">Đăng truyện</button>
     </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from 'vue'
+import { reactive, ref , computed} from 'vue'
 import { genFileId } from 'element-plus'
 import type { UploadInstance, UploadProps, UploadRawFile, UploadFile } from 'element-plus'
 import { createStory } from "@/api/stories"
@@ -103,6 +112,7 @@ interface RuleForm {
     storyAuthor: string,
     storyDesc: string,
     storyLinkForum: string,
+    pen_name:string,
     cover: UploadRawFile | null
 }
 const fileList = ref([])
@@ -126,6 +136,7 @@ const presetImages = {
         new URL('@/assets/image/image 18.png', import.meta.url).href,
     ],
 }
+
 const options = [
     { label: 'Linh dị', value: 1 },
     { label: 'Trinh thám', value: 2 },
@@ -146,6 +157,7 @@ const ruleForm = reactive<RuleForm>({
     storyName: '',
     storyGenre: '',
     storyAuthor: userId,
+    pen_name: auth.user?.username || '', 
     storyDesc: '',
     cover: null,
     storyLinkForum: ''
@@ -216,6 +228,12 @@ const selectPreset = async (imgUrl) => {
     ) as UploadRawFile
     ruleForm.cover = file
 }
+const presetImagesDesktop = computed(() => Object.values(presetImages))
+
+// Mobile carousel flatten tất cả ảnh → 1 ảnh/slide
+const presetImagesFlat = computed(() => Object.values(presetImages).flat())
+
+
 </script>
 <style>
 .form-createstory .custom-textarea .el-textarea__inner {
@@ -294,5 +312,18 @@ const selectPreset = async (imgUrl) => {
         2px 0 4px rgba(0, 0, 0, 0.02),
         /* 👉 phải siêu nhạt */
         -2px 0 4px rgba(0, 0, 0, 0.02);
+}
+
+
+@media (max-width: 768px) {
+    .form-createstory .el-form-item {
+        display: flex;
+        flex-direction: column;
+    }
+    .list-imageupload .el-carousel__item img
+    {
+        width: 100%;
+        max-width: 100%;
+    }
 }
 </style>

@@ -3,8 +3,8 @@
         <div v-if="categoryList.length" class="row">
             <div v-for="(stories, index) in paginatedList" :key="index" class="box-left__content col-md-6 mt-2">
                 <div class="book-card col-5">
-                    <img style="    width: 150px;
-    height: 200px;
+                    <img style=" width: 150px;
+    height: 100%;
     border-radius: 10px;" class="d-block" :src="stories.urlImg" alt=""></img>
                 </div>
                 <div class="left-content col-7">

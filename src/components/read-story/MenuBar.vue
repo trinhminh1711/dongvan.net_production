@@ -10,7 +10,7 @@
     </el-tab-pane>
     <el-tab-pane label="Dấu trang" name="second">
       <ul class="list-menu" style="list-style: none;">
-        <li class="my-3" v-for="(value, index) in bookmark" :key="index">
+        <li class="my-3" v-for="(value, index) in props.bookmarkValue" :key="index">
           <p @click="goToBookmark(value)" class="fw-bold hover-link">Bookmark {{ index + 1 }} : {{ value.chapter_title
             }}
           </p>
@@ -35,6 +35,7 @@ const props = defineProps({
   storyId: Number,
   chapterId: Number,
   userId: String,
+  bookmarkValue: Array
 });
 const emit = defineEmits(['update:isBookmark'])
 const storyData = ref(null)
@@ -54,6 +55,8 @@ async function fetchChapter() {
 async function getBookMark() {
   const res = await getReadingProgress(props.userId, props.storyId)
   bookmark.value = res.data
+
+  
    if (bookmark.value) {
     emit('update:isBookmark', true)
   }
@@ -103,5 +106,10 @@ const activeName = ref('first')
 
 .list-menu p {
   line-height: 1.5rem;
+  color: #000 !important;
+}
+.list-menu p:hover
+{
+  color: #ff6114 !important;
 }
 </style>

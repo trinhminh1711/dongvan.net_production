@@ -1,6 +1,6 @@
 <template>
     <div class="container py-4">
-        <div class="d-flex gap-3 bottom-layout">
+        <div class="d-md-flex d-block gap-3 bottom-layout">
             <img class="header-logo" src="@/assets/logo.png" />
             <p class="text-sm">
                 © 2025 Đông Minh Tân Văn<br>

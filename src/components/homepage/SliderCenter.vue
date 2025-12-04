@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <div class="carousel-wrapper col-6">
+    <div class="carousel-wrapper col-md-6 col-12">
       <!-- Swiper -->
       <Swiper :modules="[EffectCoverflow, Pagination, Autoplay]" effect="coverflow" centered-slides :slides-per-view="3"
         :coverflow-effect="{
@@ -19,7 +19,7 @@
       </Swiper>
     </div>
 
-    <div class="slide-content col-6">
+    <div class="slide-content col-md-6">
       <h3 @click="gotoStory(idStory[currentIndex])" class="text-start text-color_primary fw-bold">{{ title[currentIndex]
         }}</h3>
       <p class="text-start text-color__tertiary slide-content__desc text-sm">
@@ -161,5 +161,14 @@ function gotoStory(id) {
 .text-start:hover {
   cursor: pointer;
   color: #FF6114;
+}
+@media (max-width: 768px) {
+  .slide-content{
+    margin-top: 60px;
+  }
+  .slide-content > *
+  {
+    text-align: center !important;
+  }
 }
 </style>

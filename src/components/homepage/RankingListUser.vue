@@ -4,7 +4,7 @@
     </div>
     <div class="list-topvote">
         <div v-for="(item, index) in items" :key="index"
-            class="topvote-item align-items-start d-flex gap-4 text-start py-2">
+            class="topvote-item justify-content-between gap-4 d-flex text-start py-2">
             <div class="d-flex align-items-start">
                 <img class="top-icon" v-if="index == 0" :src="rankingIcon1" alt="" srcset="">
                 <img class="top-icon" v-if="index == 1" :src="rankingIcon2" alt="" srcset="">
@@ -15,8 +15,8 @@
                             <p class="text-sm text-color__tertiary" v-if="index == 0">{{ item.total_reads }} lượt đọc</p>
                         </div>
             </div>
-            <div>
-                <img style="max-width: 40px; height: 60px;" v-if="index == 0" :src="item.link_thumbnail" />
+            <div class="pe-3">
+                <img style="width: 52px; height: 66px;" v-if="index == 0" :src="item.link_thumbnail" />
             </div>
         </div>
     </div>

@@ -1,16 +1,17 @@
 <template>
-    <div class="container">
+    <div class="container-fuild">
+            <div class="container bg-gray px-3 mt-3">
         <div style="background-color: #FFF5F5;" class="py-3">
-            <img style="max-width: 50px; display: block; margin: auto; padding: 30px 0;"
+            <img style="max-width: 50px; display: block; margin: auto; padding: 20px 0;"
                 src="@/assets/icon/icon-payment.png" alt="">
             <p class="text-center">Nạp Tang Diệp vào tài khoản để mua chương VIP và ủng hộ tác giả</p>
         </div>
         <h3 class="fw-bold my-3">
             Chọn mệnh giá
         </h3>
-        <div class="d-flex justify-content-between">
+        <div class="d-md-flex justify-content-between">
             <div @click="selectPayment(index)" v-for="(item, index) in payments" :key="index"
-                class="payment-value-box text-center border rounded-3" :class="{ active: selected === index }">
+                class="payment-value-box text-center border rounded-3 my-4 my-md-0" :class="{ active: selected === index }">
                 <h4 class="fw-bold text-xlg color-yellow">{{ item.price }}</h4>
                 <div v-if="item.budget" class="popular-payment btn-alert">Phổ biến</div>
                 <p class="mt-2">{{ item.value }} Tang Diệp</p>
@@ -46,7 +47,7 @@
                             </p>
                         </div>
                     </template>
-                    <div class="col-5">
+                    <div>
                         <RenderQRcode :key="valueRenderQRcode" :amount="valueRenderQRcode"
                             :add-info="auth.userId + ' Chuyển khoản' + valueRenderQRcode + 'mua Tang diệp'" />
                     </div>
@@ -76,8 +77,12 @@
             </el-tabs>
 
         </div>
-        <p class="mt-3 text-center">Đã thanh toán thành công, để Tang diệp có thể về tài khoản sớm nhất! <span
-                class="text-link" @click="sendRequest()">Gửi yêu cầu duyệt ngay</span></p>
+        <div class="text-center mt-5">
+            <p class="mt-3 text-center text-16 text-color_primary">Đã thanh toán thành công, để Tang diệp có thể về tài khoản sớm nhất!</p>
+            <button class="fw-bold mt-3 py-2 btn-alert btn-sendpayment" @click="sendRequest()">Gửi yêu cầu duyệt
+                ngay</button>
+        </div>
+    </div>
     </div>
 </template>
 
@@ -103,10 +108,18 @@ function handleFocus() {
     selected.value = null; // hủy chọn box khi focus vào input
 }
 function renderValueMoney(value) {
-    if (value > 10000) {
-        return vnNum2Words(value) + " đồng = " + value / 100 + " Tang diệp"
+    if (!value) return "Số tiền chưa hợp lệ";
+
+    // Loại bỏ tất cả dấu chấm chỉ ở nghìn (không xóa dấu thập phân)
+    const cleaned = String(value).replace(/\.(?=\d{3}\b)/g, '');
+
+    const num = parseFloat(cleaned);
+    if (!isNaN(num) && num > 9999) {
+        const tangDiep = Math.floor(num / 100);
+        return vnNum2Words(num) + " đồng = " + tangDiep + " Tang diệp";
     }
-    return "Số tiền chưa hợp lệ"
+
+    return "Số tiền chưa hợp lệ";
 }
 function selectPayment(index) {
     inputValue.value = "";
@@ -162,8 +175,17 @@ const inputValue = ref()
 </script>
 
 <style scoped>
+.container-fuild
+{
+    background-color: #F9FAFB;
+}
+.btn-sendpayment {
+    padding: 30px;
+    line-height: 1.5;
+}
+
 .payment-value-box {
-    padding: 20px 60px;
+   padding: 20px 100px;
     position: relative;
 }
 

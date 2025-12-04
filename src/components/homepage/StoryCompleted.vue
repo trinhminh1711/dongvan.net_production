@@ -1,71 +1,95 @@
 <template>
-    <h3 class="text-color_primary fw-bold mb-4">Truyện Đã Hoàn Thành</h3>
-    <div v-if="storyComplete" class="row d-flex align-items-center">
-        <div class="col-3">
-            <div @click="gotoStory(storyComplete?.[0].story_id)"  class="box-img__vertical d-flex flex-column gap-2 px-2 cursor-pointer">
-                <img class="img-boxshadow" :src="storyComplete?.[0].urlImg" alt="">
-                <p class="text-center">{{ storyComplete?.[0].title }}</p>
-                <p class="text-center color-alert text-md mt-1">
-                    <span class="fw-bold"> {{ storyComplete?.[0].chap_number }} </span> chương
-                </p>
-                <p class="text-sm text-center text-three-line">{{ storyComplete?.[0].description }}</p>
-                <p class="text-center mt-2"> <button class="btn-alert__rounded">Đọc ngay</button></p>
+    <div class="container">
+        <h3 class="text-color_primary fw-bold mb-4 mt-5">Truyện Đã Hoàn Thành</h3>
+        <div v-if="storyComplete" class="row d-flex align-items-center">
+            <div class="col-md-3">
+                <div @click="gotoStory(storyComplete?.[0].story_id)"
+                    class="box-img__vertical d-flex flex-column gap-2 px-4 cursor-pointer">
+                    <div class="d-flex">
+                        <div class="coverflow">
+                            <img :src="storyComplete?.[0].urlImg" alt="Book Left" class="left">
+                            <img :src="storyComplete?.[0].urlImg" alt="Book Center" class="active">
+                            <img :src="storyComplete?.[0].urlImg" alt="Book Right" class="right">
+                        </div>
+                    </div>
+                    <p class="text-center fw-semibold">{{ storyComplete?.[0].title }}</p>
+                    <p class="text-center color-alert text-md mt-1">
+                        <span class="fw-bold"> {{ storyComplete?.[0].chap_number }} </span> chương
+                    </p>
+                    <p class="text-sm text-center text-three-line">{{ storyComplete?.[0].description }}</p>
+                    <p class="text-center mt-2"> <button class="btn-alert__rounded">Đọc ngay</button></p>
+                </div>
             </div>
-        </div>
-        <div class="list-container col-9">
-            <div class="row">
-                <div v-for="(item, index) in listStoryCompleteWithCategory"
-                    class="card-story-completed col-4 px-4 pb-3">
-                    <p class="d-flex align-items-center d-flex justify-content-between border-bottom mb-3">
-                        <span class="fw-bold">{{ item.category_name }}</span>
-                        <img :src="item.image" alt="">
-                    </p>
-                    <div >
-                    <p class="content-title" v-for="(detail, key) in item.content">
-                        <span @click="goToProfile(detail.author_id)" class="text-sm hover-link left">[{{ detail.author }}]</span>
-                        <span @click="gotoStory(detail.story_id)" class="text-color_primary fw-bold text-sm right text-link_alert ms-1">{{ detail.name
-                        }}</span>
-                    </p>
+            <div class="list-container col-md-9">
+                <div class="row">
+                    <div v-for="(item, index) in listStoryCompleteWithCategory"
+                        class="card-story-completed col-md-4 px-4 pb-3">
+                        <p class="d-flex align-items-center d-flex justify-content-between border-bottom mb-3">
+                            <span class="fw-bold text-18">{{ item.category_name }}</span>
+                            <img :src="item.image" alt="">
+                        </p>
+                        <div>
+                            <p class="content-title " v-for="(detail, key) in item.content">
+                                <span @click="goToProfile(detail.author_id)" class="text-16 hover-link left">[{{
+                                    detail.author }}]</span>
+                                <span @click="gotoStory(detail.story_id)"
+                                    class="text-color_primary fw-bold text-16 right text-link_alert ms-1">{{ detail.name
+                                    }}</span>
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div v-if="storyComplete" class="row d-flex align-items-center mt-4">
-        <div class="col-3">
-            <div @click="gotoStory(storyComplete?.[1].story_id)" class="box-img__vertical d-flex flex-column gap-2 px-2 cursor-pointer">
-                <img class="img-boxshadow" :src="storyComplete?.[1].urlImg" alt="">
-                <p class="text-center">{{ storyComplete?.[1].title }}</p>
-                <p class="text-center color-alert text-md mt-1">
-                    <span class="fw-bold"> {{ storyComplete?.[1].chap_number }} </span> chương
-                </p>
-                <p class="text-sm text-center text-three-line">{{ storyComplete?.[1].description }}</p>
-                <p @click="gotoStory(storyComplete?.[1].story_id)" class="text-center mt-2"> <button class="btn-alert__rounded">Đọc ngay</button></p>
+        <div v-if="storyComplete" class="row d-md-flex d-none align-items-center  mt-4">
+            <div class="col-3">
+                <div @click="gotoStory(storyComplete?.[1].story_id)"
+                    class="box-img__vertical box-img__vertical2 d-flex flex-column gap-2 px-4 cursor-pointer">
+                    <div class="d-flex">
+                        <div class="coverflow">
+                            <img :src="storyComplete?.[1].urlImg" alt="Book Left" class="left">
+                            <img :src="storyComplete?.[1].urlImg" alt="Book Center" class="active">
+                            <img :src="storyComplete?.[1].urlImg" alt="Book Right" class="right">
+                        </div>
+                    </div>
+                    <p class="text-center fw-semibold">{{ storyComplete?.[1].title }}</p>
+                    <p class="text-center color-alert text-md mt-1">
+                        <span class="fw-bold"> {{ storyComplete?.[1].chap_number }} </span> chương
+                    </p>
+                    <p class="text-sm text-center text-three-line">{{ storyComplete?.[1].description }}</p>
+                    <p @click="gotoStory(storyComplete?.[1].story_id)" class="text-center mt-2"> <button
+                            class="btn-alert__rounded">Đọc ngay</button></p>
+                </div>
             </div>
-        </div>
-        <div class="list-container col-9">
-            <div class="row">
-                <div v-for="(item, index) in listStoryCompleteWithCategory"
-                    class="card-story-completed col-4 px-4 pb-3">
-                    <p class="d-flex align-items-center d-flex justify-content-between border-bottom mb-3">
-                        <span class="fw-bold">{{ item.category_name }}</span>
-                        <img :src="item.image" alt="">
-                    </p>
-                    <p class="d-flex content-title" v-for="(detail, key) in item.content">
-                        <span @click="goToProfile(detail.author_id)" class="text-sm hover-link left">[{{ detail.author }}]</span> <span
-                            class="text-color_primary fw-bold text-sm text-one-line right">{{ detail.name
-                            }}</span>
-                    </p>
+            <div class="list-container col-9">
+                <div class="row">
+                    <div v-for="(item, index) in listStoryCompleteWithCategory"
+                        class="card-story-completed col-4 px-4 pb-3">
+                        <p class="d-flex align-items-center d-flex justify-content-between border-bottom mb-3">
+                            <span class="fw-bold text-18">{{ item.category_name }}</span>
+                            <img :src="item.image" alt="">
+                        </p>
+                        <p class="d-flex content-title" v-for="(detail, key) in item.content">
+                            <span @click="goToProfile(detail.author_id)" class="text-16 hover-link left">[{{
+                                detail.author
+                            }}]</span> <span class="text-color_primary fw-bold  text-one-line right text-16">{{
+                                    detail.name
+                                }}</span>
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="bottom-card-image mt-5">
-        <div @click="gotoStory(item.story_id)" class="d-flex flex-column align-items-center gap-2 py-3 cursor-pointer" v-for="(item, index) in storyCompletedBottom">
-            <img style="max-width: 70px; height: 100px; box-shadow: rgba(0, 0, 0, 0.25) 0px 3px 10px; border-radius: 5px;" :src="item.urlImg" alt="">
-            <p class="text-color_primary fw-bold text-md text-one-line hover-link">{{ item.title }}</p>
-            <small class="d-block"> {{ item.genre_name }} </small>
-            <button @click="gotoStory(item.story_id)" class="btn-outline">Đọc ngay</button>
+        <div class="bottom-card-image pt-100">
+            <div @click="gotoStory(item.story_id)"
+                class="d-flex flex-column align-items-center gap-2 py-3 cursor-pointer"
+                v-for="(item, index) in storyCompletedBottom">
+                <img style="max-width: 70px; height: 100px; box-shadow: rgba(0, 0, 0, 0.25) 0px 3px 10px; border-radius: 5px;"
+                    :src="item.urlImg" alt="">
+                <p class="text-color_primary fw-bold text-md text-one-line hover-link px-3">{{ item.title }}</p>
+                <small class="d-block"> {{ item.genre_name }} </small>
+                <button @click="gotoStory(item.story_id)" class="btn-outline">Đọc ngay</button>
+            </div>
         </div>
     </div>
 </template>
@@ -156,7 +180,7 @@ async function getAllStoryComplete() {
     const res = await getStoryComplete(10);
     storyComplete.value = res
     console.log(storyComplete.value);
-    
+
     listStoryCompleteWithCategory.value = (mapStoriesToCategories(storyCompleted1.value, storyComplete.value));
 }
 function mapStoriesToCategories(categories, stories) {
@@ -167,7 +191,7 @@ function mapStoriesToCategories(categories, stories) {
             ...cat,
             category_name: filteredStories[0]?.genre_name || "",
             content: filteredStories.map(story => ({
-                 story_id: story.story_id,
+                story_id: story.story_id,
                 author: story.author_name,
                 author_id: story.author_id,
                 name: story.title
@@ -179,7 +203,7 @@ function mapStoriesToCategories(categories, stories) {
 function gotoStory(params) {
     router.push({ name: 'story', params: { id: params } })
 }
-function goToProfile(params) {   
+function goToProfile(params) {
     router.push({ name: 'user', params: { id: params } })
 }
 onMounted(async () => {
@@ -200,19 +224,27 @@ onMounted(async () => {
     border-radius: 10px;
     background: linear-gradient(to bottom,
             #E2EBF3 0%,
-            #E2EBF3 55%,
-            #FFFFFF 70%,
-            #FFFFFF 100%);
+            #FFFFFF 63%);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
 }
-.hover-link:hover
-{
-   color: #FC6C28;
-   cursor: pointer;
+
+.box-img__vertical2 {
+    padding: 40px 0;
+    border-radius: 10px;
+    background: linear-gradient(to bottom,
+            #E1E1F2 0%,
+            #FFFFFF 63%);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
 }
+
+.hover-link:hover {
+    color: #FC6C28;
+    cursor: pointer;
+}
+
 .bottom-card-image {
     display: flex;
-    gap: 20px
+
 }
 
 .bottom-card-image>div {
@@ -222,27 +254,35 @@ onMounted(async () => {
 .bottom-card-image>div:nth-child(even) {
     background-color: #f7f6f2;
 }
+
+.bottom-card-image>div:nth-child(odd) {
+    background-color: #FCFCFA;
+}
+
 .content-title {
-  display: flex;
-  align-items: center;
-  gap: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
-.content-title  .left {
-  flex-shrink: 0; /* không cho co lại */
+.content-title .left {
+    flex-shrink: 0;
+    /* không cho co lại */
 }
 
-.content-title  .right {
-  flex: 1; /* chiếm phần còn lại */
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-      display: -webkit-box;
+.content-title .right {
+    flex: 1;
+    /* chiếm phần còn lại */
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    display: -webkit-box;
     -webkit-line-clamp: 1;
     /* số dòng muốn hiển thị */
     -webkit-box-orient: vertical;
     text-overflow: ellipsis;
 }
+
 .img-boxshadow {
     box-shadow: rgba(0, 0, 0, 0.25) 0px 3px 10px;
     ;
@@ -256,6 +296,7 @@ onMounted(async () => {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
 .text-one-line {
     display: -webkit-box;
     -webkit-line-clamp: 1;
@@ -263,5 +304,60 @@ onMounted(async () => {
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.coverflow {
+    position: relative;
+    width: 600px;
+    height: 230px;
+    perspective: 1000px;
+}
+
+.coverflow img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 230px;
+    height: auto;
+    transform-style: preserve-3d;
+    border-radius: 5px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    transition: all 0.6s ease;
+    cursor: pointer;
+}
+
+/* Ảnh trung tâm */
+.coverflow img.active {
+    transform: translate(-50%, -50%) scale(1.2);
+    z-index: 3;
+    height: 140px;
+    filter: brightness(1);
+}
+
+/* Ảnh bên trái */
+.coverflow img.left {
+    transform: translate(-120%, -40%) scale(0.9);
+    z-index: 2;
+    filter: brightness(0.5);
+}
+
+/* Ảnh bên phải */
+.coverflow img.right {
+    transform: translate(20%, -40%) scale(0.9);
+    z-index: 2;
+    filter: brightness(0.5);
+}
+
+@media (max-width: 768px) {
+    .bottom-card-image {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px
+    }
+
+    .bottom-card-image>.flex-column {
+       width: calc(50% - 10px);
+        flex: unset;
+    }
 }
 </style>

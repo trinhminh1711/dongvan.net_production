@@ -5,16 +5,16 @@
         </h2>
         <p class="text-center mt-2 mb-4">Tìm lời giải cho những thắc mắc của bạn ở đây</p>
         <div class="row align-items-center">
-            <div style="margin: auto;" class="col-10">
+            <div style="margin: auto;" class="col-md-10">
                 <div class="demo-collapse">
                     <el-collapse v-model="activeNames" @change="handleChange">
                         <el-collapse-item name="1">
                             <template #title>
-                                <span class="fw-semibold">Tang Diệp là gì? Cách để có Tang Diệp trong tài
+                                <span class="fw-semibold text-18">Tang Diệp là gì? Cách để có Tang Diệp trong tài
                                     khoản?</span>
                             </template>
                             <div>
-                                <p>
+                                <p class="text-16">
                                     Tang Diệp là đơn vị tiền được sử dụng trong nền tảng Mạng văn học Đông Văn. Tang
                                     Diệp
                                     dùng để mở
@@ -25,19 +25,23 @@
 
                             </div>
                             <template #icon>
-                                <el-icon style="font-size:24px;" v-if="activeNames.includes('1')">
-                                    <CirclePlus />
+                                <el-icon style="font-size:20px;" v-if="activeNames.includes('1')">
+                                    <el-icon style="font-size:12px;" class="icon-circle minus">
+                                        <Minus />
+                                    </el-icon>
                                 </el-icon>
-                                <el-icon style="font-size:24px;" v-else>
-                                    <CircleClose />
+                                <el-icon class="icon-circle minus" style="font-size:20px;" v-else>
+                                    <el-icon style="font-size:12px;">
+                                        <Plus />
+                                    </el-icon>
                                 </el-icon>
                             </template>
                         </el-collapse-item>
                         <el-collapse-item title="Feedback" name="2">
                             <template #title>
-                                <span class="fw-semibold">Phiếu Đề cử là gì? Làm sao để có Phiếu đề cử?</span>
+                                <span class="fw-semibold text-18">Phiếu Đề cử là gì? Làm sao để có Phiếu đề cử?</span>
                             </template>
-                            <div>
+                            <div class="text-16">
                                 - Phiếu đề cử là phiếu dùng để đề cử cho các truyện bạn đang đọc, hoặc các truyện bạn
                                 yêu thích
                                 để cho truyện đó
@@ -55,20 +59,24 @@
                                 5 Tang Diệp đổi
                                 một Phiếu đề cử.<br>
                             </div>
-                            <template #icon>
-                                <el-icon style="font-size:24px;" v-if="activeNames.includes('1')">
-                                    <CirclePlus />
+                         <template #icon>
+                                <el-icon style="font-size:20px;" v-if="activeNames.includes('2')">
+                                    <el-icon style="font-size:12px;" class="icon-circle minus">
+                                        <Minus />
+                                    </el-icon>
                                 </el-icon>
-                                <el-icon style="font-size:24px;" v-else>
-                                    <CircleClose />
+                                <el-icon class="icon-circle minus" style="font-size:20px;" v-else>
+                                    <el-icon style="font-size:12px;">
+                                        <Plus />
+                                    </el-icon>
                                 </el-icon>
                             </template>
                         </el-collapse-item>
                         <el-collapse-item title="Efficiency" name="3">
                             <template #title>
-                                <span class="fw-semibold">Liên hệ hỗ trợ</span>
+                                <span class="fw-semibold text-18">Liên hệ hỗ trợ</span>
                             </template>
-                            <div>
+                            <div class="text-16">
                                 - Đối với các vấn đề gặp phải khi đọc hoặc đăng tải truyện bạn sáng tác trên nền tảng
                                 như thắc
                                 mắc về việc nạp,
@@ -84,38 +92,47 @@
                                 hỗ trợ với tác
                                 phẩm.
                             </div>
-                            <template #icon>
-                                <el-icon style="font-size:24px;" v-if="activeNames.includes('1')">
-                                    <CirclePlus />
+                             <template #icon>
+                                <el-icon style="font-size:20px;" v-if="activeNames.includes('3')">
+                                    <el-icon style="font-size:12px;" class="icon-circle minus">
+                                        <Minus />
+                                    </el-icon>
                                 </el-icon>
-                                <el-icon style="font-size:24px;" v-else>
-                                    <CircleClose />
+                                <el-icon class="icon-circle minus" style="font-size:20px;" v-else>
+                                    <el-icon style="font-size:12px;">
+                                        <Plus />
+                                    </el-icon>
                                 </el-icon>
                             </template>
                         </el-collapse-item>
                         <el-collapse-item title="Controllability" name="4">
                             <template #title>
-                                <span class="fw-semibold">Làm sao để Đề cử truyện hoặc Tặng quà cho tác giả?</span>
+                                <span class="fw-semibold text-18">Làm sao để Đề cử truyện hoặc Tặng quà cho tác
+                                    giả?</span>
                             </template>
-                            <div>
+                            <div class="text-16">
                                 - Cuối mỗi chương truyện, sẽ có nút “Đề cử” và “Tặng quà” cho tác giả của truyện bạn
                                 đang đọc.
                             </div>
                             <template #icon>
-                                <el-icon style="font-size:24px;" v-if="activeNames.includes('1')">
-                                    <CirclePlus />
+                                <el-icon style="font-size:20px;" v-if="activeNames.includes('4')">
+                                    <el-icon style="font-size:12px;" class="icon-circle minus">
+                                        <Minus />
+                                    </el-icon>
                                 </el-icon>
-                                <el-icon style="font-size:24px;" v-else>
-                                    <CircleClose />
+                                <el-icon class="icon-circle minus" style="font-size:20px;" v-else>
+                                    <el-icon style="font-size:12px;">
+                                        <Plus />
+                                    </el-icon>
                                 </el-icon>
                             </template>
                         </el-collapse-item>
                         <el-collapse-item name="5">
                             <template #title>
-                                <span class="fw-semibold">Đăng truyện trên “Đông Văn” có thể kiếm được tiền
+                                <span class="fw-semibold text-18">Đăng truyện trên “Đông Văn” có thể kiếm được tiền
                                     không?</span>
                             </template>
-                            <div>
+                            <div class="text-16">
                                 - Câu trả lời là có. Nền tảng “Đông Văn” được thành lập với một trong những mục tiêu
                                 chính là
                                 giúp cho các tác
@@ -126,42 +143,52 @@
                                 + Tiền từ quà tặng của các độc giả gửi đến tác giả.:<br>
                                 + Tiền thưởng khi bạn đạt được các danh hiệu, hoặc tham gia các cuộc thi của nền tảng.
                             </div>
-                            <template #icon>
-                                <el-icon style="font-size:24px;" v-if="activeNames.includes('1')">
-                                    <CirclePlus />
+                         <template #icon>
+                                <el-icon style="font-size:20px;" v-if="activeNames.includes('5')">
+                                    <el-icon style="font-size:12px;" class="icon-circle minus">
+                                        <Minus />
+                                    </el-icon>
                                 </el-icon>
-                                <el-icon style="font-size:24px;" v-else>
-                                    <CircleClose />
+                                <el-icon class="icon-circle minus" style="font-size:20px;" v-else>
+                                    <el-icon style="font-size:12px;">
+                                        <Plus />
+                                    </el-icon>
                                 </el-icon>
                             </template>
                         </el-collapse-item>
                         <el-collapse-item name="6">
                             <template #title>
-                                <span class="fw-semibold">Khi nào thì truyện của bạn đạt điều kiện xét duyệt thu phí (mở
+                                <span class="fw-semibold text-18">Khi nào thì truyện của bạn đạt điều kiện xét duyệt thu
+                                    phí (mở
                                     VIP)?</span>
                             </template>
-                            <div>
+                            <div class="text-16">
                                 - Để đạt đủ điều kiện mở thu phí, bạn cần đáp ứng các điều kiện:<br>
                                 +Truyện của bạn đáp ứng các tiêu chuẩn sáng tác của nền tảng “Đông Văn”.<br>
                                 + Đăng tối thiểu 10 chương (dung lượng mỗi chương từ 1500 từ trở lên”<br>
                                 + Lượt đọc của truyện từ 1000 lượt trở lên.<br>
                             </div>
-                            <template #icon>
-                                <el-icon style="font-size:24px;" v-if="activeNames.includes('1')">
-                                    <CirclePlus />
+                           <template #icon>
+                                <el-icon style="font-size:20px;" v-if="activeNames.includes('6')">
+                                    <el-icon style="font-size:12px;" class="icon-circle minus">
+                                        <Minus />
+                                    </el-icon>
                                 </el-icon>
-                                <el-icon style="font-size:24px;" v-else>
-                                    <CircleClose />
+                                <el-icon class="icon-circle minus" style="font-size:20px;" v-else>
+                                    <el-icon style="font-size:12px;">
+                                        <Plus />
+                                    </el-icon>
                                 </el-icon>
                             </template>
                         </el-collapse-item>
                         <el-collapse-item name="7">
                             <template #title>
-                                <span class="fw-semibold">Các loại hợp đồng khi truyện của bạn vào VIP (đủ điều kiện mở
+                                <span class="fw-semibold text-18">Các loại hợp đồng khi truyện của bạn vào VIP (đủ điều
+                                    kiện mở
                                     thu
                                     phí)?</span>
                             </template>
-                            <div>
+                            <div class="text-16">
                                 - Khi truyện của bạn đủ điều kiện mở thu phí (vào VIP), bạn có thể lựa chọn kí 1 trong 2
                                 loại
                                 hợp động: Hợp đồng
@@ -186,12 +213,16 @@
                                 của bạn vào thời
                                 điểm kí hợp đồng) trên mỗi lượt độc giả trả phí.
                             </div>
-                            <template #icon>
-                                <el-icon style="font-size:24px;" v-if="activeNames.includes('1')">
-                                    <CirclePlus />
+                                <template #icon>
+                                <el-icon style="font-size:20px;" v-if="activeNames.includes('7')">
+                                    <el-icon style="font-size:12px;" class="icon-circle minus">
+                                        <Minus />
+                                    </el-icon>
                                 </el-icon>
-                                <el-icon style="font-size:24px;" v-else>
-                                    <CircleClose />
+                                <el-icon class="icon-circle minus" style="font-size:20px;" v-else>
+                                    <el-icon style="font-size:12px;">
+                                        <Plus />
+                                    </el-icon>
                                 </el-icon>
                             </template>
                         </el-collapse-item>
@@ -215,5 +246,26 @@ const handleChange = (val: CollapseModelValue) => {
 <style>
 .collapse .el-collapse-item__content p {
     line-height: 2;
+}
+.icon-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 21px;
+  height: 21px;
+  border-radius: 50%;
+  border: 2px solid #AEAEAE; /* hoặc #ffd04b */
+  color: #AEAEAE;
+}
+.el-collapse-item__wrap {
+  overflow: hidden;  /* đảm bảo nội dung bung ra không đè lên item khác */
+  transition: height 0.3s ease; /* mượt khi mở/đóng */
+}
+.demo-collapse {
+  position: relative;
+  width: 100%;
+}
+.el-collapse-item__header {
+    height: auto !important;
 }
 </style>

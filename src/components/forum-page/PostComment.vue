@@ -2,8 +2,8 @@
     <div class="box-shadow px-3 pb-2 pt-3 mt-3">
         <div class="post-main__info d-flex align-items-center justify-content-between gap-1">
             <div class="d-flex align-items-center">
-                <img style="width: 50px; height:50px ; border-radius: 50%;" :src="user_thumbnail" alt="">
-                <p class="ms-3 fw-bold">{{ user }}</p>
+                <img @click="goToProfile(user_id)" class="hover-pointer" style="width: 50px; height:50px ; border-radius: 50%;" :src="user_thumbnail" alt="">
+                <p  @click="goToProfile(user_id)" class="ms-3 fw-bold hover-link">{{ user }}</p>
             </div>
             <div class="date-comment">
                 <p class="text-sm pe-3">{{ timeAgo(date) }}</p>
@@ -38,8 +38,8 @@
         <div v-if="commentReply.length > 0" v-for="value in commentReply" class="box-shadow px-3 pb-2 pt-3 mt-3">
             <div class="post-main__info d-flex align-items-center justify-content-between gap-1">
                 <div class="d-flex align-items-center">
-                      <img style="width: 50px; height:50px ; border-radius: 50%;" :src="value.link_thumbnail" alt="">
-                    <p class="ms-3 fw-bold">{{ value.username }}</p>
+                    <img @click="goToProfile(value.user_id)" class="cursor-pointer" style="width: 50px; height:50px ; border-radius: 50%;" :src="value.link_thumbnail" alt="">
+                    <p @click="goToProfile(value.user_id)" class="ms-3 fw-bold hover-link">{{ value.username }}</p>
                 </div>
                 <div class="date-comment">
                     <p class="text-sm pe-3">{{ timeAgo(value.created_at) }}</p>
@@ -59,6 +59,11 @@ import { ref, onMounted } from "vue";
 import { increaseLike } from '@/api/storyComment';
 import { increaseLikePostComment, getListLikeComment } from "../../api/forum";
 import { useAuthStore } from "@/stores/auth";
+import { useLoginModal } from "@/stores/useLoginModal";
+import { useRouter } from 'vue-router'
+const router = useRouter()
+
+const loginModal = useLoginModal()
 import PostCommentReply from "./PostCommentReply.vue";
 const auth = useAuthStore();
 const userId = auth.userId || null
@@ -72,6 +77,9 @@ const props = defineProps({
     },
     user: {
         type: String,
+    },
+    user_id: {
+        type: Number,
     },
     comment: {
         type: String,
@@ -102,7 +110,13 @@ function linkifyText(text) {
 }
 const localLike = ref(props.like);
 function replyCommentFunc() {
-    replyComment.value = true
+    if (auth.userId) {
+        replyComment.value = true
+    }
+    else {
+        loginModal.open()
+    }
+
 }
 async function getLikeComment() {
     const res = await getListLikeComment(props.comment_id);
@@ -143,6 +157,9 @@ function timeAgo(dateString: string): string {
         const diffMonths = Math.floor(diffDays / 30);
         return `${diffMonths} tháng trước`;
     }
+}
+function goToProfile(params) {
+    router.push({ name: 'user', params: { id: params } })
 }
 onMounted(() => {
     getLikeComment()

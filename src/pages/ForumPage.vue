@@ -4,7 +4,7 @@
             <div class="spinner"></div>
         </div>
         <div class="row">
-            <div class="col-3 sidebar-sticky">
+            <div class="col-3 d-md-block d-none sidebar-sticky">
                 <h3 class="fw-bold mb-3">Danh mục</h3>
                 <div @click="goToListPost(item.id ?? items[4].id)" v-for="(item, index) in items" :key="index"
                     class=" d-flex align-items-center menu-category__item gap-2 py-2">
@@ -14,13 +14,21 @@
                     <div>
                         <p class="text-color_primary">{{ item.text }}</p>
                         <p class="text-color__tertiary">
-                             {{ item.number ?? items[4].number }} bài viết
+                            {{ item.number ?? items[4].number }} bài viết
                         </p>
                     </div>
 
                 </div>
             </div>
-            <div class="col-9">
+            <div class="d-block d-md-none mb-3">
+                 <h3 class="fw-bold mb-3">Danh mục</h3>
+                <el-select placeholder="Chọn danh mục" @change="goToListPost" style="width: 100%;">
+                    <el-option v-for="(item, index) in items" :key="index"
+                        :label="`${item.text} - ${item.number ?? items[4].number} bài viết`"
+                        :value="item.id ?? items[4].id" />
+                </el-select>
+            </div>
+            <div class="col-md-9">
                 <router-view v-if="!loading" :key="$route.fullPath" v-slot="{ Component }">
                     <component :is="Component || PostCategory" />
                 </router-view>
@@ -53,13 +61,14 @@ import ListPost from '@/components/forum-page/ListPost.vue'
 import PostDetail from '@/components/forum-page/PostDetail.vue'
 import CreatePostForum from '@/components/forum-page/CreatePostForum.vue'
 import PostCategory from '@/components/forum-page/PostCategory.vue'
+
 const loading = ref(false);
 const items = [
     { image: storyIcon, text: 'Trinh thám' },
     { image: vectorIcon2, text: 'Ngôn tình' },
     { image: vectorIcon3, text: 'Linh dị' },
     { image: vectorIcon4, text: 'Lịch sử' },
-    { id: 1, image: vectorIcon5, text: 'Luận truyện' },
+    { id: 1, image: vectorIcon5, text: 'Thể loại khác' },
     { id: 2, image: vectorIcon6, text: 'Đề cử và Review truyện', number: '43492' },
     { id: 3, image: vectorIcon7, text: 'Nhập môn sáng tác', number: '77225' },
     { id: 4, image: vectorIcon8, text: 'Tìm bạn đồng sáng tác', number: '45378' },

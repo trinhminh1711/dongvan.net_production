@@ -12,6 +12,9 @@ const authService = {
   getProfile: () => {
     return axiosClient.get("/auth/profile");
   },
+  loginGoogle: (data) => {
+    return axiosClient.post("/auth/login/google", data);
+  },
 };
 
 export default authService;

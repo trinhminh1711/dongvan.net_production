@@ -3,7 +3,7 @@
     <el-tab-pane label="Đăng nhập" name="first">
         <LoginForm/>
     </el-tab-pane>
-    <el-tab-pane label="Đăng ký" name="seconds">
+    <el-tab-pane label="Đăng ký mới" name="seconds">
         <SignUp />
     </el-tab-pane>
 
@@ -29,5 +29,14 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
   color: #6b778c;
   font-size: 32px;
   font-weight: 600;
+}
+.demo-tabs .el-tabs__nav 
+{
+width: 100%;
+}
+.demo-tabs .el-tabs__nav  .el-tabs__item
+{
+  flex: 0 0 50%; 
+  padding: 0;
 }
 </style>

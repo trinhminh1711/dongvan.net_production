@@ -22,9 +22,6 @@
         </div>
 
     </div>
-       <div v-if="!authStore.userId" class="pb-2">
-        <h4 @click="loginModal.open()" class="text-link">Login to comment</h4>
-    </div>
 </template>
 
 <script lang="ts" setup>

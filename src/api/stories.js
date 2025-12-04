@@ -19,6 +19,7 @@ export const createStory = async (data) => {
         const formData = new FormData();
         formData.append("title", data.storyName);
         formData.append("author_id", data.storyAuthor);
+        formData.append("pen_name", data.pen_name);
         formData.append("genres_id", data.storyGenre);
         formData.append("description", data.storyDesc);
         formData.append("link_forum", data.storyLinkForum);

@@ -1,5 +1,5 @@
 <template>
-    <div class="d-flex align-items-center justify-content-between">
+    <div class="d-md-flex align-items-center justify-content-between">
         <div>
             <h3 class="text-color_primary fw-bold">{{ tableData[0]?.topicTitle }}</h3>
             <p>Trao đổi chia sẻ những câu truyện hay nào!</p>
@@ -21,16 +21,21 @@
                                 <template #content>
                                     <UserInfoCard :idUserComment="scope.row.user_id" />
                                 </template>
-                                <img style="width: 70px; height: 70px; border-radius: 50%;" :src="scope.row.avatarImg"
+                                <img class="cursor-pointer" @click="goToProfile(scope.row.user_id)"
+                                    style="width: 70px; height: 70px; border-radius: 50%;" :src="scope.row.avatarImg"
                                     alt="">
                             </el-tooltip>
                         </div>
                         <div class="info">
-                            <p> <span class="text-sm fw-semibold color-blue post-topic"><span class="dot"></span>
+                            <p>
+                                <span class="text-sm fw-semibold post-topic"
+                                    :class="getTopicColor(scope.row.topicTitle).text">
+                                    <span class="dot" :class="getTopicColor(scope.row.topicTitle).dot"></span>
                                     {{ scope.row.topicTitle }}
-                                </span> <span @click="goToPost(scope.row.postId)"
-                                    class="text-md fw-bold color-blue hover_link">{{
-                                        scope.row.name }}</span></p>
+                                    </span> <span @click="goToPost(scope.row.postId)"
+                                        class="text-md fw-bold color-blue hover_link">{{
+                                            scope.row.name }}</span>
+                            </p>
                             <div class="d-flex gap-3 align-items-center mt-2">
                                 <p class="d-flex gap-1 align-items-center">
                                     <el-icon>
@@ -53,10 +58,13 @@
             <el-table-column label="Lượt tương tác" prop="chapters">
                 <template #default="scope">
                     <p class="like-share d-flex gap-4 py-4">
-                        <span>
-<svg data-v-fb47b416="" class="heart-icon-unliked" width="22" height="20" viewBox="0 0 20 18" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path data-v-fb47b416="" d="M9.99431 3.27985C8.32819 1.332 5.54981 0.808035 3.46227 2.59168C1.37472 4.37532 1.08083 7.35748 2.72019 9.467C4.0832 11.2209 8.20816 14.9201 9.5601 16.1174C9.71136 16.2513 9.78698 16.3183 9.8752 16.3446C9.95219 16.3676 10.0364 16.3676 10.1134 16.3446C10.2016 16.3183 10.2773 16.2513 10.4285 16.1174C11.7805 14.9201 15.9054 11.2209 17.2684 9.467C18.9078 7.35748 18.6498 4.35656 16.5264 2.59168C14.4029 0.826798 11.6604 1.332 9.99431 3.27985Z"></path></svg>
+                        <span @click="likeShare(scope.row.postId)">
+ 
+<svg width="22" height="20" viewBox="0 0 22 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M10.9932 3.13771C8.9938 0.800292 5.65975 0.171535 3.15469 2.31191C0.649644 4.45228 0.296968 8.03087 2.2642 10.5623C3.89982 12.667 8.84977 17.106 10.4721 18.5427C10.6536 18.7035 10.7444 18.7838 10.8502 18.8154C10.9426 18.843 11.0437 18.843 11.1361 18.8154C11.2419 18.7838 11.3327 18.7035 11.5142 18.5427C13.1365 17.106 18.0865 12.667 19.7221 10.5623C21.6893 8.03087 21.3797 4.42976 18.8316 2.31191C16.2835 0.194049 12.9925 0.800292 10.9932 3.13771Z" stroke="#667085" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
                             {{ scope.row.like }}</span>
-                        <span><el-icon>
+                        <span @click="goToPost(scope.row.postId)"><el-icon :size="24">
                                 <ChatRound />
                             </el-icon>{{ scope.row.comment }}</span>
                     </p>
@@ -68,14 +76,17 @@
                 <template #default="scope">
                     <div class="closest-interaction justify-content-between d-flex align-items-center gap-1">
                         <div>
-                            <p class="text-md color-blue">{{ scope.row.closestInteraction.date }}</p>
-                            <p class="text-sm">{{ scope.row.closestInteraction.name }}</p>
+                            <p class="text-md color-blue text-right">{{ scope.row.closestInteraction.date }}</p>
+                            <p :class="scope.row.closestInteraction.user_id ? 'hover-link' : ''"
+                                @click="goToProfile(scope.row.closestInteraction.user_id)" class="text-sm">{{
+                                    scope.row.closestInteraction.name }}</p>
                         </div>
                         <el-tooltip popper-class="custom-tooltip" placement="left-start">
                             <template #content>
                                 <UserInfoCard :idUserComment="scope.row.closestInteraction.user_id" />
                             </template>
-                            <img v-if="scope.row.closestInteraction.user_id"
+                            <img class="cursor-pointer" @click="goToProfile(scope.row.closestInteraction.user_id)"
+                                v-if="scope.row.closestInteraction.user_id"
                                 style="width: 40px; height: 40px; border-radius: 50%;"
                                 :src="scope.row.closestInteraction.avatarImg" alt="">
                         </el-tooltip>
@@ -83,12 +94,12 @@
                 </template>
             </el-table-column>
         </el-table>
+
+    </div>
         <div class="example-pagination-block d-flex justify-content-center mt-2">
             <el-pagination :page-size="5" v-model:current-page="currentPage" layout="prev, pager, next"
                 :total="totalPage" />
         </div>
-    </div>
-
 
     <el-dialog v-model="dialogVisible" width="500">
         <CreatePostForum />
@@ -102,6 +113,11 @@ import { getPostForumByTopic } from '@/api/forum';
 import UserInfoCard from './UserInfoCard.vue';
 import { useRouter } from "vue-router";
 import { useRoute } from "vue-router";
+import { toggleLike, getListLikePost } from '../../api/forum';
+import { useLoginModal } from '@/stores/useLoginModal'
+import { useAuthStore } from "@/stores/auth";
+const auth = useAuthStore();
+const loginModal = useLoginModal()
 const router = useRouter();
 const route = useRoute();
 const dialogVisible = ref(false)
@@ -135,29 +151,70 @@ const tableData = ref<Item[]>([
     },
 
 ])
+interface TopicColor {
+    text: string
+    dot: string
+}
+
+// Map chủ đề → màu tương ứng
+const topicColors: Record<string, TopicColor> = {
+    'Luận truyện': { text: 'border-color-blue', dot: 'dot-blue' },
+    'Thông báo': { text: 'border-color-red', dot: 'dot-red' },
+    'Đề cử và Review truyện': { text: 'border-color-green', dot: 'dot-green' },
+    'Nhập môn sáng tác': { text: 'border-color-pink', dot: 'dot-pink' },
+    'Hỏi đáp cùng tác giả': { text: 'border-color-orange', dot: 'dot-orange' }
+}
+const getTopicColor = (title: string): TopicColor => {
+    return topicColors[title] || { text: 'border-color-gray', dot: 'dot-gray' }
+}
+
 async function getAllPostByTopic(page) {
     const res = await getPostForumByTopic(route.params.id, page, 5);
     listPostTopic.value = res.data;
     totalPage.value = res.totalPage;
-    console.log(listPostTopic.value);
 
-    tableData.value = listPostTopic.value.map(post => ({
-        topicTitle: post.topic_title,
-        postId: post.post_id,
-        avatarImg: post.link_thumbnail, // tạm thời fix cứng, hoặc lấy từ user table
-        name: post.title,
-        user_id: post.user_id,
-        author: post.username,  // chỗ này có thể thay bằng username nếu backend trả về
-        time: timeAgo(post.created_at), // cần xử lý từ created_at nếu backend có
-        like: post.total_likes, // nếu backend có trường view thì gán trực tiếp
-        comment: post.total_comments, // hoặc số comment thực tế nếu có
-        closestInteraction: {
-            avatarImg: post.latest_comment ? convertJsonData(post.latest_comment).link_thumbnail : null,
-            name: post.latest_comment ? convertJsonData(post.latest_comment).username : "Chưa có tương tác",
-            date: post.latest_comment ? convertJsonData(post.latest_comment).created_at.split(" ")[0] : null,
-            user_id: post.latest_comment ? convertJsonData(post.latest_comment).user_id : null,
+
+    tableData.value = listPostTopic.value.map(post => {
+        let latestComment = null;
+
+        try {
+            latestComment = post.latest_comment ? JSON.parse(post.latest_comment) : null;
+        } catch (e) {
+            console.warn("Latest comment JSON parse error:", e);
+            latestComment = null;
         }
-    }));
+
+        return {
+            topicTitle: post.topic_title,
+            postId: post.post_id,
+            avatarImg: post.link_thumbnail ?? null, // avatar post, nếu có
+            name: post.title,
+            user_id: post.user_id,
+            author: post.username,
+            time: post.created_at ? timeAgo(post.created_at) : null,
+            like: post.total_likes ?? 0,
+            comment: post.total_comments ?? 0,
+            closestInteraction: {
+                avatarImg: latestComment?.link_thumbnail ?? null,
+                name: latestComment?.username ?? "Chưa có tương tác",
+                date: latestComment?.created_at ? timeAgo(latestComment.created_at) : null,
+                user_id: latestComment?.user_id ?? null,
+                content: latestComment?.content ?? null
+            }
+        };
+    });
+}
+async function likeShare(postId) {
+    if (auth.userId) {
+        const res = await toggleLike(auth.userId, postId)
+        router.push({
+            name: 'post-detail',   // Tên route bạn đã định nghĩa trong router/index.js
+            params: { id: postId }       // Truyền param id
+        })
+    }
+    else {
+        loginModal.open()
+    }
 }
 function timeAgo(dateString: string): string {
     const inputDate = new Date(dateString);
@@ -204,6 +261,18 @@ watch(currentPage, (newPage) => {
 })
 </script>
 <style scoped>
+.border-color-blue { color: #007bff; border: solid 1px #007bff !important}
+.border-color-red { color: #dc3545;border: solid 1px #dc3545 !important }
+.border-color-green { color: #28a745;border: solid 1px #28a745 !important }
+.border-color-pink { color: #C11574;border: solid 1px #C11574 !important }
+.border-color-gray { color: #6c757d;border: solid 1px #6c757d !important }
+.border-color-orange{ color: #B93815; border: solid 1px #B93815 !important; }
+.dot-blue { background-color: #007bff !important;; }
+.dot-red { background-color: #dc3545 !important;; }
+.dot-green { background-color: #28a745 !important;; }
+.dot-pink { background-color: #C11574 !important; }
+.dot-orange { background-color: #B93815 !important; }
+.dot-gray { background-color: #6c757d !important;  }
 .like-share span {
     display: flex;
     align-items: center;
@@ -233,8 +302,13 @@ watch(currentPage, (newPage) => {
 
 .post-topic {
     border: solid 1px #b0d5f4;
-    border-radius: 10px;
-    padding: 2px 10px;
+    border-radius: 25px;
+    padding: 0px 10px;
+    display: inline-flex;
+    /* cho phép căn giữa theo chiều dọc */
+    align-items: center;
+    /* căn giữa dọc */
+    gap: 6px;
 }
 </style>
 <style>

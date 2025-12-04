@@ -5,16 +5,12 @@
 </template>
 
 <script setup>
-import { ref , watch } from "vue";
+import { ref, watch } from "vue";
 const content = defineModel('content');
 const previewContent = ref("");
 import { QuillEditor } from '@vueup/vue-quill'
+
 import Quill from "quill";
-const Size = Quill.import('formats/size');
-Size.whitelist = [
-    '8px', '10px', '12px', '14px', '16px', '18px', '20px', '24px', '28px', '32px', '36px'
-];
-Quill.register(Size, true);
 // Cấu hình toolbar
 const editorOptions = {
     theme: "snow",
@@ -23,7 +19,7 @@ const editorOptions = {
         toolbar: [
             ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
             [{ 'header': [1, 2, 3, 4, 5, 6] }],
-            [{ size: ['8px', '10px', '12px', '14px', '16px', '18px', '20px', '24px', '28px', '32px', '36px'] }],
+            [{ 'size': ['small', 'normal', 'large', 'huge'] }], // dùng mặc định
             [{ 'font': [] }],
             [{ 'color': [] }],
             [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'list': 'check' }],
@@ -38,58 +34,32 @@ const editorOptions = {
 </script>
 
 <style>
-
 .editor {
     min-height: 200px;
 }
 
-.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="8px"]::before {
-    content: "8";
+.ql-snow .ql-picker.ql-size .ql-picker-label::before {
+  content: "13px" !important;  /* chữ hiển thị trên toolbar */
 }
 
-.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="10px"]::before {
-    content: "10";
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="small"]::before, .ql-snow .ql-picker.ql-size .ql-picker-label[data-value=small]::before {
+  content: "10px" !important;
 }
 
-.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="12px"]::before {
-    content: "12";
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="normal"]::before, .ql-snow .ql-picker.ql-size .ql-picker-label[data-value=nomal]::before {
+   content: "13px" !important;
 }
 
-.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="14px"]::before {
-    content: "14";
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="large"]::before , .ql-snow .ql-picker.ql-size .ql-picker-label[data-value=large]::before {
+  content: "18px" !important;
 }
 
-.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="16px"]::before {
-    content: "16";
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="huge"]::before , .ql-snow .ql-picker.ql-size .ql-picker-label[data-value=huge]::before {
+  content: "32px"!important;
 }
 
-.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="18px"]::before {
-    content: "18";
-}
-
-.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="20px"]::before {
-    content: "20";
-}
-
-.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="24px"]::before {
-    content: "24";
-}
-
-.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="28px"]::before {
-    content: "28";
-}
-
-.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="32px"]::before {
-    content: "32";
-}
-
-.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="36px"]::before {
-    content: "36";
-}
-
-/* Ẩn nhãn Normal mặc định nếu vẫn còn */
-.ql-snow .ql-picker.ql-size .ql-picker-label::before,
-.ql-snow .ql-picker.ql-size .ql-picker-item::before {
-    content: "Cỡ chữ" !important;
+/* Đổi label dropdown hiện tại khi chưa chọn gì */
+.ql-snow .ql-picker.ql-size .ql-picker-label::before {
+  content: attr(data-value);
 }
 </style>

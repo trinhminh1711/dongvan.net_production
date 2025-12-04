@@ -5,17 +5,21 @@
                 <div class="book-card">
                     <div v-if="!stories.is_vip_story" class="ribbon">FULL</div>
                     <div v-if="stories.is_vip_story" class="ribbon-vip">VIP</div>
-                    <img style="width: 150px; height: auto"  :src="stories.link_img" alt=""></img>
+                    <img style="width: 150px; height: 100%" :src="stories.link_img" alt=""></img>
                 </div>
                 <div class="left-content">
-                    <p class="text-color_primary fw-bold text-lg">{{ stories.story_title }}</p>
-                    <p class="text-md fw-semibold">{{ stories.author_name }}</p>
-                    <p class="color-red fst-italic"><span class="fw-bold text-md">{{ stories.total_chapters }}</span>
+                    <p @click="goToStory(stories.story_id)" class="text-color_primary fw-bold text-lg hover-link">{{
+                        stories.story_title }}</p>
+                    <p @click="goToProfile(stories.author_id)" class="text-md fw-semibold hover-link">{{
+                        stories.author_name }}</p>
+                    <p class="color-red fst-italic"><span class="fw-bold text-md ">{{ stories.total_chapters
+                            }}</span>
                         <span class="text-md">
                             chương</span>
                     </p>
-                    <p class="text-md fw-semibold"> Chương đang đọc: [Chương {{ stories.chapter_number }}] {{
-                        stories.chapter_title }} </p>
+                    <p @click="gotoChapDetail(stories.story_id, stories.chapter_number)" class="text-md fw-semibold  hover-link">
+                        Chương đang đọc: [Chương {{ stories.chapter_number }}] {{
+                            stories.chapter_title }} </p>
                     <button @click="readOnBook(stories.story_id, stories.chapter_number)" class="btn-alert my-3">Đọc
                         tiếp</button>
                 </div>
@@ -50,6 +54,24 @@ function readOnBook(storyId, chapId) {
     router.push({
         name: "chap-detail",
         params: { id: storyId, chapId: chapId }
+    });
+}
+function goToStory(post_id) {
+    router.push({
+        name: 'story',   // Tên route bạn đã định nghĩa trong router/index.js
+        params: { id: post_id }       // Truyền param id
+    })
+}
+function goToProfile(params) {
+    router.push({ name: 'user', params: { id: params } })
+}
+function gotoChapDetail(storyId, chapterId) {
+    router.push({
+        name: "chap-detail",
+        params: {
+            id: storyId,
+            chapId: chapterId
+        }
     });
 }
 onMounted(async () => {

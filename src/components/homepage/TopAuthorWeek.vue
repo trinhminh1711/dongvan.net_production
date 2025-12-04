@@ -1,15 +1,19 @@
 <template>
-    <div>
-        <h2>Top Tác Giả Mới Của Tuần</h2>
-        <div class="row gap-3 flex-nowrap mt-3">
-            <div v-for="item in usersInfo" class="image-box col-4 gap-y-5">
+    <div class="pt-100">
+        <h2 class="fw-semibold">Top Tác Giả Mới Của Tuần</h2>
+        <div class="row gap-3 flex-md-nowrap mt-4">
+            <div :style="{
+                backgroundImage: `url(${getBgImage(index)})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center'
+            }"  v-for="(item, index) in usersInfo" class="image-box col-md-4 gap-y-5">
                 <p @click="goToProfile(item.data.user_id)" class="d-flex align-items-center gap-2">
                     <img style="border-radius: 50%; height: 50px; width: 50px;" :src="item.data.link_thumbnail" alt="">
                     <span class="fw-bold text-color_primary hover-link">{{ item.data.username }}</span>
                 </p>
                 <p class="text-start py-3"><span class="color-light-gray">Tác phẩm tiêu biểu: </span>
-                    <span @click="readOnBook(item.storyDataId)"
-                        class="fw-bold text-color_primary hover-link">《 {{ item.storyData }} 》</span>
+                    <span @click="readOnBook(item.storyDataId)" class="fw-bold text-color_primary hover-link">《 {{
+                        item.storyData }} 》</span>
                 </p>
                 <p class="text-start"><span class="color-light-gray">Huy hiệu: </span> <span
                         class="fw-bold text-color_primary">Tác giả cấp {{ item.rank }}</span></p>
@@ -32,6 +36,14 @@ function readOnBook(storyId) {
         params: { id: storyId }
     });
 }
+function getBgImage(index) {
+    const images = [
+      new URL('@/assets/image/bg-card-1.jpg', import.meta.url).href,
+      new URL('@/assets/image/bg-card-2.jpg', import.meta.url).href,
+     new URL('@/assets/image/bg-card-3.jpg', import.meta.url).href,
+    ];
+    return images[index % images.length];
+  }
 const authors = [
     {
         avatarImg:
@@ -53,7 +65,7 @@ onMounted(async () => {
         usersInfo.value = results.map((user, index) => ({
             ...user,
             rank: `${index + 1}`,
-            storyData: storyData[index],    
+            storyData: storyData[index],
             storyDataId: storyDataId[index],      // ví dụ: thêm thứ hạng
             fetchedAt: new Date().toISOString() // ví dụ: thêm thời điểm lấy dữ liệu
         }))
