@@ -1,6 +1,6 @@
 <template>
     <div class="main-comment">
-        <div class="px-3 pb-2 pt-3 mt-3 d-flex align-items-start gap-3"
+        <div class="pb-2 pt-3 mt-3 d-flex align-items-start gap-3"
             :class="{ 'line-thread': commentReply.length > 0 }">
             <div class="post-main__info d-flex align-items-center justify-content-between gap-1">
                 <img @click="goToProfile(user_id)" class="hover-pointer"
@@ -43,7 +43,7 @@
 
         </div>
         <div class="ms-5-5">
-            <div v-if="commentReply.length > 0" v-for="value in commentReply" class="px-3 pb-2 pt-3   reply-thread">
+            <div v-if="commentReply.length > 0" v-for="value in commentReply" class="pb-2 pt-3 reply-thread">
                 <div class="post-main__info d-flex align-items-center gap-3">
                     <div class="d-flex align-items-center">
 
@@ -64,16 +64,16 @@
 
                 </div>
             </div>
-            <PostCommentReply @reload="getLikeComment()" :comment-id="props.comment_id" v-if="replyComment" />
+            <PostCommentReplyStory @reload="getLikeComment()" :comment-id="props.comment_id" v-if="replyComment" />
         </div>
     </div>
 
 </template>
 
 <script lang="ts" setup>
-import ListReplyComment from "./ListReplyComment.vue";
 import { ref, onMounted } from "vue";
 import { increaseLike } from '@/api/storyComment';
+import {getRepliesByComment} from '@/api/storyComment'
 import { increaseLikePostComment, getListLikeComment } from "../../api/forum";
 import { useAuthStore } from "@/stores/auth";
 import { useLoginModal } from "@/stores/useLoginModal";
@@ -81,7 +81,7 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 
 const loginModal = useLoginModal()
-import PostCommentReply from "./PostCommentReply.vue";
+import PostCommentReplyStory from "./PostCommentReplyStory.vue";
 const auth = useAuthStore();
 const userId = auth.userId || null
 const isLiked = ref(false)
@@ -136,16 +136,15 @@ function replyCommentFunc() {
 
 }
 async function getLikeComment() {
-    const res = await getListLikeComment(props.comment_id);
-    listLikeComment.value = res
-    isLiked.value = res.liked_users.some(
-        (u) => u.user_id == auth.userId
-    );
+    const res = await getRepliesByComment(props.comment_id);
+    listLikeComment.value = res    
+    // isLiked.value = res.liked_users.some(
+    //     (u) => u.user_id == auth.userId
+    // );
     commentReply.value = (res.replies);
+    console.log(res.replies);
+    
     replyComment.value = false
-
-
-
 }
 async function incrementLike() {
     localLike.value += 1;

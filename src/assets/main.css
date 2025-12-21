@@ -1,38 +1,115 @@
 @import "./base.css";
-body, html, #app {
-  font-family: 'Inter', sans-serif;
+body,
+html,
+#app {
+  font-family: "Inter", sans-serif;
+}
+* {
+  box-sizing: border-box;
+}
+@media (prefers-color-scheme: dark) {
+  html,
+  body,
+  #app {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+  }
+}
+.text-justify {
+  text-align: justify;
+}
+.text-limit-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;     /* số dòng muốn giới hạn */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.text-limit-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;     /* số dòng muốn giới hạn */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.comment-box {
+  border-radius: 20px;
+}
+.post-main__info {
+  position: relative;
+}
+.comment-box .btn-comment {
+  background: none;
+  border: none;
+  position: absolute;
+  top: 70%;
+  right: 1%;
+}
+.comment-box .btn-comment svg {
+  width: 23px;
+  height: 23px;
+}
+.ms-5-5 {
+  margin-left: 4rem;
+}
+.comment-box .el-input__wrapper {
+  display: flex !important;
+  align-items: start !important;
+  border-radius: 10px;
+  padding: 10px 0 0 15px;
+}
+.comment-box .el-input__wrapper .el-input__inner::placeholder {
+  color: #344054; /* đổi màu */
+
+  font-size: 16px; /* cỡ chữ */
+  opacity: 1; /* đảm bảo không bị làm mờ ở Firefox */
+}
+.comment-box .el-mention,
+.comment-box .el-mention .el-textarea__inner {
+  border: solid 1px #e7e7e7;
+  box-shadow: none !important;
+  outline: none !important;
 }
 
+.comment-box .el-mention.is-focus,
+.comment-box .el-mention.is-focus .el-textarea__inner {
+  border: solid 1px #e7e7e7;
+  box-shadow: none !important;
+  outline: none !important;
+}
+.text-one-line {
+  white-space: nowrap; /* Không xuống dòng */
+  overflow: hidden; /* Ẩn phần chữ tràn */
+  text-overflow: ellipsis; /* Hiển thị dấu ... */
+}
 .el-dialog {
   border-radius: 12px !important; /* sửa giá trị theo ý bạn */
-    position: fixed !important;   /* luôn trên viewport */
-  top: 50% !important;          /* từ trên xuống 50% */
-  left: 50% !important;         /* từ trái sang 50% */
+  position: fixed !important; /* luôn trên viewport */
+  top: 50% !important; /* từ trên xuống 50% */
+  left: 50% !important; /* từ trái sang 50% */
   transform: translate(-50%, -50%) !important; /* căn giữa chính xác */
-  margin: 0 !important;         /* xóa margin mặc định */
+  margin: 0 !important; /* xóa margin mặc định */
 }
 .text-underline {
   text-decoration: underline;
-  color: #1F67FF;
+  color: #1f67ff;
 }
-.box-left__content .book-card img
-{
-border: 2px solid rgb(228, 231, 236);
-border-radius: 10px;
+.box-left__content .book-card img {
+  border: 2px solid rgb(228, 231, 236);
+  border-radius: 10px;
 }
 /* Optional: max width & responsive */
 
-.bg-gray
-{
-  background-color: #FFFFFF;
+.bg-gray {
+  background-color: #ffffff;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
   border-radius: 20px;
   padding: 20px 0 50px 0;
-  border: solid 1px #E4E7EC;
+  border: solid 1px #e4e7ec;
 }
-.el-tabs__content, 
+.el-tabs__content,
 .el-tab-pane {
-  height: 100%;  /* chiếm toàn bộ chiều cao của tab content */
+  height: 100%; /* chiếm toàn bộ chiều cao của tab content */
 }
 
 /* Nếu muốn cả header và footer cũng bo tròn */
@@ -41,27 +118,99 @@ border-radius: 10px;
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
 }
-.py-10
-{
+.py-10 {
   padding-top: 80px;
   padding-bottom: 80px;
 }
-.pt-100
-{
+.pt-100 {
   padding-top: 100px;
 }
-.text-18
-{
+.text-18 {
   font-size: 18px;
 }
-.text-16
-{
+.text-16 {
   font-size: 16px;
 }
-.text-24
-{
+.text-14 {
+  font-size: 14px;
+}
+.text-24 {
   font-size: 24px;
 }
+.reply-thread {
+  position: relative;
+}
+
+/* Tạo đoạn cong nối từ bình luận cha đến avatar của reply đầu tiên */
+.reply-thread::before {
+  content: "";
+  position: absolute;
+  top: 10px;
+  left: -24px;
+  width: 30px;
+  height: 40px;
+  border-left: 2px solid #e4e7ec;
+  border-bottom: 2px solid #e4e7ec;
+  border-bottom-left-radius: 20px;
+}
+.reply-thread::after {
+  content: "";
+  position: absolute;
+  background-color: #e4e7ec;
+  width: 2px;
+  left: -24px;
+  top: 0;
+  height: 100%;
+}
+.comment-area .el-textarea__inner {
+  min-height: 100px !important;
+  border-radius: 10px;
+}
+.comment-area-parent .el-textarea__inner {
+  min-height: 130px !important;
+  border-radius: 10px;
+}
+.btn-replycomment svg {
+  width: 25px;
+  height: 25px;
+}
+.main-comment .line-thread::before {
+  content: "";
+  position: absolute;
+  background-color: #e4e7ec;
+  width: 2px;
+  left: 40px;
+  top: 43px;
+  height: 70%;
+}
+.comment-box .btn-replycomment {
+  background: none;
+  border: none;
+  position: absolute;
+  top: 50%;
+  right: 1%;
+}
+.comment-area-post .btn-replycomment {
+  right: 2% !important;
+}
+.main-comment .line-thread {
+  position: relative;
+}
+.reply-thread:last-child::after {
+  height: 15%; /* hoặc 70%, tuỳ bạn */
+}
+/* Tùy chọn: căn chỉnh đường dọc và khoảng cách đẹp hơn */
+.reply-item {
+  position: relative;
+}
+
+/* Làm nền comment rõ ràng hơn nếu bạn muốn */
+.reply-item .post-main__content {
+  background: #1b1b1b;
+  border-radius: 10px;
+  padding: 8px 12px;
+}
+
 a,
 .green {
   text-decoration: none;
@@ -69,19 +218,17 @@ a,
   transition: 0.4s;
   padding: 3px;
 }
-.hover_link:hover
-{
+.hover_link:hover {
   cursor: pointer;
 }
 .text-color_primary {
   color: #344054;
 }
 .text-color__tertiary {
-  color: #667085
+  color: #667085;
 }
-.text-secondary
-{
- color: #667085;
+.text-secondary {
+  color: #667085;
 }
 .color-alert {
   color: #bf2c24;
@@ -107,12 +254,10 @@ a,
 .text-md {
   font-size: 14px;
 }
-.text-20
-{
+.text-20 {
   font-size: 20px;
 }
-.text-16
-{
+.text-16 {
   font-size: 16px;
 }
 .text-sm {
@@ -121,8 +266,7 @@ a,
 .text-lg {
   font-size: 20px;
 }
-.text-2md
-{
+.text-2md {
   font-size: 18px;
 }
 .text-xlg {
@@ -134,28 +278,29 @@ a,
 .bg-red {
   background: #bf2c24;
 }
+.bg-lightblue
+{
+  background: #F9FAFB;
+}
 .btn-alert__rounded {
   border: none;
-  background: linear-gradient(to left, #E60000, #FF6114);
+  background: linear-gradient(to left, #e60000, #ff6114);
   color: white;
   border-radius: 50px;
   padding: 7px 20px;
   font-weight: 700;
 }
-.btn-alert__rounded:hover
-{
+.btn-alert__rounded:hover {
   cursor: pointer;
 }
-.btn-outline-primary
-{
+.btn-outline-primary {
   border: solid 1px #344054;
   border-radius: 20px;
   padding: 8px 20px;
   background: none;
   color: #344054;
 }
-.btn-outline-primary:hover
-{
+.btn-outline-primary:hover {
   background-color: #344054;
   cursor: pointer;
   color: #fff;
@@ -181,16 +326,16 @@ a,
 }
 .btn-alert {
   border: none;
-  border-radius: 20px;
+  border-radius: 50px;
   padding: 8px 20px;
-    background: linear-gradient(to right, #E60000, #FF6114);
+  background: linear-gradient(to right, #e60000, #ff6114);
   color: #fff;
 }
 .btn-success {
   border: none;
   border-radius: 20px;
   padding: 8px 20px;
-    background: linear-gradient(to right, #29DF9F, #0CA876);
+  background: linear-gradient(to right, #29df9f, #0ca876);
   color: #fff;
 }
 .btn-success:hover {
@@ -206,38 +351,33 @@ a,
   cursor: pointer;
   background: #e60000;
 }
-.text-link
-{
+.text-link {
   color: #e60000;
   font-weight: bold;
 }
-.text-link:hover{
+.text-link:hover {
   cursor: pointer;
 }
-.text-link_alert:hover{
-    color: #ff6114;
-    cursor: pointer;
+.text-link_alert:hover {
+  color: #ff6114;
+  cursor: pointer;
 }
-.border-b
-{
+.border-b {
   border-bottom: solid 1px #344054;
- 
 }
-.hover-link:hover
-{
-   color: #FC6C28;
-   cursor: pointer;
+.hover-link:hover {
+  color: #fc6c28;
+  cursor: pointer;
 }
 .text-one-line {
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    /* số dòng muốn hiển thị */
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  /* số dòng muốn hiển thị */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.hover-pointer:hover
-{
+.hover-pointer:hover {
   cursor: pointer;
 }
 .btn-no-pointer {
@@ -247,26 +387,157 @@ a,
 .ql-editor b {
   font-weight: bold !important;
 }
+
+.ps-md-16 {
+  padding-left: 16px;
+}
+
 @media (hover: hover) {
   a:hover {
     background-color: hsla(160, 100%, 37%, 0.2);
   }
 }
-
+@media (min-width: 992px) {
+  .hide-desktop {
+    display: none !important;
+  }
+}
 @media (max-width: 768px) {
+  .text-mb-md {
+    font-size: 20px;
+  }
+  .text-mb-16 {
+    font-size: 16px;
+  }
+    .text-mb-14 {
+    font-size: 14px;
+  }
+  .btn-mb-alert
+  {
+    padding: 10px 0;
+  }
+    .text-mb-12 {
+    font-size: 12px;
+  }
+  .mt-mb-32
+  {
+    margin-top: 32px;
+  }
+  .px-0-mb
+  {
+    padding-right: 0px;
+    padding-left:  0px;
+  }
+  .ps-12 {
+    padding-left: 12px;
+  }
+  .title-mb,
+  .title-mobile {
+    text-align: left;
+    font-size: 20px !important;
+    position: relative;
+    padding-left: 10px;
+  }
+  .title-mb::before,
+  .title-mobile::before {
+    content: "";
+    height: 80%;
+    width: 3px;
+    background-color: #ff6114;
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+  .text-mb-sm {
+    font-size: 12px;
+  }
   /* Bỏ margin âm của .row */
   .row {
     margin-left: 0 !important;
     margin-right: 0 !important;
   }
 
-
   /* Nếu muốn full-width nhưng vẫn căn lề */
   .container {
-    padding-left: 10px;  /* tùy chỉnh theo mobile */
+    padding-left: 10px; /* tùy chỉnh theo mobile */
     padding-right: 10px;
   }
-    .mobile-center {
+  .mobile-center {
     justify-content: center !important;
   }
+  .hide-mobile {
+    display: none !important;
+  }
+  .py-10 {
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+  .p-mobile-1 {
+    padding: 0.25rem !important;
+  } /* 4px */
+  .p-mobile-2 {
+    padding: 0.5rem !important;
+  } /* 8px */
+  .p-mobile-3 {
+    padding: 1rem !important;
+  } /* 16px */
+  .p-mobile-4 {
+    padding: 1.5rem !important;
+  } /* 24px */
+  .p-mobile-5 {
+    padding: 3rem !important;
+  } /* 48px */
+
+  /* Nếu muốn riêng theo hướng */
+  .pt-mobile-2 {
+    padding-top: 2rem !important;
+  }
+  .pb-mobile-2 {
+    padding-bottom: 1rem !important;
+  }
+  .px-mobile-3 {
+    padding-left: 2rem !important;
+    padding-right: 1rem !important;
+  }
+  .py-mobile-4 {
+    padding-top: 2.5rem !important;
+    padding-bottom: 1.5rem !important;
+  }
+
+  .box-left__content > img {
+    width: 130px !important;  
+    height: 180px !important;
+  }
+  .box-left__content .left-content
+  {
+    padding: 0px  12px  !important;
+  }
+  .box-left__content.col-md-6
+  {
+    padding: 5px 0 !important;
+    align-items: start;
+  }
+  .box-left__content.col-md-6 div.left-content
+  {
+    flex: 1;
+  }
+  .box-left__content.col-md-6 .text-color_primary
+  {
+    font-size: 16px;
+  }
+  .box-left__content .book-card img
+  {
+    width: 130px !important; 
+    height: 180px !important
+  }
+  .desc-center .el-descriptions__label,
+.desc-center .el-descriptions__content {
+  text-align: center !important;    /* Căn giữa ngang */
+  vertical-align: middle !important; /* Giữa dòng theo trục dọc */
+}
+
+.desc-center .el-descriptions__cell {
+  display: table-cell; /* Đảm bảo label + content có thể căn giữa dọc */
+  vertical-align: middle;
+}
 }

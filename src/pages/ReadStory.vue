@@ -2,8 +2,8 @@
     <div>
         <LoadingSpiner :show="loading" />
     </div>
-    <div style="margin-top: -15px;"
-        :style="{ backgroundColor: backgroundColor, transition: 'all 0.3s ease' }" v-if="!loading">
+    <div style="margin-top: -15px;" :style="{ backgroundColor: backgroundColor, transition: 'all 0.3s ease' }"
+        v-if="!loading">
         <div class="tab-bar">
             <button class="hover_link" @click="goBack"><el-icon style="color: white; font-size: 24px;">
                     <ArrowLeft />
@@ -12,18 +12,20 @@
             <h4 @click="gotoStory(chapterData?.story_id)" class="text-white fw-bold text-md hover-link">{{
                 chapterData?.story_title }}</h4>
             <div class="button-function">
-                <button :class="{ 'yellow-filter': Bookmarked }" class="hover_link cursor-pointer" @click="addBookMark()"><img
-                        style="max-width: 40px;" src="@/assets/icon/bookmark-add.png" alt=""></img></button>
+                <button :class="{ 'yellow-filter': Bookmarked }" class="hover_link cursor-pointer"
+                    @click="addBookMark()"><img style="max-width: 40px;" src="@/assets/icon/bookmark-add.png"
+                        alt=""></img></button>
                 <button class="cursor-pointer" @click="drawer = true, showOption = true"><img style="max-width: 40px;"
                         src="@/assets/icon/icon-list.png" alt=""></img></button>
                 <button class="cursor-pointer" @click="drawer = true, showOption = false"><img style="max-width: 40px;"
                         src="@/assets/icon/icon-fontsize.png" alt=""></img></button>
-                <button class="cursor-pointer" @click="toggleFullScreen"><img style="max-width: 40px;" src="@/assets/icon/icon-maximize.png"
-                        alt=""></img></button>
+                <button class="cursor-pointer" @click="toggleFullScreen"><img style="max-width: 40px;"
+                        src="@/assets/icon/icon-maximize.png" alt=""></img></button>
             </div>
         </div>
-        <div style="padding-bottom: 140px;" class="container mt-3">
-            <div :style="{color: textColor}" class="story" :class="['story-content', { 'two-column': isTwoColumn }]">
+        <div style="padding-bottom: 140px;" class="container mt-3 story-wrapper">
+            <div :style="{ '--text-color': textColor }" class="story"
+                :class="['story-content', { 'two-column': isTwoColumn }]">
                 <div :style="{ fontFamily: fontFamily, fontSize: fontSize + 'px', marginTop: '20px' }"
                     v-html="chapterData?.content"></div>
             </div>
@@ -31,9 +33,10 @@
                 <div class="unlock-chapter">
                     <img src="@/assets/icon/lock.png" alt="">
                 </div>
-                <p class="text-center fw-semibold mt-2">Cần <strong class="fw-semibold"
-                        style="font-size: 26px; color: red;">5 Tang Diệp</strong> để mở khóa chương</p>
-                <div class="unlock-span">
+                <p :style="{ color: textColor }" class="text-center fw-semibold mt-2">Cần <strong
+                        class="fw-semibold" style="font-size: 26px; color: red;">5 Tang Diệp</strong> để mở khóa chương
+                </p>
+                <div :style="{ '--text-color': textColor }" class="unlock-span">
                     <span @click="unlockChapter()"><svg width="19" height="20" viewBox="0 0 19 20" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
                             <path
@@ -191,6 +194,8 @@ async function fetchChapter() {
         const chapterId = route.params.chapId;
         const res = await getChapterWithId(storyId, chapterId, auth.userId)
         chapterData.value = res.data
+        console.log(res.data.content);
+        
         IsPurchased.value = res.IsPurchased
         isVip.value = res.data.is_vip
         required_time_seconds.value = (res.data.word_count / 1000) * 2
@@ -266,7 +271,7 @@ async function getBookMark() {
     Bookmarked.value = isBookmarked(res.data, route.params.chapId)
 }
 function isBookmarked(bookmarks, currentChapterId) {
-  return Array.isArray(bookmarks) && bookmarks.some(item => item.chapter_id == currentChapterId);
+    return Array.isArray(bookmarks) && bookmarks.some(item => item.chapter_id == currentChapterId);
 }
 async function unlockChap(chapter) {
     if (auth.userId) {
@@ -362,12 +367,10 @@ async function addBookMark() {
             scroll: window.scrollY,
         })
         await getBookMark();
-        if(Bookmarked.value)
-        {
+        if (Bookmarked.value) {
             toast.success("Đã lưu dấu trang");
         }
-        else
-        {
+        else {
             toast.success("Đã xóa dấu trang");
         }
 
@@ -485,7 +488,11 @@ nextTick(() => {
     window.scrollTo({ top: scroll, behavior: 'smooth' });
 });
 </script>
-
+<style scoped>
+.story * {
+    color: var(--text-color) !important;
+}
+</style>
 <style>
 .story {
     line-height: 2;
@@ -591,6 +598,7 @@ nextTick(() => {
 
 .unlock-span {
     display: flex;
+    color: var(--text-color) !important;
     justify-content: center;
     margin-top: 20px;
 }
@@ -602,7 +610,7 @@ nextTick(() => {
 
 .unlock-span span {
     margin: 0 20px;
-    border: solid 1px #E4E7EC;
+    border: solid 1px var(--text-color) !important;
     padding: 5px 20px;
     border-radius: 30px;
     display: flex;
@@ -667,6 +675,6 @@ nextTick(() => {
 }
 
 .yellow-filter {
-filter: sepia(1) saturate(8) hue-rotate(36deg) brightness(1.1);
+    filter: sepia(1) saturate(8) hue-rotate(36deg) brightness(1.1);
 }
 </style>

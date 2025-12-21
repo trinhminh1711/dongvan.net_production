@@ -17,7 +17,7 @@
                         <span class="text-md">
                             chương</span>
                     </p>
-                    <p @click="gotoChapDetail(stories.story_id, stories.chapter_number)" class="text-md fw-semibold  hover-link">
+                    <p @click="gotoChapDetail(stories.story_id, stories.chapter_number)" class="text-md fw-semibold  text-limit-2 hover-link">
                         Chương đang đọc: [Chương {{ stories.chapter_number }}] {{
                             stories.chapter_title }} </p>
                     <button @click="readOnBook(stories.story_id, stories.chapter_number)" class="btn-alert my-3">Đọc

@@ -21,7 +21,7 @@
                                 <img style="width: 30px; border-radius: 4px;" :src="item.urlImg" alt="" />
                                 <div class="d-flex flex-column">
                                     <span class="fw-semibold">{{ item.value }}</span>
-                                    <small class="text-muted">Tác giả: {{ item.username }}</small>
+                                    <small class="text-muted">Tác giả: {{ item.author_name }}</small>
                                 </div>
                             </div>
                             <div class="d-flex align-items-center">
@@ -86,7 +86,7 @@
                                     :src="auth.user.link_thumbnail" alt="">
                                 <div>
                                     <p class="fw-bold text-color_primary">{{ auth.user.username }} ({{ auth.user.role
-                                        }})</p>
+                                    }})</p>
                                     <p>ID: {{ auth.user.user_id }}</p>
                                 </div>
                             </div>
@@ -206,7 +206,7 @@
                         <router-link to="/library-page" class="d-flex align-items-center">
                             <img src="@/assets/icon/books-stack-of-three 1.svg" alt="">
                         </router-link>
-                        <el-popover class="px-2" placement="bottom-start" :width="250" trigger="click">
+                        <el-popover class="px-2 popper-mb" placement="bottom-start" :width="250" trigger="click">
                             <div>
                                 <div class="pb-3 d-flex align-items-center gap-2 "
                                     style="border: none;border-bottom: 1px solid #ccc;">
@@ -215,7 +215,7 @@
                                     <div>
                                         <p class="fw-bold text-color_primary">{{ auth.user.username }} ({{
                                             auth.user.role
-                                        }})</p>
+                                            }})</p>
                                         <p>ID: {{ auth.user.user_id }}</p>
                                     </div>
                                 </div>
@@ -283,31 +283,34 @@
                             </template>
                         </el-popover>
                     </div>
-                    <div class="d-flex align-items-center ms-3 menu-vertical">
+                    <div :class="{
+                        'page-home': $route.name === 'Home',
+                        'page-other': $route.name !== 'Home'
+                    }" class="d-flex align-items-center ms-3 menu-vertical">
                         <img style="height: 20px" @click="drawer = true" src="@/assets/icon/emphasis.svg" />
-                        <el-drawer v-model="drawer" size="70%">
+                        <el-drawer v-model="drawer" class="custom-drawer" size="70%">
                             <el-menu default-active="2" class="el-menu-vertical-demo">
                                 <el-menu-item index="2">
-                                    <RouterLink to="/forum"
+                                    <RouterLink @click="drawer = false" to="/forum"
                                         class="d-flex align-items-center gap-2 bg-transparent border-0 router-link text-16">
                                         Diễn đàn
                                     </RouterLink>
 
                                 </el-menu-item>
                                 <el-menu-item index="2">
-                                    <RouterLink to="/"
+                                    <RouterLink @click="drawer = false" to="/"
                                         class="d-flex align-items-center gap-2 bg-transparent border-0 router-link text-16">
                                         Bảng xếp hạng
                                     </RouterLink>
                                 </el-menu-item>
                                 <el-menu-item index="3">
-                                    <RouterLink to="/support"
+                                    <RouterLink @click="drawer = false" to="/support"
                                         class="d-flex align-items-center gap-2 bg-transparent border-0 router-link text-16">
                                         Hỗ trợ
                                     </RouterLink>
 
                                 </el-menu-item>
-                                <el-menu-item index="4">
+                                <el-menu-item @click="drawer = false" index="4">
                                     <RouterLink to="/instruct-page"
                                         class="d-flex align-items-center gap-2 bg-transparent border-0 router-link text-16">
                                         <img src="@/assets/icon/huong-dan.svg" alt="">
@@ -315,7 +318,7 @@
                                     </RouterLink>
 
                                 </el-menu-item>
-                                <el-menu-item index="5">
+                                <el-menu-item @click="drawer = false" index="5">
                                     <RouterLink tag="p" to="/create-story"
                                         class="d-flex align-items-center gap-2 bg-transparent border-0 router-link text-16">
                                         <img src="@/assets/icon/dang-truyen.svg" alt="">
@@ -397,9 +400,9 @@
                         <el-menu class="el-menu-top" mode="horizontal" router :default-active="$route.name"
                             background-color="#3D3E43" text-color="#fff" active-text-color="#ffd04b">
                             <!-- Dùng index = name của route -->
-                            <el-menu-item index="forum">Diễn đàn</el-menu-item>
-                            <el-menu-item index="ranking" @click="goHome">Bảng xếp hạng</el-menu-item>
-                            <el-menu-item index="support">Hỗ trợ</el-menu-item>
+                            <el-menu-item index="/forum">Diễn đàn</el-menu-item>
+                            <el-menu-item index="/ranking" @click="goHome">Bảng xếp hạng</el-menu-item>
+                            <el-menu-item index="/support">Hỗ trợ</el-menu-item>
                         </el-menu>
                     </div>
                 </div>
@@ -452,7 +455,7 @@ interface Story {
     title: string;
     author: string;
     description?: string;
-    username?: string;
+    author_name?: string;
     urlImg?: string;
 }
 
@@ -498,16 +501,19 @@ function goTo(pathName) {
 }
 const listNotifi = ref([])
 async function getAllNotification() {
-    const res = await getNotifications(auth.userId);
-    listNotifi.value = res.data; // dữ liệu fetch từ API
-    updateNotiNumber();
+    if (auth.userId) {
+        const res = await getNotifications(auth.userId);
+        listNotifi.value = res.data; // dữ liệu fetch từ API
+        updateNotiNumber();
+    }
+
 }
 const updateNotiNumber = () => {
     notiNumber.value = listNotifi.value?.filter(n => n.is_read === 0)?.length || 0;
 };
 async function getStoryList() {
     try {
-        const res = await getAllStory(); // gọi API backend
+        const res = await getAllStory(); // gọi API backend        
         stories.value = res.map((story: Story) => ({
             ...story,
             value: story.title, // el-autocomplete yêu cầu có 'value'
@@ -520,13 +526,13 @@ async function getStoryList() {
 function querySearch(queryString: string, cb: (results: SuggestItem[]) => void) {
     const query = removeVietnameseTones(queryString);
     const results = query
+
         ? stories.value.filter((story) => {
             const title = removeVietnameseTones(story.value);
-            const author = removeVietnameseTones(story.username);
+            const author = removeVietnameseTones(story.author_name); // <-- Sử dụng author_name
             return title.includes(query) || author.includes(query);
         })
         : stories.value;
-
     cb(results.slice(0, 10));
 }
 function removeVietnameseTones(str: string) {
@@ -582,11 +588,20 @@ async function goToNoti(post_id, id_noti, notiObj) {
         listNotifi.value = [...listNotifi.value];
         updateNotiNumber();
     }
+    if (notiObj.type == 'warning') {
+        router.push({
+            name: "story",
+            params: { id: post_id }
+        });
 
-    router.push({
-        name: "post-detail",
-        params: { id: post_id }
-    });
+    }
+    else {
+        router.push({
+            name: "post-detail",
+            params: { id: post_id }
+        });
+    }
+
 
 }
 function timeAgo(dateString: string): string {
@@ -654,6 +669,18 @@ onMounted(async () => {
 </script>
 
 <style>
+.page-other .el-drawer {
+    background-color: #3E3D43 !important;
+    width: 70% !important;
+    /* mặc định cho tất cả */
+}
+
+.page-home .el-drawer {
+    background-color: #3E3D43 !important;
+    width: 70% !important;
+    /* riêng trang home */
+}
+
 .router-link-active {
     color: #ffd04b !important;
 }
@@ -785,7 +812,7 @@ onMounted(async () => {
 }
 
 .notification-read {
-    background-color: #f5f5f5;
+
     /* màu nền nhẹ cho notification đã đọc */
     color: #999;
     /* chữ màu xám */
@@ -907,24 +934,39 @@ onMounted(async () => {
 <style>
 @media (max-width: 768px) {
     .el-popover.el-popper {
-        width: 100% !important;
-        /* gần full width trên mobile */
+        width: 90% !important;
+        /* gần full width */
         max-width: 400px;
-            left: 0 !important;
-            top: 10% !important;
-        /* không vượt quá 400px */
+        /* giới hạn tối đa */
+        top: 10% !important;
+        /* cách đỉnh một chút */
+        left: 50% !important;
+        /* đặt tâm theo giữa màn hình */
+        transform: translateX(-50%) !important;
+        /* dịch nửa chiều ngang để canh giữa */
     }
-
+.el-popper__arrow, .el-popper__arrow:before
+{
+    height: 10px;
+    position: absolute;
+    width: 10px;
+    z-index: -1;
+    left: 15px;
+}
     .menu-vertical .el-drawer__body {
         padding: 0 !important;
     }
 
-    .menu-vertical .el-drawer {
-        background-color: #3E3D43 !important;
+    .custom-drawer .el-drawer__close {
+        color: #fff;
+        /* 🎨 đổi màu icon */
+        font-size: 22px;
+        /* nếu muốn */
     }
 
     .el-menu-item a {
         color: #fff !important;
+        width: 100%;
     }
 
     .el-menu-item:hover {

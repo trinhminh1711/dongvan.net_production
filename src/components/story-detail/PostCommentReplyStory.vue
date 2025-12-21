@@ -1,12 +1,12 @@
 <template>
-    <div v-if="authStore.userId" v-loading="loading" class="comment-box comment-area-post px-3 pb-2 pt-3 reply-thread">
+    <div v-if="authStore.userId" v-loading="loading" class="comment-box pb-2 pt-3 reply-thread">
         <div class="post-main__info d-flex justify-content-between gap-3">
             <div class="d-flex align-items-start">
                 <img @click="goToProfile(authStore.userId)" style="width: 50px; height: 50px; border-radius: 50%;"
                     :src="authStore.user?.link_thumbnail" alt="">
             </div>
-            <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 3 }" @focus="handleFocus" class="comment-area comment-area-post" v-model="commentContent" placeholder="Thêm bình luận của bạn..."
-                style="height: 130px; resize: none;" />
+            <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 3 }" @focus="handleFocus" class="comment-area"
+                v-model="commentContent" placeholder="Thêm bình luận của bạn..." style="height: 130px; resize: none;" />
         </div>
         <div class="d-flex justify-content-end">
             <button @click="postComment()" class="btn-replycomment d-flex align-items-center gap-2">
@@ -25,8 +25,7 @@ import { useLoginModal } from '@/stores/useLoginModal'
 
 const loginModal = useLoginModal()
 import { useAuthStore } from "@/stores/auth";
-import { addPostComment } from "@/api/forum";
-import { createReply } from "@/api/forum";
+import { createReply } from "@/api/storyComment.js"
 const authStore = useAuthStore();
 import { ref, onMounted } from 'vue'
 const loading = ref(false)
@@ -62,10 +61,10 @@ function goToProfile(params) {
     router.push({ name: 'user', params: { id: params } })
 }
 </script>
+
 <style scoped>
-    .comment-box
-    {
-        position: relative;
-    }
+.comment-box {
+    position: relative;
+}
 
 </style>

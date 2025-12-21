@@ -1,10 +1,15 @@
 <template>
-    <h3 class="list-title text-color_primary border-b pb-2">Chương mới cập nhật</h3>
+    <h3 class="list-title text-color_primary border-b pb-2 title-mobile">Chương mới cập nhật</h3>
     <div class="list-container">
-        <div @click="gotoChapDetail(item.story_id, item.chap_number)" v-for="(item, index) in items" :key="index"
+        <div @click="gotoChapDetail(item.story_id, item.chap_number)" v-for="(item, index) in items?.slice(0,8)" :key="index"
             class="list-item">
-            <span class="text-one-line">{{ item.title }}</span>
-            <span class="text-color__tertiary">Chương {{ item.chap_number }}</span>
+            <div class="item-img">
+                <img :src="item.story_img" alt="">
+            </div>
+            <div class="item-text">
+                <span class="text-one-line">{{ item.title }}</span>
+                <span class="text-color__tertiary">Chương {{ item.chap_number }}</span>
+            </div>
         </div>
     </div>
 </template>
@@ -27,7 +32,7 @@ function gotoChapDetail(storyId, chapterId) {
 }
 onMounted(async () => {
     try {
-        const res = await getListChapterUpdate()        
+        const res = await getListChapterUpdate()
         const result = res.map((bItem) => ({
             title: bItem.title,
             text: "Chương " + bItem.chap_number,
@@ -65,5 +70,18 @@ onMounted(async () => {
     text-wrap: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+.list-item .item-img {
+  flex: 0 0 20%;  /* không co, không giãn, 20% */
+}
+.list-item .item-text {
+  flex: 1;        /* chiếm phần còn lại */
+}
+.list-item .item-img img
+{
+    width: 60%;
+    height: 50px;
+    border-radius: 5px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 </style>

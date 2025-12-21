@@ -21,7 +21,7 @@
 
     <div class="slide-content col-md-6">
       <h3 @click="gotoStory(idStory[currentIndex])" class="text-start text-color_primary fw-bold">{{ title[currentIndex]
-        }}</h3>
+      }}</h3>
       <p class="text-start text-color__tertiary slide-content__desc text-sm">
         {{ descriptions[currentIndex] }}
       </p>
@@ -38,7 +38,7 @@ import { useRouter } from "vue-router";
 
 // Import Swiper và modules
 import { Swiper, SwiperSlide } from "swiper/vue";
-import { EffectCoverflow, Pagination, Autoplay } from "swiper/modules"; 
+import { EffectCoverflow, Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/effect-coverflow";
 import "swiper/css/pagination";
@@ -112,7 +112,18 @@ function gotoStory(id) {
   });
 }
 </script>
+<style>
+.carousel-wrapper .swiper-pagination {
+  top: 90% !important;
+}
 
+@media (max-width: 768px) {
+
+  .carousel-wrapper .swiper-pagination {
+    display: none !important;
+  }
+}
+</style>
 <style scoped>
 .swiper-coverflow {
   padding: 20px 0;
@@ -162,13 +173,18 @@ function gotoStory(id) {
   cursor: pointer;
   color: #FF6114;
 }
+
 @media (max-width: 768px) {
-  .slide-content{
+  .slide-content {
     margin-top: 60px;
   }
-  .slide-content > *
-  {
+
+  .slide-content>* {
     text-align: center !important;
+  }
+
+  .swiper-pagination {
+    display: none !important;
   }
 }
 </style>

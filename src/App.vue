@@ -1,9 +1,10 @@
 <script lang="ts" setup>
 import Login from './pages/LoginPage.vue';
 import Header from './components/view/Header.vue';
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { ElMessageBox } from 'element-plus'
 import Footer from './components/view/Footer.vue';
+import ScrollTop from './components/view/ScrollTop.vue';
 import ArticleCategoryList from './components/article-category/ArticleCategoryList.vue';
 import LibraryPage from './components/library-page/LibraryPage.vue';
 import HomePage from './pages/HomePage.vue';
@@ -20,29 +21,78 @@ const loginModal = useLoginModal()
 import { useRoute } from "vue-router";
 const route = useRoute();
 const dialogVisible = ref(false)
+
+
+const isHideHeader = ref(false)
+let lastScrollY = window.scrollY
+
+const handleScroll = () => {
+  const currentScroll = window.scrollY
+
+  if (currentScroll > lastScrollY && currentScroll > 80) {
+    isHideHeader.value = true   // kéo xuống → ẩn
+  } else {
+    isHideHeader.value = false  // kéo lên → hiện
+  }
+
+  lastScrollY = currentScroll
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll, { passive: true })
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
+})
 </script>
 <template>
   <div class="layout">
-    <header v-if="route.name !== 'chap-detail'" class="pt-3">
+    <header v-if="route.name !== 'chap-detail'" class="pt-3 pb-3" :class="[
+      'pt-3 pb-3 mobile-sticky-header',
+      { hide: isHideHeader }
+    ]">
       <Header />
     </header>
-    <main :class="[
-      !['payment', 'login', 'chap-detail'].includes(route.name) ? 'mt-mid-4 pb-4' : '',
+    <main class="pd-desktop-100 pd-mb-0" :class="[
+      !['payment', 'login', 'chap-detail'].includes(route.name) ? 'mt-mid-4' : '',
       !['payment', 'login', 'chap-detail'].includes(route.name) ? 'main' : '',
       route.name === 'payment' ? 'payment-bg' : ''
     ]">
       <RouterView />
     </main>
-    <footer style="margin-top: 100px;" v-if="route.name !== 'chap-detail'" class="bg-footer border-top">
+    <footer v-if="route.name !== 'chap-detail'" class="bg-footer border-top">
       <Footer />
     </footer>
+     <ScrollTop />
   </div>
   <el-dialog v-model="loginModal.isVisible" width="400" destroy-on-close append-to-body>
     <LoginPage />
   </el-dialog>
+  
 </template>
-
 <style scoped>
+@media (max-width: 768px) {
+  .mobile-sticky-header {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    background: #fff;
+
+    transition: transform 0.5s ease, box-shadow 0.5s ease;
+  }
+  .pd-mb-0
+  {
+    padding-bottom: 0 !important;
+  }
+  .mobile-sticky-header.hide {
+    transform: translateY(-100%);
+  }
+}
+.pd-desktop-100
+{
+  padding-bottom: 100px;
+}
 .layout {
   display: flex;
   flex-direction: column;
@@ -60,7 +110,8 @@ const dialogVisible = ref(false)
 }
 
 .bg-footer {
-  background-color: #E8F8F8
+  background-color: #F8F8F8;
+  border-top: solid 1px #e7e7e7 !important;
 }
 
 .pb-8 {
@@ -81,10 +132,11 @@ const dialogVisible = ref(false)
   padding-top: 40px;
 
 }
-@media (max-width: 768px) {
-.mt-mid-4 {
-  padding-top: 40px;
 
-}
+@media (max-width: 768px) {
+  .mt-mid-4 {
+    padding-top: 40px;
+
+  }
 }
 </style>

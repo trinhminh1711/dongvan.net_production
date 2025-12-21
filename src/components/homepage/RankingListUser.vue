@@ -6,11 +6,11 @@
         <div v-for="(item, index) in items" :key="index"
             class="topvote-item justify-content-between gap-4 d-flex text-start py-2">
             <div class="d-flex align-items-start">
-                <img class="top-icon" v-if="index == 0" :src="rankingIcon1" alt="" srcset="">
-                <img class="top-icon" v-if="index == 1" :src="rankingIcon2" alt="" srcset="">
-                <img class="top-icon" v-if="index == 2" :src="rankingIcon3" alt="" srcset="">
-                <span v-if="index > 2" class="color-gray fw-bold mx-2"> {{ index < 9 ? '0' + (index + 1) : index + 1}}</span>
-                        <div>
+                <img class="top-icon me-2" v-if="index == 0" :src="rankingIcon1" alt="" srcset="">
+                <img class="top-icon me-2" v-if="index == 1" :src="rankingIcon2" alt="" srcset="">
+                <img class="top-icon me-2" v-if="index == 2" :src="rankingIcon3" alt="" srcset="">
+                <span v-if="index > 2" class="color-gray fw-bold mx-2 color-gray fw-bold mx-2"> {{ index < 9 ? '0' + (index + 1) : index + 1}}</span>
+                        <div class=" ps-12 ps-md-16">
                             <p class="hover-link" @click="profileUser(item.author_id)">{{ item.author_name }}</p>
                             <p class="text-sm text-color__tertiary" v-if="index == 0">{{ item.total_reads }} lượt đọc</p>
                         </div>

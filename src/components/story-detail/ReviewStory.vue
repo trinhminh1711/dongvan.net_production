@@ -90,8 +90,6 @@ function avgRating(ratings) {
 }
 async function onRate() {
   const res = await rateStory(props.story_id, auth.userId, rateValue.value, rateComment.value);
-  console.log(res);
-
   if (res.status == 201) {
     toast.success("Đã gửi đánh giá truyện")
     setTimeout(() => {
@@ -101,9 +99,10 @@ async function onRate() {
 }
 async function getRateting() {
   const res = await getStoryRate(props.story_id);
-
-  rateData.value = res || [];
-  rateDataStar.value = avgRating(res)
+  console.log(res.data);
+  
+  rateData.value = res.data || [];
+  rateDataStar.value = avgRating(res.data)
   ratingCounts.value = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
   rateData.value.forEach(r => {
     ratingCounts.value[r.rating] = (ratingCounts.value[r.rating] || 0) + 1;

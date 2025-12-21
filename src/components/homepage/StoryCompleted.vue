@@ -179,8 +179,6 @@ async function getStoryData() {
 async function getAllStoryComplete() {
     const res = await getStoryComplete(10);
     storyComplete.value = res
-    console.log(storyComplete.value);
-
     listStoryCompleteWithCategory.value = (mapStoriesToCategories(storyCompleted1.value, storyComplete.value));
 }
 function mapStoriesToCategories(categories, stories) {

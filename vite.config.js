@@ -10,6 +10,10 @@ export default defineConfig({
     vue(),
     vueDevTools(),
   ],
+   server: {
+    host: '0.0.0.0',  // cho phép truy cập từ IP mạng LAN
+    port: 5173,        // có thể giữ nguyên hoặc đổi
+  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))

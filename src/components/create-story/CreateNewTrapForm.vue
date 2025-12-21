@@ -49,7 +49,7 @@
             <button class="btn-outline-primary my-4 align-middle" @click="goBack">
                 <img src="@/assets/icon/back-icon.svg" alt=""><span class="fw-semibold ms-1 text-16">Quay lại</span>
             </button>
-            <button @click="validateForm()" style="display: block;" class="btn-alert my-4 fw-semibold lh-2 text-16">
+            <button :disabled="isEmptyHtml(newChapForm.chapContent)"  :class="{'btn-alert': !isEmptyHtml(newChapForm.chapContent)}" @click="validateForm()" style="display: block;" class="my-4 fw-semibold lh-2 text-16">
                 Đăng chương
             </button>
         </div>
@@ -140,6 +140,10 @@ const newChapForm = reactive<chapData>({
     isfinal: 0
 
 })
+function isEmptyHtml(html) {
+  if (!html) return true
+  return html.replace(/<[^>]*>/g, '').trim() === ''
+}
 function goBack() {
     if (window.history.length > 1) {
         router.push({

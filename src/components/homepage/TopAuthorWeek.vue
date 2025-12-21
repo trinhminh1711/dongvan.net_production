@@ -1,12 +1,13 @@
 <template>
     <div class="pt-100">
-        <h2 class="fw-semibold">Top Tác Giả Mới Của Tuần</h2>
-        <div class="row gap-3 flex-md-nowrap mt-4">
+        <h2 class="fw-semibold hide-mobile">Top Tác Giả Mới Của Tuần</h2>
+        <h3 class="list-title fw-semibold text-color_primary border-b pb-2 title-mobile hide-desktop">Top Tác Giả Mới Của Tuần</h3>
+        <div class="row gap-3 flex-md-nowrap mt-4 hide-mobile">
             <div :style="{
                 backgroundImage: `url(${getBgImage(index)})`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center'
-            }"  v-for="(item, index) in usersInfo" class="image-box col-md-4 gap-y-5">
+            }" v-for="(item, index) in usersInfo" class="image-box col-md-4 gap-y-5">
                 <p @click="goToProfile(item.data.user_id)" class="d-flex align-items-center gap-2">
                     <img style="border-radius: 50%; height: 50px; width: 50px;" :src="item.data.link_thumbnail" alt="">
                     <span class="fw-bold text-color_primary hover-link">{{ item.data.username }}</span>
@@ -19,6 +20,35 @@
                         class="fw-bold text-color_primary">Tác giả cấp {{ item.rank }}</span></p>
             </div>
         </div>
+        <div class="hide-desktop">
+            <Swiper :modules="[Autoplay]" :space-between="16" :breakpoints="{
+                0: { slidesPerView: 'auto' },     // mobile: peek slide
+                768: { slidesPerView: 3 }         // desktop: 3 slides
+            }" class="top-author-swiper mt-4">
+                <SwiperSlide v-for="(item, index) in usersInfo" :key="index" class="image-box" :style="{
+                    backgroundImage: `url(${getBgImage(index)})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center'
+                }">
+                    <p @click="goToProfile(item.data.user_id)" class="d-flex align-items-center gap-2">
+                        <img style="border-radius: 50%; height: 50px; width: 50px;" :src="item.data.link_thumbnail"
+                            alt="" />
+                        <span class="fw-bold text-color_primary hover-link">{{ item.data.username }}</span>
+                    </p>
+                    <p class="text-start py-3 text-sm text-nowrap">
+                        <span class="color-light-gray">Tác phẩm tiêu biểu: </span>
+                        <span @click="readOnBook(item.storyDataId)" class="fw-bold text-color_primary hover-link">
+                            《 {{ item.storyData }} 》
+                        </span>
+                    </p>
+                    <p class="text-start text-sm text-nowrap">
+                        <span class="color-light-gray">Huy hiệu: </span>
+                        <span class="fw-bold text-color_primary">Tác giả cấp {{ item.rank }}</span>
+                    </p>
+                </SwiperSlide>
+            </Swiper>
+        </div>
+
     </div>
 </template>
 
@@ -26,6 +56,10 @@
 import { getUserInfomation } from '@/api/other.user';
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router'
+import { Swiper, SwiperSlide } from 'swiper/vue'
+import { Pagination, Autoplay } from 'swiper/modules'
+import 'swiper/css'
+import 'swiper/css/pagination'
 const router = useRouter()
 function goToProfile(params) {
     router.push({ name: 'user', params: { id: params } })
@@ -38,12 +72,12 @@ function readOnBook(storyId) {
 }
 function getBgImage(index) {
     const images = [
-      new URL('@/assets/image/bg-card-1.jpg', import.meta.url).href,
-      new URL('@/assets/image/bg-card-2.jpg', import.meta.url).href,
-     new URL('@/assets/image/bg-card-3.jpg', import.meta.url).href,
+        new URL('@/assets/image/bg-card-1.jpg', import.meta.url).href,
+        new URL('@/assets/image/bg-card-2.jpg', import.meta.url).href,
+        new URL('@/assets/image/bg-card-3.jpg', import.meta.url).href,
     ];
     return images[index % images.length];
-  }
+}
 const authors = [
     {
         avatarImg:
@@ -81,5 +115,26 @@ onMounted(async () => {
     padding: 20px;
     border: solid 1px #E4E7EC;
     border-radius: 10px;
+}
+
+
+/* chỉ áp dụng cho mobile */
+@media (max-width: 767px) {
+    .top-author-swiper {
+
+        /* để phần slide sau không bị cắt */
+        overflow: visible;
+        /* quan trọng: cho phép slide tràn ra ngoài */
+    }
+
+    .pt-100 {
+        padding-top: 50px;
+    }
+
+    .top-author-swiper .swiper-slide {
+        width: 85% !important;
+        height: auto;
+    }
+
 }
 </style>

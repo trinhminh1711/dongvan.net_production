@@ -20,7 +20,7 @@
         </div>
 
     </div>
-    <div v-if="!(categoryList?.length > 0)">
+    <div class="nodata-wrapper" v-if="!(categoryList?.length > 0)">
         <img style="display: block; margin: 0 auto;" src="@/assets/icon/nodata.png" />
         <p style="text-align: center;">Không có dữ liệu</p>
     </div>
@@ -46,7 +46,7 @@ function handlePageChange(page) {
     console.log('Trang mới:', page) // In ra số trang
 }
 function gotoStory(id) {
-  router.push({ name: 'story', params: { id } });
+    router.push({ name: 'story', params: { id } });
 }
 function createNewTrap(story_id, stories) {
     if (stories.last_chapter_is_final) {
@@ -59,7 +59,20 @@ function createNewTrap(story_id, stories) {
 }
 
 </script>
-
+<style>
+.nodata-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 500px; /* hoặc 100% vùng tab */
+  text-align: center;
+}
+.nodata-wrapper img {
+  width: 250px;
+  margin-bottom: 10px;
+}
+</style>
 <style scoped>
 .box-left__content {
     display: flex;

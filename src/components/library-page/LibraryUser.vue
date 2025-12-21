@@ -2,13 +2,22 @@
     <div class="container">
         <div class="row mt-4">
             <div v-for="stories in categoryList" :key="stories.id" class="box-left__content col-md-6 py-3">
-                <img style="width: 150px; height: 100%; border-radius: 10px; border: solid 2px #E4E7EC;" :src="stories.urlImg">
+                <img style="width: 150px; height: 100%; border-radius: 10px; border: solid 2px #E4E7EC;"
+                    :src="stories.urlImg">
                 <div class="left-content">
-                    <h4 @click="goToStory(stories.story_id)"  class="text-color_primary fw-bold hover-link">{{ stories.title }}</h4>
-                    <p class="color-red fst-italic"><span class="fw-bold text-md">
-                        {{ stories.last_chap_number > 0 ? stories.last_chap_number + ' Chương' : 'Chưa đăng chương' }}</span><span class="text-md"></span></p>
-                    <p class="text-sm"> Chương đang viết: [Chương 1] Trùng Sinh Tỉnh Lại </p>
-                     <button  @click="$router.push(`/create-story/new-chap/${stories.story_id}`)" v-if="!stories.last_chapter_is_final" class="btn-alert my-3">Đăng Chương</button>
+                    <h4 @click="goToStory(stories.story_id)" class="text-color_primary fw-bold hover-link">{{
+                        stories.title }}</h4>
+                    <p class="color-red fst-italic">
+                        <span class="fw-bold text-md" v-if="stories.last_chap_number > 0">
+                            {{ stories.last_chap_number }}
+                        </span>
+                        <span class="text-md">
+                            {{ stories.last_chap_number > 0 ? ' Chương' : 'Chưa đăng chương' }}
+                        </span>
+                    </p>
+                    <p style="font-weight:500;" class="text-md text-limit-2 hover-link"> Chương đang viết: [Chương 1] {{ stories.last_chapter_title }} </p>
+                    <button @click="$router.push(`/create-story/new-chap/${stories.story_id}`)"
+                        v-if="!stories.last_chapter_is_final" class="btn-alert my-3">Đăng Chương</button>
                     <button v-if="stories.last_chapter_is_final" class="btn-success my-3">Hoàn thành</button>
                 </div>
             </div>
@@ -30,12 +39,12 @@ import { useRouter } from "vue-router";
 const router = useRouter();
 import { getStory } from "@/api/stories"
 function handlePageChange(page) {
-  console.log('Trang mới:', page) // In ra số trang
+    console.log('Trang mới:', page) // In ra số trang
 }
 onMounted(async () => {
     const res = await getStory(auth.userId);
     categoryList.value = res
-    
+
 })
 function goToStory(post_id) {
     router.push({
@@ -64,8 +73,8 @@ function goToStory(post_id) {
     /* hướng hộp */
     overflow: hidden;
 }
-.box-left__content h4
-{
+
+.box-left__content h4 {
     font-size: 22px;
 }
 </style>

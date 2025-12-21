@@ -24,7 +24,7 @@
                 </div>
             </div>
             <div class="post-main__content text-sm ps-md-5 pe-md-3 mt-3">
-                <div v-html="postData[0].content"></div>
+                <div class="post-content" v-html="postData[0].content"></div>
                 <div class="post-comment">
                     <p class="like-share d-flex gap-4 py-4">
                         <span @click="likePost(postData[0].post_id)"
@@ -37,7 +37,8 @@
                             </svg>
                             {{ listLiked?.total_likes || 0 }}
                         </span>
-                        <span @click="!auth.userId && loginModal.open()" class="d-flex align-items-center gap-2 text-md cursor-pointer">
+                        <span @click="!auth.userId && loginModal.open()"
+                            class="d-flex align-items-center gap-2 text-md cursor-pointer">
                             <svg width="21" height="20" viewBox="0 0 21 20" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path
@@ -56,15 +57,17 @@
             <h4 v-if="showComment" class=" mb-3 fw-bold">Bình luận ({{ listComment.length }})</h4>
         </div>
     </div>
-    <PostComment v-if="showComment" v-for="value in listComment" :user_id="value.comment_user_id" :comment_id="value.comment_id"
-        :like="value.comment_total_likes" :user="value.comment_username" :user_thumbnail="value.comment_link_thumbnail"
-        :comment="value.comment_content" :date="value.comment_created_at" />
     <div class="post__comment">
 
         <div class="user-comment">
             <InputCommentPost :postId="Number(route.params.id)" />
         </div>
     </div>
+    <PostComment v-if="showComment" v-for="value in listComment" :user_id="value.comment_user_id"
+        :comment_id="value.comment_id" :like="value.comment_total_likes" :user="value.comment_username"
+        :user_thumbnail="value.comment_link_thumbnail" :comment="value.comment_content"
+        :date="value.comment_created_at" />
+
 </template>
 <script setup lang="ts">
 import { toggleLike, getListLikePost } from '../../api/forum';
@@ -103,8 +106,8 @@ onMounted(async () => {
         comment_created_at: item.comment_created_at,
         comment_total_likes: item.comment_total_likes
     }));
-    console.log(1,listComment.value);
-    
+    console.log(1, listComment.value);
+
     getListLike()
 })
 async function getListLike() {
@@ -141,7 +144,7 @@ async function likePost(id) {
         await toggleLike(auth.userId, id)
         await getListLike()
     }
-    else{
+    else {
         loginModal.open()
     }
 
@@ -156,17 +159,22 @@ async function likePost(id) {
     border: solid 1px #e7e7e7;
 }
 
+.post-content>* {
+    font-size: 18px;
+    text-align: justify;
+}
+
 .post-main__content {
-    line-height: 1.5rem;
+    line-height: 2rem;
 
 }
 
 .cursor-pointer:hover {
     cursor: pointer;
 }
+
 @media (max-width: 768px) {
-    .post-title
-    {
+    .post-title {
         font-size: 16px;
     }
 }

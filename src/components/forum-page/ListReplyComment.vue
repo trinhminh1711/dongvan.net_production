@@ -6,7 +6,7 @@
                 <p class="ms-3 fw-bold">{{ props.commentReplies }}</p>
             </div>
             <div class="date-comment">
-                <p class="text-sm pe-3"></p>
+                <p class="text-14 pe-3"></p>
             </div>
         </div>
         <div class="post-main__content text-sm ps-5 pe-3">

@@ -1,21 +1,21 @@
 <template>
   <Banner />
-  <div class="container py-10 text-center">
-    <div class="row align-items-stretch justify-content-between">
-      <div class="col-md-3 col-12 px-0 d-flex flex-column justify-content-between">
+  <div class="container py-10 text-center d-flex flex-column">
+    <div class="row align-items-stretch justify-content-between order-1 order-md-1">
+      <div class="col-md-3 col-12 d-flex flex-column justify-content-between hide-mobile">
         <ListStory />
       </div>
-      <div class="col-md-6 col-12 el-menu-story px-0 px-md-5 d-flex flex-column justify-content-between">
-        <h3 class="text-color_primary fw-bold text-start border-b pb-2">Biên tập viên đề cử</h3>
-        <div class="text-center border-bottom pt-3 pb-5">
+      <div class="col-md-6 col-12 el-menu-story px-md-3 p-0 d-flex flex-column justify-content-between">
+        <h3 class="text-color_primary fw-bold text-start border-b pb-2 title-mb">Biên tập viên đề cử</h3>
+        <div class="text-center border-bottom pb-md-5 pb-4">
           <SliderCenter />
         </div>
         <div class="container text-center pt-2">
           <div class="row align-items-center gap-10">
             <div v-for="(item, index) in dataPropose" :key="index" class="col-md-4 col-6 px-md-0 px-2 mb-2">
               <p @click="goToStory(item.story_id)"
-                class="text-start text-md fw-bold mt-1 text-capitalize text-nowrap hover-link">{{ item.title }}</p>
-              <p class="text-start color-alert text-md mt-1">
+                class="text-start text-md fw-bold mt-md-1 text-capitalize text-nowrap hover-link">{{ item.title }}</p>
+              <p class="text-start color-alert text-md mt-md-1">
                 <span class="fw-bold">{{ item.numberChapter }} </span> Chương
               </p>
               <p style="text-align:justify" class="text-color__tertiary text-sm mt-1 two-line-ellipsis">{{ item.desc
@@ -47,13 +47,14 @@
           </div>
         </div>
       </div>
-      <div class="col-md-3 col-12 p-0 d-flex flex-column justify-content-between">
+      <div class="col-md-3 col-12 d-flex flex-column justify-content-between hide-mobile">
         <ReviewStory />
       </div>
     </div>
-    <div id="ranking" class="row align-items-start mt-5 justify-content-between g-0" style="row-gap: 20px; column-gap: 20px;">
+    <div id="ranking" class="row align-items-start mt-5 justify-content-between g-0 hide-mobile order-md-2"
+      style="row-gap: 20px; column-gap: 20px;">
       <div style="border-radius: 10px; background: linear-gradient(to bottom, #F3FAFF, #FCFEFF); margin: 0;"
-        class="row py-4 col-md-3 px-0 d-flex align-items-center ranking-box">
+        class="row py-4 col-md-3 col-12 px-0 d-flex align-items-center ranking-box">
         <RankingList :items="topUserReadersRecoment">
           <template #header>
             <img class="vote-icon__yellow" src="@/assets/icon/icon-top-2.svg" alt="">
@@ -63,8 +64,7 @@
         </RankingList>
 
       </div>
-      <div
-        style="border-radius: 10px; background: linear-gradient(to bottom, #FFF6F2, #FFFBF9); margin: 0;"
+      <div style="border-radius: 10px; background: linear-gradient(to bottom, #FFF6F2, #FFFBF9); margin: 0;"
         class="row col-md-3 px-0 py-4 d-flex align-items-center ranking-box">
         <RankingList :items="topStoryRead">
           <template #header>
@@ -75,14 +75,13 @@
         </RankingList>
 
       </div>
-      <div
-         style="border-radius: 10px; background: linear-gradient(to bottom, #FFF7EC, #FFFDF9); margin: 0;"
+      <div style="border-radius: 10px; background: linear-gradient(to bottom, #FFF7EC, #FFFDF9); margin: 0;"
         class="row col-md-3 px-0 py-4 d-flex align-items-center ranking-box">
         <RankingList :items="topStoryMonthRead">
           <template #header>
-            <img class="vote-icon__yellow" src="@/assets/icon/icon-top-6.svg" alt="">
+            <img class="vote-icon__yellow" src="@/assets/icon/top-icon-8.svg" alt="">
             <h3 style="color:#EAAE00 ;" class="topvote-title color-light-blue">Đọc nhiều trong tháng </h3>
-            <img class="vote-icon__yellow" src="@/assets/icon/icon-top-5.svg" alt="">
+            <img style="  transform: scaleX(-1);" class="vote-icon__yellow" src="@/assets/icon/top-icon-8.svg" alt="">
           </template>
         </RankingList>
 
@@ -99,8 +98,70 @@
 
       </div>
     </div>
-    <div class="row align-items-start mt-5 justify-content-between">
-      <div class="col-md-3 px-3">
+    <div id="ranking" class="mt-5 hide-desktop order-2">
+      <Swiper :space-between="16" :breakpoints="{
+        0: { slidesPerView: 'auto' },
+        768: { slidesPerView: 4 }
+      }" class="ranking-swiper">
+        <!-- Box 1 -->
+        <SwiperSlide class="ranking-box-slide">
+          <div class="ranking-box row py-4 col-12 px-0 d-flex align-items-center"
+            style="border-radius: 10px; background: linear-gradient(to bottom, #F3FAFF, #FCFEFF);">
+            <RankingList :items="topUserReadersRecoment">
+              <template #header>
+                <img class="vote-icon__yellow" src="@/assets/icon/icon-top-2.svg" alt="">
+                <h3 class="topvote-title color-light-blue">Người đọc đề cử</h3>
+                <img class="vote-icon__yellow" src="@/assets/icon/icon-top-1.svg" alt="">
+              </template>
+            </RankingList>
+          </div>
+        </SwiperSlide>
+
+        <!-- Box 2 -->
+        <SwiperSlide class="ranking-box-slide">
+          <div class="ranking-box row py-4 col-12 px-0 d-flex align-items-center"
+            style="border-radius: 10px; background: linear-gradient(to bottom, #FFF6F2, #FFFBF9);">
+            <RankingList :items="topStoryRead">
+              <template #header>
+                <img class="vote-icon__yellow" src="@/assets/icon/icon-top-3.svg" alt="">
+                <h3 style="color:#EA8759" class="topvote-title">Đọc nhiều trong tuần</h3>
+                <img class="vote-icon__yellow" src="@/assets/icon/icon-top-4.svg" alt="">
+              </template>
+            </RankingList>
+          </div>
+        </SwiperSlide>
+
+        <!-- Box 3 -->
+        <SwiperSlide class="ranking-box-slide">
+          <div class="ranking-box row py-4 col-12 px-0 d-flex align-items-center"
+            style="border-radius: 10px; background: linear-gradient(to bottom, #FFF7EC, #FFFDF9);">
+            <RankingList :items="topStoryMonthRead">
+              <template #header>
+                <img class="vote-icon__yellow" src="@/assets/icon/top-icon-8.svg" alt="">
+                <h3 style="color:#EAAE00" class="topvote-title">Đọc nhiều trong tháng</h3>
+                <img style="transform: scaleX(-1)" class="vote-icon__yellow" src="@/assets/icon/top-icon-8.svg" alt="">
+              </template>
+            </RankingList>
+          </div>
+        </SwiperSlide>
+
+        <!-- Box 4 -->
+        <SwiperSlide class="ranking-box-slide">
+          <div class="ranking-box row py-4 col-12 px-0 d-flex align-items-center"
+            style="border-radius: 10px; background: linear-gradient(to bottom, #FCFAFF, #FDFBFF);">
+            <RankingListUser :items="topAuthorWeek">
+              <template #header>
+                <img class="vote-icon__yellow" src="@/assets/icon/icon-top-8.svg" alt="">
+                <h3 class="topvote-title color-light-blue">Top tác giả của tuần</h3>
+                <img class="vote-icon__yellow" src="@/assets/icon/icon-top-7.svg" alt="">
+              </template>
+            </RankingListUser>
+          </div>
+        </SwiperSlide>
+      </Swiper>
+    </div>
+    <div class="row align-items-start mt-5 justify-content-between order-5 order-md-3">
+      <div class="col-md-3 px-md-3">
         <TopListUser v-if="topUserReadersStory && topUserReadersStory.length > 0" :items="topUserReadersStory">
           <template #author-top3>
             <div class="d-flex justify-content-between author-card__img">
@@ -120,10 +181,10 @@
           </template>
         </TopListUser>
       </div>
-      <div class="col-md-6 px-3">
+      <div class="col-md-6 px-md-3 hide-mobile">
         <TopListUpdate :items="topStoryUpdatedNew" :content="'Truyện mới cập nhật'" />
       </div>
-      <div class="col-md-3 px-3">
+      <div class="col-md-3 px-md-3 pt-mobile-2">
         <TopListUserSpending v-if="topSpendingUsers" :items="topSpendingUsers" :content="'Top đại gia'">
           <template #author-top3>
             <div class="d-flex justify-content-between author-card__img">
@@ -145,15 +206,26 @@
         </TopListUserSpending>
       </div>
     </div>
-    <div class="row align-items-start">
+    <div class="row align-items-start order-3 swiper-hidden-mb">
       <TopAuthorWeek />
     </div>
+    <div class="row align-items-stretch justify-content-between order-4 pt-mobile-2  hide-desktop">
+      <div class="col-md-3 col-12 d-flex flex-column justify-content-between">
+        <ListStory />
+      </div>
+      <div class="col-md-3 col-12 d-flex flex-column justify-content-between pt-mobile-2">
+        <ReviewStory />
+      </div>
+    </div>
   </div>
-  <div class="container-fluid">
+  <div class="container-fluid hide-mobile">
     <img style="max-width: 100%;display: block;margin: 0 auto;" src="@/assets/image/img-bottom.jpg" alt="">
   </div>
-  <div class="container-fluid bg-successfull-story">
+  <div class="container-fluid bg-successfull-story hide-mobile">
     <StoryCompleted />
+  </div>
+  <div class="container-fluid bg-successfull-story hide-desktop">
+    <LibrarySuccess />
   </div>
 </template>
 
@@ -162,6 +234,7 @@
 import { ref, onMounted } from 'vue'
 import Banner from '@/components/view/Banner.vue'
 import type { TabsPaneContext } from 'element-plus'
+import LibrarySuccess from '@/components/mobile-layout/LibrarySuccess.vue'
 import ListStory from '@/components/homepage/ListStory.vue'
 import SliderCenter from '@/components/homepage/SliderCenter.vue'
 import RankingList from '@/components/homepage/RankingList.vue'
@@ -173,6 +246,10 @@ import TopAuthorWeek from '@/components/homepage/TopAuthorWeek.vue'
 import TopListUserSpending from '@/components/homepage/TopListUserSpending.vue'
 import StoryCompleted from '@/components/homepage/StoryCompleted.vue'
 import { getTopUserRead } from '../api/chapter'
+import { Swiper, SwiperSlide } from 'swiper/vue'
+import { Pagination } from 'swiper/modules'
+import 'swiper/css'
+import 'swiper/css/pagination'
 import { getTopStoryReaded, getTopStoryReadedMonth, getTopAuthorWeek, getTopUserReaders, getListStoryUpdatedNew, getTopStoryRecomment, getTopUserSpending } from '../api/stories'
 const activeName = ref('first')
 import { useRouter } from 'vue-router'
@@ -221,7 +298,7 @@ async function getTopStoryUpdate() {
 async function getTopRecomment() {
   topUserReadersRecoment.value = await getTopStoryRecomment();
   console.log(topUserReadersRecoment.value);
-  
+
 }
 async function getTopSpendingUsers() {
   topSpendingUsers.value = await getTopUserSpending();
@@ -257,17 +334,18 @@ const dataPropose = [
 .topvote-title {
   font-weight: bold;
 }
-.ranking-box
-{
+
+.ranking-box {
   flex: 1 1 calc(25% - 20px);
 }
+
 .demo-tabs>.el-tabs__content {
   color: #6b778c;
   font-size: 32px;
   font-weight: 600;
 }
-.bg-successfull-story
-{
+
+.bg-successfull-story {
   background-image: url('@/assets/image/Background-story-successfull.jpg');
   background-size: 100% 100%;
   background-position: center;
@@ -295,14 +373,64 @@ const dataPropose = [
   max-width: 100%;
 }
 
-.author-card__img
-{
-  padding: 26px 0;
+.author-card__img {
+  padding: 25px 0;
 }
-.author-card__img img{
-    box-shadow:
-    -2px 0 4px rgba(0, 0, 0, 0.08),   /* bên trái */
-    0 2px 4px rgba(0, 0, 0, 0.08),    /* bên dưới */
-    0 -2px 4px rgba(0, 0, 0, 0.05);   /* bên trên */
+
+.author-card__img img {
+  box-shadow:
+    -2px 0 4px rgba(0, 0, 0, 0.08),
+    /* bên trái */
+    0 2px 4px rgba(0, 0, 0, 0.08),
+    /* bên dưới */
+    0 -2px 4px rgba(0, 0, 0, 0.05);
+  /* bên trên */
+}
+</style>
+<style scoped>
+.ranking-swiper {
+  overflow: visible;
+  /* để peek không bị cắt */
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+/* Peek effect trên mobile */
+@media (max-width: 767px) {
+  #ranking , .swiper-hidden-mb {
+    overflow-x: hidden;
+  }
+
+  /* Giữ hiệu ứng peek */
+  .ranking-swiper {
+    overflow: visible;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .ranking-swiper .swiper-slide {
+    width: 80% !important;
+    /* lộ 20% box kế */
+  }
+
+  .story-card__img {
+    justify-content: right;
+    display: flex;
+  }
+
+  .story-card__img img {
+    max-width: 55px;
+  }
+
+  .bg-successfull-story {
+    background-image: unset !important;
+  }
+}
+
+/* Desktop vẫn dạng grid 4 cột (Swiper auto xử lý qua slidesPerView) */
+@media (min-width: 768px) {
+  .ranking-swiper .swiper-slide {
+    width: auto !important;
+  }
 }
 </style>

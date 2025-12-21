@@ -18,7 +18,7 @@
                     </button>
 
                     <button class="btn-edit-ui" :class="{ active: selectedTheme === '#E0E0E0' }"
-                        @click="selectTheme('#E0E0E0', '#f5f5f5')" style="background-color: #E0E0E0">
+                        @click="selectTheme('#E0E0E0', '#3440545')" style="background-color: #E0E0E0">
                         <img width="24px" src="@/assets/icon/check-select.png" alt="">
                     </button>
 
@@ -54,8 +54,8 @@
         <div class="edit-font__style mt-5">
             <p class="fw-bold mb-3">Cỡ và kiểu chữ</p>
             <div class="edit-fontsize d-flex gap-3 mb-3">
-                <button @click="adjustFontSize('decrease')" class="fw-bold">A-</button>
-                <button @click="adjustFontSize('increase')" class="fw-bold">A+</button>
+                <button @click="adjustFontSize('decrease')" :class="{ active: selectedFontSize === 'decrease' }" class="fw-bold ui-dantrang">A-</button>
+                <button @click="adjustFontSize('increase')" :class="{ active: selectedFontSize === 'increase' }" class="fw-bold ui-dantrang">A+</button>
             </div>
             <div class="edit-font-style d-flex flex-column">
                 <button class="" @click="selectFont('')" :class="{ active: selectedFont === '' }">
@@ -102,6 +102,7 @@ const fontSize = ref("16px");
 const fontFamily = ref("Arial");
 const value1 = ref(false)
 const selectedLayout = ref(false)
+const selectedFontSize = ref(false)
 const selectedTheme = ref('white')
 const selectedFont = ref('')
 function handleChange(val) {
@@ -116,6 +117,7 @@ function selectFont(font) {
     selectedFont.value = font
 }
 function adjustFontSize(action) {
+     selectedFontSize.value = action
     emit("changeFontSize", action); // action = "increase" hoặc "decrease"
 }
 function selectTheme(bg, color) {

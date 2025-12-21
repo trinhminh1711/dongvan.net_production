@@ -1,7 +1,7 @@
 <template>
     <div class="container mt-3">
         <div class="row gap-4 flex-md-nowrap">
-            <div class="col-md-4">
+            <div class="col-md-4x order-md-1 order-2 ">
                 <div class="infor-contact">
                     <div class="p-4">
                         <h4 class="fw-bold color-alert"> Thông tin liên hệ</h4>
@@ -44,8 +44,8 @@
 
                 </div>
             </div>
-            <div class="col-md-8 contact-form">
-                <div class="pt-4 px-md-4 pb-4">
+            <div class="col-md-8 order-md-2 order-1 ">
+                <div class="pt-4 px-md-4 px-3 pb-4  contact-form">
                     <SupportContacForm />
                 </div>
             </div>

@@ -1,7 +1,7 @@
 <template>
     <div>
         <h4 class="text-20 fw-bold"> Đăng bài mới</h4>
-        <p class="text-16">Chia sẻ những câu chuyện thú vị và tương tác với các độc giả khác trên diễn đàn!</p>
+        <p class="text-14">Chia sẻ những câu chuyện thú vị và tương tác với các độc giả khác trên diễn đàn!</p>
 
         <div class="py-2">
             <p class="mb-1 fw-semibold text-md">Tiêu đề</p>
@@ -18,7 +18,7 @@
             <QuillEditor v-model:content="postData.content" contentType="html" :options="editorOptions"
                 class="editor" />
         </div>
-        <button @click="upPost()" style="width: 100%;" class="btn-alert mt-3"> Đăng bài </button>
+        <button @click="upPost()" style="width: 100%;" class="btn-alert mt-3 text-mb-16 btn-mb-alert"> Đăng bài </button>
     </div>
 </template>
 

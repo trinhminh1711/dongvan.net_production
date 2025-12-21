@@ -50,7 +50,12 @@ function formatDateTime(dateString) {
 }
 </script>
 
-
+<style>
+    .author-card__img
+{
+     border-bottom: solid 1px #E4E7EC;
+}
+</style>
 <style scoped>
 .list-title {
     font-weight: bold;

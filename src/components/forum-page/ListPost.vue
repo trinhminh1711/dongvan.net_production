@@ -169,6 +169,8 @@ const getTopicColor = (title: string): TopicColor => {
 }
 
 async function getAllPostByTopic(page) {
+    console.log(route.params.id);
+    
     const res = await getPostForumByTopic(route.params.id, page, 5);
     listPostTopic.value = res.data;
     totalPage.value = res.totalPage;

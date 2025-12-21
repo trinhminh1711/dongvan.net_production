@@ -6,34 +6,38 @@
             </div>
             <!-- Cột ảnh bìa -->
             <div v-if="!loading" class="col-md-4 text-center">
-                <img :src="storyData?.urlImg" fit="cover" style="width: 70%; border-radius: 12px; height: 400px; border: solid 2px #e4e7ec;" />
+                <img :src="storyData?.urlImg" fit="cover"
+                    style="width: 70%; border-radius: 12px; height: 400px; border: solid 2px #e4e7ec;" />
             </div>
 
             <!-- Cột nội dung -->
             <div v-if="!loading" class="col-md-8">
                 <!-- Tiêu đề + rating -->
-                <h3 class="fw-bold">{{ storyData?.story_title }}</h3>
-                <div class="d-flex align-items-center mb-3">
+                <h3 class="fw-bold text-center text-md-start text-20">{{ storyData?.story_title }}</h3>
+                <div class="d-flex align-items-center mb-3 justify-content-md-start justify-content-center">
                     <el-rate v-model="rating" disabled show-score text-color="#ff9900" />
                     <span class="ms-3 text-muted">0 đánh giá</span>
                 </div>
 
                 <!-- Tag -->
                 <div v-if="isTopReader" class="mb-3">
-                    <el-tag class="top-view" type="danger"><span class="text-16">#{{ isTopReader }}</span><span class="text-16">Top đọc nhiều trong
+                    <el-tag class="top-view" type="danger"><span class="text-16">#{{ isTopReader }}</span><span
+                            class="text-16">Top đọc nhiều trong
                             tháng</span></el-tag>
                 </div>
 
                 <!-- Thông tin khác -->
                 <div class="el-descriptions-storyinfo">
-                    <el-descriptions label-width="150px" :column="4" direction="vertical" size="small" class="mb-3">
-                        <el-descriptions-item label="Tác giả"><span class="fw-bold text-16">{{ storyData?.author_name
-                        }}</span></el-descriptions-item>
-                        <el-descriptions-item label="Thể loại"><span class="fw-bold text-16">Ngôn
+                    <el-descriptions label-width="150px" :column="4" direction="vertical" size="small"
+                        class="mb-3 desc-center">
+                        <el-descriptions-item label="Tác giả"><span class="fw-bold text-16 text-mb-14">{{
+                            storyData?.author_name
+                                }}</span></el-descriptions-item>
+                        <el-descriptions-item label="Thể loại"><span class="fw-bold text-16 text-mb-14">Ngôn
                                 tình</span></el-descriptions-item>
-                        <el-descriptions-item label="Trạng thái"><span class="fw-bold text-16">Hoàn
+                        <el-descriptions-item label="Trạng thái"><span class="fw-bold text-16 text-mb-14">Hoàn
                                 thành</span></el-descriptions-item>
-                        <el-descriptions-item label="Gói cước"><span class="fw-bold text-16">Miễn
+                        <el-descriptions-item label="Gói cước"><span class="fw-bold text-16 text-mb-14">Miễn
                                 phí</span></el-descriptions-item>
                     </el-descriptions>
                 </div>
@@ -43,23 +47,24 @@
                                 chương</span></el-descriptions-item>
                         <el-descriptions-item><span class="fw-bold text-16">{{ storyData?.total_reads }} lượt
                                 đọc</span></el-descriptions-item>
-                        <el-descriptions-item><span class="fw-bold text-16">357 đề cử</span></el-descriptions-item>
+                        <el-descriptions-item><span class="fw-bold text-16">{{ storyData?.total_votes }} đề
+                                cử</span></el-descriptions-item>
                     </el-descriptions>
                 </div>
                 <!-- Nút hành động -->
-                <div class="my-4 d-flex gap-3">
+                <div class="my-4 d-flex gap-3 btn-mb-action">
                     <div @click="auth.userId ? voteDialog = true : loginModal.open()"
                         class="btn-option d-flex align-items-center gap-2">
                         <img src="@/assets/icon/coin2.png" alt="">
                         <span class="fw-bold" v-if="!coinVoted">Đề cử</span>
                         <span class="fw-bold" v-if="coinVoted">Đã vote {{ coinVoted }} phiếu</span>
                     </div>
-                    <div @click="auth.userId ? likeStory(storyData.story_id) : loginModal.open()">
-                        <div v-if="!isFavorite" class="d-flex align-items-center gap-2 btn-option ">
+                    <div class="btn-option " @click="auth.userId ? likeStory(storyData.story_id) : loginModal.open()">
+                        <div v-if="!isFavorite" class="d-flex align-items-center gap-2">
                             <img src="@/assets/icon/hearth.png" alt="">
                             <span class="fw-bold">Yêu thích</span>
                         </div>
-                        <div v-if="isFavorite" class="d-flex align-items-center gap-2  btn-option ">
+                        <div v-if="isFavorite" class="d-flex align-items-center gap-2">
                             <span class="fw-bold">Bỏ yêu thích</span>
                         </div>
                     </div>
@@ -70,13 +75,14 @@
                         class="btn-option d-flex align-items-center gap-2"><img src="@/assets/icon/present.png"
                             alt="">Tặng quà</div>
                 </div>
-                <div>
-                    <button style="border-radius: 50px;" @click="goReadChap(1)" class="btn-alert  d-flex align-items-center px-4 py-3"> <img
-                            src="@/assets/icon/book.png" alt=""><span class="fw-bold text-20 ps-2"> Đọc truyện ngay</span></button>
+                <div class="flex-mb-center">
+                    <button style="border-radius: 50px;" @click="goReadChap(1)"
+                        class="btn-alert  d-flex align-items-center px-md-4 py-md-3"> <img src="@/assets/icon/book.png"
+                            alt=""><span class="fw-bold text-20 ps-2 text-mb-16"> Đọc truyện ngay</span></button>
                 </div>
                 <!-- Mô tả -->
                 <p :class="!isExpanded ? 'text-four-line' : ''" class="text-secondary mt-5 ">{{ storyData?.description
-                }}
+                    }}
 
                 </p>
                 <a class="text-link" v-if="storyData?.description.length > 100" @click="toggleExpand" type="primary">
@@ -86,25 +92,30 @@
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h3 class="fw-bold">Danh sách chương {{ fullStoryData.data.length > 1 ? '(' +
                             fullStoryData.data.length + ')' : '' }}</h3>
-                        <el-select v-model="sort" placeholder="Sắp xếp" size="small" style="width: 150px">
-                            <el-option label="Mới nhất" value="desc" />
-                            <el-option label="Cũ nhất" value="asc" />
-                        </el-select>
+                        <div class="d-flex align-items-center gap-1 sort-toggle" @click="toggleSort"
+                            style="cursor: pointer; color: #2c3e50; user-select: none;">
+                            <span>{{ sort === 'desc' ? 'Mới nhất' : 'Cũ nhất' }}</span>
+                            <span class="sort-icons">
+                                <i class="bi bi-arrow-up" :class="{ active: sort === 'desc' }"></i>
+                                <i class="bi bi-arrow-down" :class="{ active: sort === 'asc' }"></i>
+                            </span>
+                        </div>
                     </div>
                     <div>
                         <div v-if="!chapters[0]?.chap_number">
                             <img style="display: block; margin: 0 auto;" src="@/assets/icon/nodata.png" />
                             <p style="text-align: center;">Chưa đăng chương</p>
                         </div>
-                        <el-table v-if="chapters[0]?.chap_number" :data="pagedChapters" style="width: 100%">
-                            <el-table-column min-width="290">
+                        <el-table class="hide-mobile" v-if="chapters[0]?.chap_number" :data="pagedChapters"
+                            style="width: 100%">
+                            <el-table-column min-width="300">
                                 <template #default="scope">
-                                    <p>
+                                    <p class="one-line">
                                         <span v-if="scope.row.is_vip" class="me-2">
                                             <img src="@/assets/icon/key.png" alt="">
                                         </span>
                                         <span class="fw-semibold text-18">Chương {{ scope.row.chap_number }}</span> :
-                                        <span class="text-18">{{ scope.row.chapter_title }}</span>
+                                        <span class="text-18 text-one-line ms-1">{{ scope.row.chapter_title }}</span>
                                     </p>
                                 </template>
                             </el-table-column>
@@ -124,7 +135,25 @@
                                 </template>
                             </el-table-column>
                         </el-table>
-                        <div v-if="chapters[0]?.chap_number" class="mt-3 d-flex justify-content-end">
+                        <div v-if="chapters[0]?.chap_number" class="hide-desktop list-chap__mb">
+                            <div style="border-radius: 10px; margin: 10px 0;" class="bg-lightblue" v-for="chapData in pagedChapters">
+                                <div class="px-3 py-3">
+                                <p class="text-mb-14 fw-semibold">{{ chapData.chapter_title }} ({{ chapData.chap_number }})</p>
+                                <div class="d-flex align-items-center justify-content-between py-2">
+                                    <span class="text-mb-12"> {{ chapData.word_count }} chữ </span>
+                                    <span @click="goReadChap(chapData.chap_number)" class="color-alert">Đọc ngay
+                                        <svg width="6" height="10" viewBox="0 0 6 10" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M0.5 9.5L5 5L0.5 0.5" stroke="#BF2C24" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                        </svg>
+                                    </span>
+                                </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div v-if="chapters[0]?.chap_number" class="mt-3 d-flex justify-content-center justify-content-md-end">
                             <el-pagination layout="prev, pager, next" :page-size="pageSize" :current-page="currentPage"
                                 :total="chapters.length" @current-change="handlePageChange" />
                         </div>
@@ -132,8 +161,6 @@
                 </div>
             </div>
         </div>
-
-
     </div>
     <div class="container">
         <h3 class="fw-bold"> Độc giả nói gì về {{ storyData?.story_title }}</h3>
@@ -237,7 +264,7 @@ const route = useRoute();
 const router = useRouter();
 const storyData = ref(null);
 const fullStoryData = ref(null);
-const rating = ref(4.6)
+const rating = ref(0)
 const sort = ref("desc")
 const activeName = "first"
 const isFavorite = ref();
@@ -277,7 +304,7 @@ function goReadChap(chapNumber) {
 }
 async function getTopUserRead() {
     const res = await getTopStoryReadedMonth(10);
-    isTopReader.value = getStoryPosition(res, route.params.id) 
+    isTopReader.value = getStoryPosition(res, route.params.id)
 }
 function getStoryPosition(data, storyId) {
     console.log(data);
@@ -374,6 +401,9 @@ async function checkLikeStory() {
     const res = await checkStoryLike(auth.userId, route.params.id)
     isFavorite.value = res.isFavorite
 }
+const toggleSort = () => {
+    sort.value = sort.value === 'desc' ? 'asc' : 'desc'
+}
 onMounted(async () => {
     coinUser.value = auth.user?.coin_balance
     await checkLikeStory();
@@ -387,15 +417,52 @@ watch
 .el-descriptions-storyinfo .el-descriptions__table {
     width: auto;
 }
+
+.sort-toggle {
+    cursor: pointer;
+    color: #2c3e50;
+    user-select: none;
+    transition: all 0.2s;
+}
+
+.sort-toggle:hover {
+    opacity: 0.8;
+}
+
+.sort-icons i {
+    font-size: 1.1rem;
+    margin-left: 2px;
+    color: #aaa;
+    /* Màu mặc định */
+    transition: color 0.2s, font-weight 0.2s;
+}
+
+.sort-icons i.active {
+    color: #000;
+    /* Mũi tên đang active sẽ đậm hơn */
+    font-weight: 700;
+}
+
+.sort-label {
+    font-weight: 600;
+}
 </style>
 <style scoped>
-::v-deep(.el-table__row) > td {
-  border-bottom: none !important;
+.one-line {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    overflow: hidden;
 }
-.border-bottom 
-{
+
+::v-deep(.el-table__row)>td {
+    border-bottom: none !important;
+}
+
+.border-bottom {
     border-bottom: solid 1px #E4E7EC !important;
 }
+
 .btn-like {
     background-color: red;
     color: #fff;
@@ -405,7 +472,7 @@ watch
     padding: 5px 10px;
     border-radius: 15px;
     font-weight: 700;
-    font-size: 12px;
+    font-size: 14px;
     border: solid 1px #e7e9eb;
 }
 
@@ -458,18 +525,19 @@ watch
     text-overflow: ellipsis;
     word-break: break-word;
 }
+
 ::v-deep(.el-table),
 ::v-deep(.el-table__cell),
 ::v-deep(.el-table__inner-wrapper),
 ::v-deep(.el-table__header-wrapper),
 ::v-deep(.el-table__body-wrapper) {
-  border: none !important;
+    border: none !important;
 }
 
 /* 2️⃣ Xóa viền giữa các ô */
 ::v-deep(.el-table td),
 ::v-deep(.el-table th.is-leaf) {
-  border: none !important;
+    border: none !important;
 }
 
 /* 3️⃣ Xóa line dọc (nếu có border vertical) */
@@ -477,56 +545,92 @@ watch
 ::v-deep(.el-table--group::after),
 ::v-deep(.el-table--border::before),
 ::v-deep(.el-table--group::before) {
-  display: none;
+    display: none;
 }
 
 /* 4️⃣ Thêm background + spacing cho từng hàng */
-::v-deep(.el-table__row) > td {
-  background-color: #F9FAFB !important; /* màu nền mỗi hàng */
-  transition: background 0.2s ease-in-out;
+::v-deep(.el-table__row)>td {
+    background-color: #F9FAFB !important;
+    /* màu nền mỗi hàng */
+    transition: background 0.2s ease-in-out;
 }
 
 /* 5️⃣ Hover màu đậm hơn một chút */
-::v-deep(.el-table__row:hover) > td {
-  background-color: #ffe0e0 !important;
+::v-deep(.el-table__row:hover)>td {
+    background-color: #ffe0e0 !important;
 }
 
 /* 6️⃣ Bo góc hàng */
 ::v-deep(.el-table__row:first-child > td:first-child) {
-  border-top-left-radius: 8px;
+    border-top-left-radius: 8px;
 }
+
 ::v-deep(.el-table__row:first-child > td:last-child) {
-  border-top-right-radius: 8px;
+    border-top-right-radius: 8px;
 }
+
 ::v-deep(.el-table__row:last-child > td:first-child) {
-  border-bottom-left-radius: 8px;
+    border-bottom-left-radius: 8px;
 }
+
 ::v-deep(.el-table__row:last-child > td:last-child) {
-  border-bottom-right-radius: 8px;
+    border-bottom-right-radius: 8px;
 }
+
 ::v-deep(.el-table__body) {
-  border-collapse: separate !important;
-  border-spacing: 0 10px !important; /* 10px = khoảng trắng giữa các row */
+    border-collapse: separate !important;
+    border-spacing: 0 10px !important;
+    /* 10px = khoảng trắng giữa các row */
 }
 
 /* Xóa border mặc định */
 ::v-deep(.el-table__cell) {
-  border: none !important;
+    border: none !important;
 }
 
 /* Màu nền và radius từng row */
-::v-deep(.el-table__row) > td {
-  background: #F9FAFB!important;
-  border-radius: 8px;
+::v-deep(.el-table__row)>td {
+    background: #F9FAFB !important;
+    border-radius: 8px;
 
 }
+
 ::v-deep(.el-table__row > td) {
-  height: 60px; /* chiều cao row */
-  line-height: 0px; /* để text căn giữa theo chiều dọc */
-  padding: 0 16px;  /* nếu muốn padding ngang */
+    height: 60px;
+    /* chiều cao row */
+    line-height: 0px;
+    /* để text căn giữa theo chiều dọc */
+    padding: 0 16px;
+    /* nếu muốn padding ngang */
 }
+
 /* Hover */
-::v-deep(.el-table__row:hover) > td {
-  background-color: #fff7f3 !important;
+::v-deep(.el-table__row:hover)>td {
+    background-color: #fff7f3 !important;
+}
+
+@media (max-width: 768px) {
+    .btn-mb-action {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .btn-mb-action .btn-option {
+        width: 30%;
+        text-wrap: nowrap;
+    }
+
+    .btn-mb-action .btn-option span {
+        text-wrap: nowrap;
+    }
+
+    .flex-mb-center {
+        display: flex;
+        justify-content: center;
+    }
+
+    .btn-option {
+        font-size: 12px;
+    }
 }
 </style>

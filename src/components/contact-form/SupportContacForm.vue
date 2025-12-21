@@ -53,13 +53,13 @@
                         Chưa có tệp nào được chọn
                     </p>
                 </div>
-                <p>Hỗ trợ định dạng: <span class="border rounded-2 p-1">.jpg, .png, .pdf</span> tối đa 5MB</p>
+                <p class="text-mb-12">Hỗ trợ định dạng: <span class="border rounded-2 p-1">.jpg, .png, .pdf</span> tối đa 5MB</p>
             </div>
             <button type="button" style="width: 100%;"
                 class="btn-alert mt-5 py-3 font-lg d-flex align-items-center justify-content-center gap-2"
                 @click="submitForm">
                 <img style="width: 20px;" src="@/assets/icon/send.png" alt=""></img> <span
-                    class="text-md fw-semiboldr">Gửi
+                    class="text-md fw-semibold">Gửi
                     yêu cầu hỗ trợ</span>
             </button>
         </el-form>

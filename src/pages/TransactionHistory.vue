@@ -1,13 +1,9 @@
 <template>
     <div class="container">
         <div class="d-flex align-items-center justify-content-between mt-4">
-            <h2>Tang diệp hiện có: {{ auth.user.coin_balance }} <img src="@/assets/icon/tamdiep-icon.png">
+            <h2>Tang Diệp đang có: {{ auth.user.coin_balance }} <img src="@/assets/icon/tamdiep-icon.png">
             </h2>
-            <div class="filter-container">
-                <el-date-picker v-model="dateRange" type="daterange" range-separator="đến"
-                    start-placeholder="Start date" end-placeholder="End date" />
-                <el-button type="primary" @click="getTransaction()">Lọc</el-button>
-            </div>
+
         </div>
         <div class="mt-4">
             <el-table  class="custom-table" v-if="tableData.length" :data="tableData" style="width: 100%">
@@ -66,15 +62,18 @@ const onDateChange = (val: [string, string]) => {
 }
 function formatDate(dateStr: string) {
     const date = new Date(dateStr);
-    return date.toLocaleString('vi-VN', {
+    const datePart = date.toLocaleDateString('vi-VN', {
         day: '2-digit',
         month: '2-digit',
         year: 'numeric',
+    });
+    const timePart = date.toLocaleTimeString('vi-VN', {
         hour: '2-digit',
         minute: '2-digit',
         second: '2-digit',
-        hour12: false
+        hour12: false,
     });
+    return `${datePart} ${timePart}`;
 }
 const formatDateSelect = (date) => {
     const d = new Date(date)
@@ -84,7 +83,7 @@ const formatDateSelect = (date) => {
     const hh = String(d.getHours()).padStart(2, '0')
     const min = String(d.getMinutes()).padStart(2, '0')
     const ss = String(d.getSeconds()).padStart(2, '0')
-    return `${yyyy}-${mm}-${dd} ${hh}:${min}:${ss}`
+    return `${hh}:${min}:${ss} ${yyyy}-${mm}-${dd} `
 }
 onMounted(() => {
     getTransaction()

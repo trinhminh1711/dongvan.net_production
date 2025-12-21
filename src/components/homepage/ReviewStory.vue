@@ -1,21 +1,26 @@
 <template>
-    <h3 class="list-title text-color_primary border-b pb-2">Review tác phẩm</h3>
+    <h3 class="list-title text-color_primary border-b pb-2  title-mobile">Truyện mới cập nhật</h3>
     <div class="list-container">
-        <div @click="gotoPost(value.post_id)" class="list-item" v-for="value in items">
-            <p class="text-ellipsis" style="max-width: 60%;;">{{ value.title }}</p>
-            <p style="color: #AEAEAE; font-size: 14px; text-wrap: nowrap;">{{ value.username }}</p>
+        <div @click="gotoChapDetail(item.story_id, 1)" v-for="(item, index) in items?.slice(0,8)" :key="index"
+            class="list-item">
+            <div class="item-img">
+                <img :src="item.urlImg" alt="">
+            </div>
+            <div class="item-text">
+                <span class="text-one-line">{{ item.title }}</span>
+                <span class="text-color__tertiary">{{ item.author_name }}</span>
+            </div>
         </div>
     </div>
 </template>
 
 <script setup>
 import { ref, onMounted, watch } from "vue";
-import { getListChapterUpdate } from "@/api/chapter";
-import { getPostForumByTopic } from "@/api/forum";
 import { useRouter } from "vue-router";
+import { getAllStory } from "@/api/stories";
 const router = useRouter();
 const emit = defineEmits(["update:items"]);
-const items = ref([]);
+const items = ref();
 function gotoChapDetail(storyId, chapterId) {
     router.push({
         name: "chap-detail",
@@ -25,13 +30,10 @@ function gotoChapDetail(storyId, chapterId) {
         }
     });
 }
-function gotoPost(id) {
-    router.push({ name: 'post-detail', params: { id: id } });
-}
 onMounted(async () => {
     try {
-        const res = await getPostForumByTopic(2,1,14)
-        items.value = res.data
+        const res = await getAllStory()
+        items.value = res
     } catch (err) {
         console.error("Lỗi khi fetch API:", err);
     }
@@ -57,23 +59,23 @@ onMounted(async () => {
     transition: all .2s ease-in;
 }
 
-.text-two-line {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    /* số dòng muốn hiển thị */
-    -webkit-box-orient: vertical;
+.text-one-line {
+    max-width: 70%;
+    text-wrap: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
-
-.text-ellipsis {
-    max-width: 70%;
-    /* giới hạn chiều ngang */
-    white-space: nowrap;
-    /* không xuống dòng */
-    overflow: hidden;
-    /* ẩn phần dư thừa */
-    text-overflow: ellipsis;
-    /* hiển thị ... */
+.list-item .item-img {
+  flex: 0 0 20%;  /* không co, không giãn, 20% */
+}
+.list-item .item-text {
+  flex: 1;        /* chiếm phần còn lại */
+}
+.list-item .item-img img
+{
+    width: 60%;
+    height: 50px;
+    border-radius: 5px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 </style>

@@ -394,3 +394,28 @@ export const getReadingProgress = async (user_id, story_id) => {
     throw err
   }
 }
+
+export const followStory = async (user_id, story_id) => {
+  try {
+    const res = await axiosClient.post(`${API_URL}/${story_id}/follow`, { user_id: user_id})
+    return res.data
+  } catch (err) {
+    console.error('Có lỗi xảy ra', err)
+    throw err
+  }
+}
+export const unfollowStory = async (storyId, userId) => {
+  const res = await axiosClient.delete(`${API_URL}/${storyId}/unfollow`, { data: { user_id: userId } });
+  return res.data;
+};
+
+// Lấy danh sách truyện user đã follow
+export const getFollowedStories = async (userId) => {
+  try {
+    const res = await axiosClient.get(`${API_URL}/user/follow-story/${userId}`)
+    return res.data.data // hoặc res.data nếu bạn để khác
+  } catch (err) {
+    console.error('Lỗi khi lấy danh sách follow:', err)
+    throw err
+  }
+}

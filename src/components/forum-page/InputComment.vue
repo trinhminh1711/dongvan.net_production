@@ -1,24 +1,21 @@
 <template>
     <p v-if="authStore.userId">Tham gia thảo luận</p>
-    <div v-if="authStore.userId" v-loading="loading" class="comment-box px-3 pb-2 pt-3 mt-3">
-        <div class="post-main__info d-flex justify-content-between gap-1">
+    <div v-if="authStore.userId" v-loading="loading" class="comment-box pb-2 pt-3 mt-3">
+        <div class="post-main__info d-flex justify-content-between gap-2">
             <div class="d-flex align-items-start">
-                <img style="    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    object-fit: cover;" :src="authStore.user?.link_thumbnail" alt="">
+                <img style="border-radius: 50%; width: 40px; height: 40px;
+                object-fit: cover;" :src="authStore.user?.link_thumbnail" alt="">
             </div>
-            <el-mention @focus="handleFocus" v-model="commentContent" type="textarea"
-                placeholder="Thêm bình luận của bạn" style="height: 100px; resize: none;" />
+            <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 5 }" class="comment-area"
+                v-model="commentContent" placeholder="Thêm bình luận của bạn..." style="height: 170px; resize: none;" />
         </div>
         <div class="d-flex justify-content-end">
-            <button @click="postComment()" class="btn-alert d-flex align-items-center gap-2">
-                <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <button @click="postComment()" class="btn-comment d-flex align-items-center gap-2">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
-                        d="M9.49952 12.5001L19.9995 2.00005M9.6271 12.8281L12.2552 19.5861C12.4867 20.1815 12.6025 20.4791 12.7693 20.566C12.9139 20.6414 13.0862 20.6415 13.2308 20.5663C13.3977 20.4796 13.5139 20.1821 13.7461 19.587L20.3364 2.69925C20.5461 2.16207 20.6509 1.89348 20.5935 1.72185C20.5437 1.5728 20.4268 1.45583 20.2777 1.40604C20.1061 1.34871 19.8375 1.45352 19.3003 1.66315L2.41258 8.25349C1.8175 8.48572 1.51997 8.60183 1.43326 8.76873C1.35809 8.91342 1.35819 9.08567 1.43353 9.23027C1.52043 9.39707 1.81811 9.51283 2.41345 9.74436L9.17146 12.3725C9.29231 12.4195 9.35273 12.443 9.40361 12.4793C9.44871 12.5114 9.48815 12.5509 9.52031 12.596C9.55661 12.6468 9.58011 12.7073 9.6271 12.8281Z"
-                        stroke="white" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-                Đăng bình luận</button>
+                        d="M7.60206 10.0911L16.3521 1.34109M7.70838 10.3645L9.89847 15.9961C10.0914 16.4923 10.1879 16.7403 10.3269 16.8127C10.4474 16.8755 10.5909 16.8756 10.7115 16.813C10.8506 16.7407 10.9473 16.4928 11.1409 15.9969L16.6328 1.92375C16.8075 1.4761 16.8948 1.25228 16.8471 1.10925C16.8056 0.985045 16.7081 0.887572 16.5839 0.846078C16.4409 0.798298 16.217 0.885645 15.7694 1.06034L1.69627 6.55229C1.20038 6.74581 0.95243 6.84257 0.880172 6.98165C0.817532 7.10223 0.817617 7.24577 0.880398 7.36627C0.95282 7.50527 1.20088 7.60174 1.697 7.79467L7.32867 9.98477C7.42938 10.0239 7.47973 10.0435 7.52213 10.0738C7.55971 10.1006 7.59258 10.1334 7.61939 10.171C7.64963 10.2134 7.66921 10.2638 7.70838 10.3645Z"
+                        stroke="#344054" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round" />
+                </svg></button>
         </div>
 
     </div>
@@ -60,25 +57,3 @@ const handleFocus = (e) => {
     }
 }
 </script>
-
-<style>
-.comment-box {
-    border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-    border: solid 1px #e7e7e7;
-}
-
-.comment-box .el-mention,
-.comment-box .el-mention .el-textarea__inner {
-    border: none !important;
-    box-shadow: none !important;
-    outline: none !important;
-}
-
-.comment-box .el-mention.is-focus,
-.comment-box .el-mention.is-focus .el-textarea__inner {
-    border: none !important;
-    box-shadow: none !important;
-    outline: none !important;
-}
-</style>

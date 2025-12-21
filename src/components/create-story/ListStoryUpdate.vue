@@ -1,5 +1,5 @@
 <template>
-    <div class="mt-4">
+    <div v-if="paginatedData.length!=0" class="mt-4">
         <!-- Thanh tìm kiếm toàn bảng -->
         <div class="d-flex justify-content-between">
             <el-input v-model="search" placeholder="Tìm kiếm truyện" clearable
@@ -128,6 +128,10 @@
             </el-form>
         </el-dialog>
 
+    </div>
+    <div class="nodata-wrapper" v-else>
+        <img style="display: block; margin: 0 auto;" src="@/assets/icon/nodata.png" />
+        <p style="text-align: center;">Không có dữ liệu</p>
     </div>
 </template>
 

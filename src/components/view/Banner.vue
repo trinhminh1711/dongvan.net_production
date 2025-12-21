@@ -1,7 +1,7 @@
 <template>
     <div class="container text-center">
-        <div class="row align-items-stretch justify-content-between mobile-center">
-            <div class="row col-md-3 d-flex menu-category">
+        <div class="row align-items-stretch mobile-center">
+            <div class="row col-md-3 d-flex menu-category order-2 order-md-1 m-0">
                 <div @click="goToCategory(item)" v-for="(item, index) in items" :key="index"
                     class="col-md-6 col-6 d-flex align-items-center menu-category__item">
                     <span>
@@ -13,23 +13,32 @@
                     </span>
                 </div>
             </div>
-            <div class="col-md-6  d-flex flex-column justify-content-between el-menu-story">
+            <div class="col-md-6 px-0  d-flex flex-column justify-content-between el-menu-story order-1 order-md-2">
                 <div class="banner-top" :style="{ backgroundImage: `url(${currentBg})` }">
-                    <div class="buttons">
-                        <button v-for="(bg, index) in backgrounds" :key="index"
+
+                    <!-- Buttons desktop -->
+                    <div class="buttons d-none d-md-flex">
+                        <button v-for="(label, index) in labels" :key="index"
                             :class="{ active: index === currentIndex }" @click="changeBackground(index)">
-                            {{ labels[index] }}
+                            {{ label }}
                         </button>
                     </div>
+
+                    <!-- Dots mobile -->
+                    <div class="dots d-flex d-md-none">
+                        <span v-for="(_, index) in backgrounds" :key="index" :class="{ active: index === currentIndex }"
+                            @click="changeBackground(index)"></span>
+                    </div>
+
                 </div>
-                <div class="list-img">
+                <div class="list-img d-none d-md-grid">
                     <img src="@/assets/image/img-cateory3.png" />
                     <img src="@/assets/image/img-cateory1.png" />
                     <img src="@/assets/image/img-cateory2.png" />
 
                 </div>
             </div>
-            <div class="col-md-3 d-flex flex-column justify-content-between">
+            <div class="col-md-3 d-md-flex d-none flex-column justify-content-between order-3 order-md-3">
                 <div class="banner-newfeeds ">
                     <div class=" p-2">
                         <div class="text-start new-feed_title d-flex align-items-center text-color_primary fw-bold">
@@ -51,7 +60,7 @@
             </div>
 
         </div>
-        
+
     </div>
 </template>
 
@@ -228,7 +237,29 @@ onUnmounted(() => clearTimeout(timer))
     background-repeat: no-repeat;
     position: relative;
 }
+.banner-top .dots {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  gap: 8px;
+  align-items: center;
+}
 
+.banner-top .dots span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #fff;
+  transition: all 0.3s ease;
+}
+
+.banner-top .dots span.active {
+  width: 12px;
+  height: 12px;
+  border-radius: 10px;
+  background: #BF2C24;
+}
 .el-menu-story .list-img {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -252,7 +283,7 @@ onUnmounted(() => clearTimeout(timer))
 }
 
 .banner-top button.active {
-    background: #BF2C24
+    background: linear-gradient(to right, #E60000, #FF6114)
 }
 
 .banner-top .buttons {
@@ -265,6 +296,7 @@ onUnmounted(() => clearTimeout(timer))
     flex: 1;
     padding: 10px;
     border-right: 1px solid #ccc;
+    font-family: 'Inter', sans-serif;
     /* viền giữa */
 }
 
@@ -369,14 +401,13 @@ onUnmounted(() => clearTimeout(timer))
 
     }
 
-    .banner-top .buttons button{
-      font-size: 8px;
+    .banner-top .buttons button {
+        font-size: 8px;
     }
 
-    .banner-newfeeds
-    {
-      margin-top: 30px;
+    .banner-newfeeds {
+        margin-top: 30px;
     }
-    
+
 }
 </style>
