@@ -1,6 +1,6 @@
 <template>
     <div v-show="!showCommitPage" class="container">
-        <el-form class="form-createstory mt-5" :model="newChapForm" :rules="rules" ref="ruleFormRef" label-width="auto">
+        <el-form class="form-createstory create-chap" :model="newChapForm" :rules="rules" ref="ruleFormRef" label-width="auto">
             <el-form-item prop="chapNumber">
                 <template #label><span class="form-createstory__label align-middle">Chương thứ
                         <el-tooltip :content="'Hiện tại đã xuất bản đến chương ' + (newChapForm.chapNumber - 1)"
@@ -47,9 +47,9 @@
         <!-- Button submit -->
         <div class="d-flex gap-4 justify-content-end btn-create-chap">
             <button class="btn-outline-primary my-4 align-middle" @click="goBack">
-                <img src="@/assets/icon/back-icon.svg" alt=""><span class="fw-semibold ms-1 text-16">Quay lại</span>
+                <img src="@/assets/icon/back-icon.svg" alt=""><span class="fw-semibold ms-1 text-16 text-mb-14">Quay lại</span>
             </button>
-            <button :disabled="isEmptyHtml(newChapForm.chapContent)"  :class="{'btn-alert': !isEmptyHtml(newChapForm.chapContent)}" @click="validateForm()" style="display: block;" class="my-4 fw-semibold lh-2 text-16">
+            <button :disabled="isEmptyHtml(newChapForm.chapContent)"  :class="{'btn-alert': !isEmptyHtml(newChapForm.chapContent)}" @click="validateForm()" style="display: block;" class="my-4 fw-semibold lh-2 text-16 text-mb-14">
                 Đăng chương
             </button>
         </div>
@@ -95,9 +95,9 @@
         </div>
         <div class="d-flex gap-4 justify-content-end btn-create-chap">
             <button class="btn-outline-primary my-4 align-middle" @click="goBack">
-                <img src="@/assets/icon/back-icon.svg" alt=""><span class="fw-semibold ms-1 text-16">Quay lại</span>
+                <img src="@/assets/icon/back-icon.svg" alt=""><span class="fw-semibold ms-1 text-16 text-mb-14">Quay lại</span>
             </button>
-            <button @click="submitForm()" style="display: block;" class="btn-alert my-4 fw-semibold text-16">
+            <button @click="submitForm()" style="display: block;" class="btn-alert my-4 fw-semibold text-16 text-mb-14">
                 Xác nhận
             </button>
         </div>
@@ -247,5 +247,27 @@ onMounted(
 .el-form-item.is-required:not(.is-no-asterisk).asterisk-left>.el-form-item__label-wrap>.el-form-item__label:before,
 .el-form-item.is-required:not(.is-no-asterisk).asterisk-left>.el-form-item__label:before {
     display: none;
+}
+
+.create-chap .editor-wrapper {
+  width: 100%;
+}
+@media (max-width: 768px) {
+/* chính class .ql-editor là vùng nhập nội dung */
+.create-chap .editor-wrapper .ql-editor {
+  min-height: 200px;   /* 👈 chiều cao tối thiểu */
+  max-height: 400px;   /* 👈 tùy chọn giới hạn */
+  height: 300px;       /* 👈 hoặc đặt cố định */
+  overflow-y: auto;    /* có thanh cuộn nếu vượt quá */
+}
+
+/* tùy chọn: fix thanh toolbar */
+.create-chap .editor-wrapper .ql-toolbar {
+  border-radius: 8px 8px 0 0;
+}
+
+.create-chap .editor-wrapper .ql-container {
+  border-radius: 0 0 8px 8px;
+}
 }
 </style>

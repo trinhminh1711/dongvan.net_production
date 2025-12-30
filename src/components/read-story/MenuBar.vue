@@ -1,5 +1,6 @@
 <template>
-  <el-tabs v-if="storyData" v-model="activeName">
+  <div class="tab-mb-full">
+  <el-tabs v-if="storyData" v-model="activeName" >
     <el-tab-pane label="Mục lục" name="first">
       <ul class="list-menu" style="list-style: none;">
         <li @click="gotoChap(value.chap_number)" class="my-3" v-for="(value, index) in bookIndex" :key="index">
@@ -19,6 +20,8 @@
       </ul>
     </el-tab-pane>
   </el-tabs>
+  </div>
+
 </template>
 
 <script setup>
@@ -37,7 +40,7 @@ const props = defineProps({
   userId: String,
   bookmarkValue: Array
 });
-const emit = defineEmits(['update:isBookmark'])
+const emit = defineEmits(['update:isBookmark'], ["closeDrawer"])
 const storyData = ref(null)
 const bookmark = ref()
 const bookIndex = ref()
@@ -50,7 +53,6 @@ async function fetchChapter() {
     chapter_title: chap.chapter_title,
   }));
 
-
 }
 async function getBookMark() {
   const res = await getReadingProgress(props.userId, props.storyId)
@@ -62,6 +64,7 @@ async function getBookMark() {
   }
 }
 function gotoChap(chap_number) {
+  emit("closeDrawer");
   router.push({
     name: "chap-detail",
     params: {
@@ -71,6 +74,7 @@ function gotoChap(chap_number) {
   });
 }
 function goToBookmark(bookmark) {
+  emit("closeDrawer");
   router.push({
     name: 'chap-detail',
     params: {

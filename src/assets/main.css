@@ -4,6 +4,7 @@ html,
 #app {
   font-family: "Inter", sans-serif;
 }
+
 * {
   box-sizing: border-box;
 }
@@ -20,14 +21,14 @@ html,
 }
 .text-limit-3 {
   display: -webkit-box;
-  -webkit-line-clamp: 3;     /* số dòng muốn giới hạn */
+  -webkit-line-clamp: 3; /* số dòng muốn giới hạn */
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .text-limit-2 {
   display: -webkit-box;
-  -webkit-line-clamp: 2;     /* số dòng muốn giới hạn */
+  -webkit-line-clamp: 2; /* số dòng muốn giới hạn */
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -111,7 +112,10 @@ html,
 .el-tab-pane {
   height: 100%; /* chiếm toàn bộ chiều cao của tab content */
 }
-
+.el-dialog__title
+{
+  font-weight: 500;
+}
 /* Nếu muốn cả header và footer cũng bo tròn */
 .el-dialog__header,
 .el-dialog__footer {
@@ -161,6 +165,10 @@ html,
   left: -24px;
   top: 0;
   height: 100%;
+}
+.chap-comment-area .el-textarea__inner {
+  min-height: 150px !important;
+  border-radius: 10px;
 }
 .comment-area .el-textarea__inner {
   min-height: 100px !important;
@@ -278,9 +286,8 @@ a,
 .bg-red {
   background: #bf2c24;
 }
-.bg-lightblue
-{
-  background: #F9FAFB;
+.bg-lightblue {
+  background: #f9fafb;
 }
 .btn-alert__rounded {
   border: none;
@@ -369,6 +376,14 @@ a,
   color: #fc6c28;
   cursor: pointer;
 }
+.text-1-line {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  /* số dòng muốn hiển thị */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .text-one-line {
   display: -webkit-box;
   -webkit-line-clamp: 1;
@@ -409,24 +424,21 @@ a,
   .text-mb-16 {
     font-size: 16px;
   }
-    .text-mb-14 {
+  .text-mb-14 {
     font-size: 14px;
   }
-  .btn-mb-alert
-  {
+  .btn-mb-alert {
     padding: 10px 0;
   }
-    .text-mb-12 {
+  .text-mb-12 {
     font-size: 12px;
   }
-  .mt-mb-32
-  {
+  .mt-mb-32 {
     margin-top: 32px;
   }
-  .px-0-mb
-  {
+  .px-0-mb {
     padding-right: 0px;
-    padding-left:  0px;
+    padding-left: 0px;
   }
   .ps-12 {
     padding-left: 12px;
@@ -505,39 +517,79 @@ a,
   }
 
   .box-left__content > img {
-    width: 130px !important;  
+    width: 130px !important;
     height: 180px !important;
   }
-  .box-left__content .left-content
-  {
-    padding: 0px  12px  !important;
+  .box-left__content .left-content {
+    padding: 0px 12px !important;
   }
-  .box-left__content.col-md-6
-  {
+  .box-left__content.col-md-6 {
     padding: 5px 0 !important;
     align-items: start;
   }
-  .box-left__content.col-md-6 div.left-content
-  {
+  .box-left__content.col-md-6 div.left-content {
     flex: 1;
   }
-  .box-left__content.col-md-6 .text-color_primary
-  {
+  .box-left__content.col-md-6 .text-color_primary {
     font-size: 16px;
   }
-  .box-left__content .book-card img
-  {
-    width: 130px !important; 
-    height: 180px !important
+  .box-left__content .book-card img {
+    width: 130px !important;
+    height: 180px !important;
   }
   .desc-center .el-descriptions__label,
-.desc-center .el-descriptions__content {
-  text-align: center !important;    /* Căn giữa ngang */
-  vertical-align: middle !important; /* Giữa dòng theo trục dọc */
-}
+  .desc-center .el-descriptions__content {
+    text-align: center !important; /* Căn giữa ngang */
+    vertical-align: middle !important; /* Giữa dòng theo trục dọc */
+  }
 
-.desc-center .el-descriptions__cell {
-  display: table-cell; /* Đảm bảo label + content có thể căn giữa dọc */
-  vertical-align: middle;
-}
+  .desc-center .el-descriptions__cell {
+    display: table-cell; /* Đảm bảo label + content có thể căn giữa dọc */
+    vertical-align: middle;
+  }
+  .main-comment .line-thread::before {
+    left: 25px;
+    height: 80%;
+  }
+  .reply-thread::after {
+    width: 2px;
+    left: -7px;
+    top: -10px;
+  }
+  .ms-5-5 {
+    margin-left: 2rem;
+  }
+  .reply-wrap img {
+    width: 30px !important;
+    height: 30px !important;
+  }
+  .post-main__info {
+    align-items: start !important;
+    gap: 10px !important;
+  }
+  .px-mb-0 {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+  .reply-thread::before {
+    top: 0px;
+    left: -7px;
+  }
+  .post-main__content .post-content__info {
+    padding: 10px !important;
+  }
+  .ql-toolbar.ql-snow .ql-formats {
+    margin-left: 0 !important;
+  }
+      .tab-mb-full{
+        display: flex;
+    }
+    .tab-mb-full .el-tabs__nav ,.tab-mb-full .el-tabs--top
+    {
+        width: 100% !important;
+    }
+    .tab-mb-full .el-tabs__nav .el-tabs__item
+    {
+      width: 50%;
+    }
 }

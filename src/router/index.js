@@ -75,7 +75,6 @@ const routes = [
         props: true,
         beforeEnter: async (to, from, next) => {
             const auth = useAuthStore();
-            console.log(auth.userId);
             // 1. Nếu chưa login
             if (!auth.userId) {
                 toast.info("Bạn cần đăng nhập để chỉnh sửa truyện");

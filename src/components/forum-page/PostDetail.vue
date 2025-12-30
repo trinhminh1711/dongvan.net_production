@@ -2,7 +2,8 @@
     <div v-if="postData">
         <div>
             <div>
-                <h2 class="text-color_primary fw-bold d-flex gap-2 align-items-center cursor-pointer post-title">
+                <h2
+                    class="text-color_primary fw-bold d-flex gap-2 align-items-center cursor-pointer post-title pb-3 pb-md-0">
                     <div @click="goBack()">
                         <el-icon>
                             <Back />
@@ -29,10 +30,11 @@
                     <p class="like-share d-flex gap-4 py-4">
                         <span @click="likePost(postData[0].post_id)"
                             class="d-flex align-items-center gap-2 cursor-pointer text-md">
-                            <svg width="20" height="18" viewBox="0 0 20 18" xmlns="http://www.w3.org/2000/svg">
+                            <svg :class="isLiked ? 'heart-icon-liked' : 'heart-icon-unliked'" width="20" height="18"
+                                viewBox="0 0 17 16" xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" clip-rule="evenodd"
-                                    d="M9.99431 3.27985C8.32819 1.332 5.54981 0.808035 3.46227 2.59168C1.37472 4.37532 1.08083 7.35748 2.72019 9.467C4.0832 11.2209 8.20816 14.9201 9.5601 16.1174C9.71136 16.2513 9.78698 16.3183 9.8752 16.3446C9.95219 16.3676 10.0364 16.3676 10.1134 16.3446C10.2016 16.3183 10.2773 16.2513 10.4285 16.1174C11.7805 14.9201 15.9054 11.2209 17.2684 9.467C18.9078 7.35748 18.6498 4.35656 16.5264 2.59168C14.4029 0.826798 11.6604 1.332 9.99431 3.27985Z"
-                                    :fill="isLiked ? '#FF0000' : '#667085'" :stroke="isLiked ? 'none' : '#667085'"
+                                    d="M8.49486 2.60369C6.99535 0.850631 4.49481 0.379063 2.61602 1.98434C0.737233 3.58962 0.472726 6.27356 1.94815 8.17213C3.17486 9.75066 6.88733 13.0799 8.10408 14.1575C8.2402 14.278 8.30827 14.3383 8.38766 14.362C8.45695 14.3826 8.53277 14.3826 8.60207 14.362C8.68146 14.3383 8.74952 14.278 8.88565 14.1575C10.1024 13.0799 13.8149 9.75066 15.0416 8.17213C16.517 6.27356 16.2848 3.57273 14.3737 1.98434C12.4626 0.395949 9.99438 0.850631 8.49486 2.60369Z"
+                                    :fill="isLiked ? '#E0245E' : 'none'" :stroke="isLiked ? '#E0245E' : '#667085'"
                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
                             {{ listLiked?.total_likes || 0 }}
@@ -57,7 +59,7 @@
             <h4 v-if="showComment" class=" mb-3 fw-bold">Bình luận ({{ listComment.length }})</h4>
         </div>
     </div>
-    <div class="post__comment">
+    <div class="post__comment py-4 py-md-0">
 
         <div class="user-comment">
             <InputCommentPost :postId="Number(route.params.id)" />

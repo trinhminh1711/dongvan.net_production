@@ -63,3 +63,38 @@ export const postNewChapter = async (chapter_content) => {
        return err
     }
 };
+
+export const getCommentsByChapter = async (chapterNumber, storyId) => {
+  try {
+    const res = await axiosClient.get(`${API_URL}/stories/${storyId}/chapters/${chapterNumber}/comments`);
+    return res.data;
+  } catch (err) {
+    return err;
+  }
+};
+
+// 💬 Thêm bình luận mới
+export const postCommentChapter = async (chapterNumber, storyId,  payload) => {
+  try {
+    const res = await axiosClient.post(
+      `${API_URL}/stories/${storyId}/chapters/${chapterNumber}/comments`,
+      payload,
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    return res.data;
+  } catch (err) {
+    return err;
+  }
+};
+
+// ❌ Xóa bình luận
+export const deleteCommentChapter = async (commentId) => {
+  try {
+    const res = await axiosClient.delete(`${API_URL}/comments/${commentId}`);
+    return res.data;
+  } catch (err) {
+    return err;
+  }
+};

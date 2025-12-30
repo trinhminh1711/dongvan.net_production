@@ -1,12 +1,12 @@
 <template>
-    <div class="">
+    <div  >
         <!-- Menu chức năng -->
         <div class="d-flex gap-3">
             <!-- Nút đổi màu nền -->
             <div class="edit-background">
                 <p class="fw-bold">Nền</p>
                 <div class="d-flex gap-2 mt-3">
-                    <button class="btn-edit-ui" :class="{ active: selectedTheme === 'white' }"
+                    <button  class="btn-edit-ui" :class="{ active: selectedTheme === 'white' }"
                         @click="selectTheme('white', 'black')"
                         style="background-color: white; border: solid 1px #E4E7EC;">
                         <img width="24px" src="@/assets/icon/check-select.png" alt="">
@@ -107,7 +107,8 @@ const selectedTheme = ref('white')
 const selectedFont = ref('')
 function handleChange(val) {
     // val = true nếu bật, false nếu tắt
-    emit('set-layout', val)
+    emit('set-layout', val);
+    emit("closeDrawer");
 }
 const changeBackground = (color) => {
     backgroundColor.value = color;
@@ -115,18 +116,22 @@ const changeBackground = (color) => {
 function selectFont(font) {
     emit("changeFont", font);
     selectedFont.value = font
+    emit("closeDrawer");
 }
 function adjustFontSize(action) {
      selectedFontSize.value = action
     emit("changeFontSize", action); // action = "increase" hoặc "decrease"
+    emit("closeDrawer");
 }
 function selectTheme(bg, color) {
     selectedTheme.value = bg
     emit("changeTheme", { background: bg, text: color });
+    emit("closeDrawer");
 }
 function setLayout(value) {
     selectedLayout.value = value     // cập nhật active
     emit('set-layout', value)        // emit ra ngoài
+    emit("closeDrawer");
 }
 // Đổi kích thước chữ (toggle nhỏ ↔ to)
 const toggleFontSize = () => {

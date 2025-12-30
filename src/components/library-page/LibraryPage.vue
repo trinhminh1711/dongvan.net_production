@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <el-tabs v-model="activeName" class="tab-name__center" @tab-click="handleClick">
+    <el-tabs v-model="activeName" class="tab-name__center px-mb-0" @tab-click="handleClick">
       <el-tab-pane label="Đang đọc" name="first"><LibraryReadingList /></el-tab-pane>
       <el-tab-pane label="Yêu thích" name="second"> <LibraryFavoriteList /> </el-tab-pane>
       <el-tab-pane label="Sáng tác của bạn" name="third"><LibraryUser /></el-tab-pane>

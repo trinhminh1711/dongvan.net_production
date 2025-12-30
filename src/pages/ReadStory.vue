@@ -2,28 +2,52 @@
     <div>
         <LoadingSpiner :show="loading" />
     </div>
-    <div style="margin-top: -15px;" :style="{ backgroundColor: backgroundColor, transition: 'all 0.3s ease' }"
+    <div class="pb-150-mb" style="margin-top: -15px; padding-bottom: 100px;" :style="{ backgroundColor: backgroundColor, transition: 'all 0.3s ease' }"
         v-if="!loading">
         <div class="tab-bar">
             <button class="hover_link" @click="goBack"><el-icon style="color: white; font-size: 24px;">
                     <ArrowLeft />
                 </el-icon>
             </button>
-            <h4 @click="gotoStory(chapterData?.story_id)" class="text-white fw-bold text-md hover-link">{{
-                chapterData?.story_title }}</h4>
+
             <div class="button-function">
-                <button :class="{ 'yellow-filter': Bookmarked }" class="hover_link cursor-pointer"
-                    @click="addBookMark()"><img style="max-width: 40px;" src="@/assets/icon/bookmark-add.png"
-                        alt=""></img></button>
+                <button class="hover_link cursor-pointer" @click="addBookMark()">
+
+                    <svg v-if="Bookmarked" width="24" height="24" viewBox="0 0 16 20" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M1 5.8C1 4.11984 1 3.27976 1.32698 2.63803C1.6146 2.07354 2.07354 1.6146 2.63803 1.32698C3.27976 1 4.11984 1 5.8 1H10.2C11.8802 1 12.7202 1 13.362 1.32698C13.9265 1.6146 14.3854 2.07354 14.673 2.63803C15 3.27976 15 4.11984 15 5.8V19L8 15L1 19V5.8Z"
+                            fill="#FEE000" />
+                        <path
+                            d="M5 8H11M15 19V5.8C15 4.11984 15 3.27976 14.673 2.63803C14.3854 2.07354 13.9265 1.6146 13.362 1.32698C12.7202 1 11.8802 1 10.2 1H5.8C4.11984 1 3.27976 1 2.63803 1.32698C2.07354 1.6146 1.6146 2.07354 1.32698 2.63803C1 3.27976 1 4.11984 1 5.8V19L8 15L15 19Z"
+                            stroke="#3E3D43" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+
+                    <svg v-if="!Bookmarked" width="24" height="24" viewBox="0 0 16 20" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M8 11V5M5 8H11M15 19V5.8C15 4.11984 15 3.27976 14.673 2.63803C14.3854 2.07354 13.9265 1.6146 13.362 1.32698C12.7202 1 11.8802 1 10.2 1H5.8C4.11984 1 3.27976 1 2.63803 1.32698C2.07354 1.6146 1.6146 2.07354 1.32698 2.63803C1 3.27976 1 4.11984 1 5.8V19L8 15L15 19Z"
+                            stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+
+                </button>
                 <button class="cursor-pointer" @click="drawer = true, showOption = true"><img style="max-width: 40px;"
                         src="@/assets/icon/icon-list.png" alt=""></img></button>
-                <button class="cursor-pointer" @click="drawer = true, showOption = false"><img style="max-width: 40px;"
-                        src="@/assets/icon/icon-fontsize.png" alt=""></img></button>
-                <button class="cursor-pointer" @click="toggleFullScreen"><img style="max-width: 40px;"
+                <button class="cursor-pointer" @click="drawer = true, showOption = false">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M3.45961 19H0.928356L5.53702 5.90909H8.46458L13.0796 19H10.5484L7.05194 8.59375H6.94966L3.45961 19ZM3.5427 13.8672H10.4461V15.772H3.5427V13.8672Z"
+                            fill="white" />
+                        <path
+                            d="M17.3462 19.1982C16.7241 19.1982 16.1637 19.0874 15.6651 18.8658C15.1708 18.6399 14.7788 18.3075 14.489 17.8686C14.2035 17.4297 14.0607 16.8885 14.0607 16.245C14.0607 15.6911 14.163 15.233 14.3675 14.8707C14.5721 14.5085 14.8512 14.2188 15.2049 14.0014C15.5586 13.7841 15.957 13.62 16.4002 13.5092C16.8477 13.3942 17.31 13.3111 17.7873 13.2599C18.3626 13.2003 18.8292 13.147 19.1871 13.1001C19.5451 13.049 19.805 12.9723 19.967 12.87C20.1332 12.7635 20.2163 12.5994 20.2163 12.3778V12.3395C20.2163 11.858 20.0735 11.4851 19.788 11.2209C19.5025 10.9567 19.0913 10.8246 18.5543 10.8246C17.9876 10.8246 17.538 10.9482 17.2056 11.1953C16.8775 11.4425 16.6559 11.7344 16.5408 12.071L14.3803 11.7642C14.5508 11.1676 14.832 10.669 15.2241 10.2685C15.6161 9.86364 16.0955 9.56108 16.6623 9.3608C17.229 9.15625 17.8555 9.05398 18.5415 9.05398C19.0146 9.05398 19.4854 9.10938 19.9542 9.22017C20.4229 9.33097 20.8512 9.5142 21.239 9.76989C21.6268 10.0213 21.9379 10.3643 22.1722 10.799C22.4109 11.2337 22.5302 11.777 22.5302 12.429V19H20.3058V17.6513H20.229C20.0884 17.924 19.8903 18.1797 19.6346 18.4183C19.3832 18.6527 19.0657 18.8423 18.6822 18.9872C18.3029 19.1278 17.8576 19.1982 17.3462 19.1982ZM17.9471 17.4979C18.4116 17.4979 18.8143 17.4062 19.1552 17.223C19.4961 17.0355 19.7582 16.7884 19.9414 16.4815C20.1289 16.1747 20.2227 15.8402 20.2227 15.478V14.321C20.1502 14.3807 20.0266 14.4361 19.8519 14.4872C19.6815 14.5384 19.4897 14.5831 19.2766 14.6214C19.0636 14.6598 18.8526 14.6939 18.6438 14.7237C18.435 14.7536 18.2539 14.7791 18.1005 14.8004C17.7553 14.8473 17.4464 14.924 17.1737 15.0305C16.9009 15.1371 16.6857 15.2862 16.5281 15.478C16.3704 15.6655 16.2915 15.9084 16.2915 16.2067C16.2915 16.6328 16.4471 16.9545 16.7582 17.1719C17.0692 17.3892 17.4656 17.4979 17.9471 17.4979Z"
+                            fill="white" />
+                    </svg>
+                </button>
+                <button class="cursor-pointer hide-mobile" @click="toggleFullScreen"><img style="max-width: 40px;"
                         src="@/assets/icon/icon-maximize.png" alt=""></img></button>
             </div>
         </div>
-        <div style="padding-bottom: 140px;" class="container mt-3 story-wrapper">
+        <div  class="container mt-3 story-wrapper">
             <div :style="{ '--text-color': textColor }" class="story"
                 :class="['story-content', { 'two-column': isTwoColumn }]">
                 <div :style="{ fontFamily: fontFamily, fontSize: fontSize + 'px', marginTop: '20px' }"
@@ -33,24 +57,33 @@
                 <div class="unlock-chapter">
                     <img src="@/assets/icon/lock.png" alt="">
                 </div>
-                <p :style="{ color: textColor }" class="text-center fw-semibold mt-2">Cần <strong
-                        class="fw-semibold" style="font-size: 26px; color: red;">5 Tang Diệp</strong> để mở khóa chương
+                <p :style="{ color: textColor }" class="text-center fw-semibold mt-2">Cần <strong class="fw-semibold"
+                        style="font-size: 26px; color: red;">5 Tang Diệp</strong> để mở khóa chương
                 </p>
                 <div :style="{ '--text-color': textColor }" class="unlock-span">
-                    <span @click="unlockChapter()"><svg width="19" height="20" viewBox="0 0 19 20" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
+                    <span :style="{
+                        '--text-color': textColor,
+                        border: textColor === '#344054' ? '1px solid black' : `1px solid ${textColor}`
+                    }" @click="unlockChapter" class="unlock-btn">
+                        <svg width="19" height="20" viewBox="0 0 19 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
                                 d="M4.5 8V6C4.5 3.23858 6.73858 1 9.5 1C11.5503 1 13.3124 2.2341 14.084 4M9.5 12.5V14.5M6.3 19H12.7C14.3802 19 15.2202 19 15.862 18.673C16.4265 18.3854 16.8854 17.9265 17.173 17.362C17.5 16.7202 17.5 15.8802 17.5 14.2V12.8C17.5 11.1198 17.5 10.2798 17.173 9.63803C16.8854 9.07354 16.4265 8.6146 15.862 8.32698C15.2202 8 14.3802 8 12.7 8H6.3C4.61984 8 3.77976 8 3.13803 8.32698C2.57354 8.6146 2.1146 9.07354 1.82698 9.63803C1.5 10.2798 1.5 11.1198 1.5 12.8V14.2C1.5 15.8802 1.5 16.7202 1.82698 17.362C2.1146 17.9265 2.57354 18.3854 3.13803 18.673C3.77976 19 4.61984 19 6.3 19Z"
                                 stroke="#5ABD20" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>Mở khóa chương</span>
-                    <span @click="unlockFullChapter()">
+                    <span :style="{
+                        '--text-color': textColor,
+                        border: textColor === '#344054' ? '1px solid black' : `1px solid ${textColor}`
+                    }" @click="unlockFullChapter()">
                         <svg width="23" height="22" viewBox="0 0 23 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
                                 d="M8.5 8H8.51M14.5 14H14.51M15.5 7L7.5 15M6.83377 2.8187C7.6376 2.75455 8.40071 2.43846 9.01447 1.91542C10.4467 0.69486 12.5533 0.69486 13.9855 1.91542C14.5993 2.43846 15.3624 2.75455 16.1662 2.8187C18.0421 2.96839 19.5316 4.45794 19.6813 6.33377C19.7455 7.1376 20.0615 7.90071 20.5846 8.51447C21.8051 9.94672 21.8051 12.0533 20.5846 13.4855C20.0615 14.0993 19.7455 14.8624 19.6813 15.6662C19.5316 17.5421 18.0421 19.0316 16.1662 19.1813C15.3624 19.2455 14.5993 19.5615 13.9855 20.0846C12.5533 21.3051 10.4467 21.3051 9.01447 20.0846C8.40071 19.5615 7.6376 19.2455 6.83377 19.1813C4.95794 19.0316 3.46839 17.5421 3.3187 15.6662C3.25455 14.8624 2.93846 14.0993 2.41542 13.4855C1.19486 12.0533 1.19486 9.94672 2.41542 8.51447C2.93846 7.90071 3.25455 7.1376 3.3187 6.33377C3.46839 4.45794 4.95794 2.96839 6.83377 2.8187ZM9 8C9 8.27614 8.77614 8.5 8.5 8.5C8.22386 8.5 8 8.27614 8 8C8 7.72386 8.22386 7.5 8.5 7.5C8.77614 7.5 9 7.72386 9 8ZM15 14C15 14.2761 14.7761 14.5 14.5 14.5C14.2239 14.5 14 14.2761 14 14C14 13.7239 14.2239 13.5 14.5 13.5C14.7761 13.5 15 13.7239 15 14Z"
                                 stroke="#1877F2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                         Mở combo/full</span>
-                    <span @click="$router.push({ name: 'payment' })">
+                    <span :style="{
+                        '--text-color': textColor,
+                        border: textColor === '#344054' ? '1px solid black' : `1px solid ${textColor}`
+                    }" @click="$router.push({ name: 'payment' })">
                         <svg width="19" height="22" viewBox="0 0 19 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
                                 d="M10.4999 1L1.59332 11.6879C1.24451 12.1064 1.07011 12.3157 1.06744 12.4925C1.06512 12.6461 1.13359 12.7923 1.25312 12.8889C1.39061 13 1.66304 13 2.2079 13H9.49986L8.49986 21L17.4064 10.3121C17.7552 9.89358 17.9296 9.68429 17.9323 9.50754C17.9346 9.35388 17.8661 9.2077 17.7466 9.11111C17.6091 9 17.3367 9 16.7918 9H9.49986L10.4999 1Z"
@@ -58,10 +91,85 @@
                         </svg>Nạp Tang Diệp</span>
                 </div>
             </div>
-        </div>
+            <div v-if="IsPurchased || !isVip" class="my-4 d-flex justify-content-center gap-3 btn-mb-action">
+                <div @click="auth.userId ? voteDialog = true : loginModal.open()"
+                    class="btn-option d-flex align-items-center gap-2">
+                    <img src="@/assets/icon/coin2.png" alt="">
+                    <span class="fw-bold" v-if="!coinVoted">Đề cử</span>
+                    <span class="fw-bold" v-if="coinVoted"><span class="fw-bold hide-mobile">Đã vote</span> {{ coinVoted
+                        }} phiếu</span>
+                </div>
 
+                <div @click="auth.userId ? rateDialog = true : loginModal.open()"
+                    class="btn-option d-flex align-items-center gap-2"><img src="@/assets/icon/start.png" alt="">Đánh
+                    giá</div>
+                <div @click="auth.userId ? giftDialog = true : loginModal.open()"
+                    class="btn-option d-flex align-items-center gap-2"><img src="@/assets/icon/present.png" alt="">Tặng
+                    quà</div>
+            </div>
+            <el-dialog v-model="voteDialog" title="Đề cử" width="500">
+                <span class="fw-bold text-color_primary text-md ">Số lượng Tang Diệp đề cử</span>
+                <el-input class="mt-1" v-model="inputCoinVote" placeholder="10" />
+                <ul class="list-note mt-3">
+                    <li>5 Tang Diệp = 1 phiếu đề cử</li>
+                    <li>Đề cử sẽ giúp truyện lên “Top Người đọc đề cử” trên Bảng Xếp Hạng</li>
+                    <li>Top đại gia hàng tháng hoặc mỗi khi lên hạng người đọc sẽ được tặng phiếu đề cử</li>
+                </ul>
+                <button @click="onVote()" style="width: 100%; height: 40px;" class="btn-alert mt-3"><span
+                        class="py-2 text-16">Đề
+                        cử</span></button>
+            </el-dialog>
+            <el-dialog v-model="noEnoughCoinDialog" title="Không đủ Tang Diệp" width="500">
+                <span class="text-color_primary text-md ">Vui lòng nạp thêm Tang Diệp để tiếp tục!</span>
+                <button @click="router.push({ name: 'payment' })" style="width: 100%; height: 40px;"
+                    class="btn-alert mt-3"><span class="py-2 text-16">Nạp Tang Diệp</span></button>
+            </el-dialog>
+            <el-dialog v-model="rateDialog" title="Đánh giá và nhận xét" width="500">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="fw-bold">Đánh giá</span>
+                    <el-rate v-model="rateValue"
+                        :texts="['Chưa hay', 'Bình thường', 'Tạm được', 'Khá hay', 'Tuyệt vời']" show-text />
+                </div>
+                <div class="mt-2">
+                    <span class="fw-bold">Nhật xét</span>
+                    <el-input class="mt-2" v-model="rateComment" type="textarea" :rows="5"
+                        placeholder="Hãy cho chúng mình vài nhận xét và đóng góp ý kiến nhé!" />
+                </div>
+                <button @click="onRate()" style="width: 100%; height: 40px;" class="btn-alert mt-3"><span
+                        class="py-2 text-16">Gửi
+                        nhận
+                        xét</span></button>
+            </el-dialog>
+            <el-dialog v-model="giftDialog" title="Ủng hộ tác giả" width="500">
+                <div class="gap-2">
+                    <span class="fw-semibold">Số lượng Tang diệp ủng hộ</span>
+                    <span>
+                        <el-tooltip class="box-item" effect="dark" :content="'Số tang diệp của bạn: ' + coinUser"
+                            placement="top">
+                            <el-icon>
+                                <InfoFilled />
+                            </el-icon>
+                        </el-tooltip>
+                    </span>
+                    <el-input v-model="giftValue" class="mt-2" type="input" />
+                </div>
+                <div class="mt-2">
+                    <span class="fw-semibold">Lời nhắn (nếu có)</span>
+                    <el-input v-model="giftMessenger" class="mt-2" type="textarea" :rows="5"
+                        placeholder="Gửi lời nhắn đến tác giả bạn yêu thích..." />
+                </div>
+                <button @click="onGift()" style="width: 100%; height: 40px;" class="btn-alert mt-3">
+                    <span class="py-2 text-16">Gửi ủng hộ</span>
+                </button>
+            </el-dialog>
+        </div>
+        <div v-if="auth.userId" class="container">
+            <div class="comment-wrapper">
+                <CommentChapter :chapter_id="Number(route.params.chapId)" :story_id="Number(route.params.id)" />
+            </div>
+        </div>
         <div class="bottom-bar">
-            <div class="d-flex justify-content-center align-items-center">
+            <div class="d-flex justify-content-center align-items-center hide-mobile">
                 <input :style="{
                     background: `linear-gradient(to right, #d6cbcb 0%, #d6cbcb ${scrollPercent}%, #a3a2a2 ${scrollPercent}%, #a3a2a2 100%)`
                 }" type="range" min="0" max="100" step="0.1" v-model="scrollPercent" @input="onSeek"
@@ -93,15 +201,21 @@
                     <!-- <h3 class="text-lg fw-bold">Danh sách</h3> -->
                 </div>
             </template>
-            <MenuBar :user-id="auth.userId" :storyId="Number(route.params.id)" :chapterId="Number(route.params.chapId)"
-                @update:isBookmark="isBookmark = $event" v-show="showOption" :bookmark-value="listBookMark" />
-            <MenuEditUI @set-layout="setLayout" :isTwoColumn="isTwoColumn" @change-font="handleFontChange"
-                @changeTheme="handleTheme" @changeFontSize="handleFontSize" v-if="!showOption" />
+            <MenuBar @closeDrawer="drawer = false" :user-id="auth.userId" :storyId="Number(route.params.id)"
+                :chapterId="Number(route.params.chapId)" @update:isBookmark="isBookmark = $event" v-show="showOption"
+                :bookmark-value="listBookMark" />
+            <MenuEditUI @closeDrawer="drawer = false" @set-layout="setLayout" :isTwoColumn="isTwoColumn"
+                @change-font="handleFontChange" @changeTheme="handleTheme" @changeFontSize="handleFontSize"
+                v-if="!showOption" />
         </el-drawer>
         <el-dialog v-model="unlockChapterDialog" title="Mở khóa chương" width="300">
-            <p class="mt-2">Chương sẽ mở: <strong style="color: #344054;">Chương {{ route.params.chapId }}</strong></p>
-            <p class="mt-2">Giá để mở: <strong style="color: #344054;">5 Tang diệp</strong></p>
-            <p class="mt-2">Tang Diệp hiện có: <strong style="color: #344054;">{{ cointUser }}</strong></p>
+            <p class="mt-2 text-16">Chương sẽ mở: <strong class="fw-bold" style="color: #344054;">Chương {{
+                route.params.chapId
+                    }}</strong></p>
+            <p class="mt-2 text-16">Giá để mở: <strong class="fw-bold" style="color: #344054;">5 Tang diệp</strong></p>
+            <p class="mt-2 text-16">Tang Diệp hiện có: <strong class="fw-bold" style="color: #344054;">{{ cointUser
+                    }}</strong>
+            </p>
             <template #footer>
                 <div class="dialog-footer d-flex">
                     <el-button style="width: 50%; font-size: 12px;" @click="unlockChapterDialog = false">Quay
@@ -115,16 +229,24 @@
         </el-dialog>
         <el-dialog v-if="chapterNumber" v-model="unlockFullChapterDialog" title="Mở khóa combo ưu đãi" width="300">
             <div v-if="chapterNumber.length > 1">
-                <p class="mt-2">Số chương sẽ mở: <strong style="color: #344054;">{{ chapterNumber.length }} chương <br>
+                <p class="mt-2 text-16">Số chương sẽ mở: <strong style="color: #344054;" class="fw-bold">{{
+                    chapterNumber.length
+                        }} chương <br>
                         </br> (Từ chương {{ chapterNumber[0].chap_number }} đến chương {{
                             chapterNumber[chapterNumber.length - 1].chap_number }})</strong></p>
-                <p class="mt-2">Giá ban đầu: <strong style="color: #344054;">{{ 5 * chapterNumber.length }} Tang
-                        diệp</strong></p>
-                <p class="mt-2">Giá đã giảm: <strong style="color: #344054;">{{ chapterNumber.length > 1 ? 4 *
+                <p class="mt-2 text-16">Giá ban đầu: <strong style="color: #344054;" class="fw-bold">{{ 5 *
                     chapterNumber.length
-                    : 5 *
-                    chapterNumber.length }} Tang diệp</strong></p>
-                <p class="mt-2">Số Tang diệp hiện có: <strong style="color: #344054;">{{ cointUser }}</strong></p>
+                        }} Tang
+                        diệp</strong></p>
+                <p class="mt-2 text-16">Giá đã giảm: <strong style="color: #344054;" class="fw-bold">{{
+                    chapterNumber.length > 1
+                        ? 4 *
+                        chapterNumber.length
+                        : 5 *
+                        chapterNumber.length }} Tang diệp</strong></p>
+                <p class="mt-2 text-16">Số Tang diệp hiện có: <strong class="fw-bold" style="color: #344054; ">{{
+                    cointUser
+                        }}</strong></p>
             </div>
             <p v-else>Chưa đủ số chương để mở combo</p>
             <template #footer>
@@ -132,7 +254,7 @@
                     <el-button style="width: 50%; font-size: 12px;" @click="unlockFullChapterDialog = false">Quay
                         lại</el-button>
                     <el-button v-if="chapterNumber.length > 1" @click="activeUnlockFull()"
-                        style="width: 50%; background-color: #FF6114; font-size: 12px; color: #fff; font-weight: 900;">
+                        style="width: 50%; background: linear-gradient(to right, #e60000, #ff6114); font-size: 12px; color: #fff; font-weight: 900;">
                         Xác nhận
                     </el-button>
                 </div>
@@ -142,8 +264,11 @@
 </template>
 
 <script lang="ts" setup>
+import CommentChapter from '@/components/read-story/CommentChapter.vue';
 import MenuBar from '@/components/read-story/MenuBar.vue';
 import MenuEditUI from '@/components/read-story/MenuEditUI.vue';
+import { getStoryById } from '@/api/stories';
+import { voteStory, rateStory, giveSupport } from "@/api/author";
 import { useLoginModal } from '@/stores/useLoginModal'
 import { ref, onMounted, watch, onBeforeUnmount, onUnmounted, computed, nextTick } from "vue";
 import { useRoute, onBeforeRouteLeave, useRouter } from "vue-router";
@@ -155,6 +280,24 @@ import { toast } from "vue3-toastify";
 import { } from '@/api/stories';
 const auth = useAuthStore();
 import LoadingSpiner from '@/components/loadding/LoadingSpiner.vue';
+const sort = ref("desc")
+const activeName = "first"
+const isFavorite = ref();
+const voteDialog = ref(false);
+const rateDialog = ref(false);
+const coinUser = ref(0);
+const isExpanded = ref(false);
+const inputCoinVote = ref(10);
+const rateValue = ref();
+const rateComment = ref();
+const noEnoughCoinDialog = ref(false)
+const coinVoted = ref();
+const giftDialog = ref()
+const giftValue = ref(10)
+const currentPage = ref(1)
+const pageSize = 10
+const giftMessenger = ref()
+const isTopReader = ref(0)
 const route = useRoute();
 const content = ref(null);
 const router = useRouter()
@@ -186,6 +329,10 @@ const scrollPercent = ref(0);
 const prevChap = ref(null);
 const nextChap = ref(null);
 const currentChap = ref(Number(route.params.chapId));
+const spanStyle = computed(() => ({
+    '--text-color': textColor.value,
+    borderColor: textColor.value === '#344054' ? 'black' : textColor.value
+}))
 async function fetchChapter() {
     loading.value = true;
     await new Promise(resolve => setTimeout(resolve, 1000));
@@ -194,8 +341,6 @@ async function fetchChapter() {
         const chapterId = route.params.chapId;
         const res = await getChapterWithId(storyId, chapterId, auth.userId)
         chapterData.value = res.data
-        console.log(res.data.content);
-        
         IsPurchased.value = res.IsPurchased
         isVip.value = res.data.is_vip
         required_time_seconds.value = (res.data.word_count / 1000) * 2
@@ -469,6 +614,48 @@ async function scrollToBookmark() {
         window.scrollTo({ top: scroll, behavior: 'smooth' })
     }
 }
+async function onGift() {
+    if (!giftMessenger.value) {
+        giftMessenger.value = "Gửi tặng tác giả, truyện rất hay"
+    }
+    const author = await (getStoryById(chapterData.value.story_id))
+    const res = await giveSupport(auth.userId, author.author_id, giftValue.value, giftMessenger.value)
+    if (res.success) {
+        toast.success("Gửi thành công " + giftValue.value + " Tang diệp")
+        setTimeout(() => {
+            window.location.reload()
+        }, 1000);
+    }
+    else {
+        giftDialog.value = false
+        noEnoughCoinDialog.value = true
+        toast.error(res.data.message)
+
+    }
+}
+async function onVote() {
+    const res = await voteStory(auth.userId, route.params.id, inputCoinVote.value);
+    if (res.success) {
+        toast.success("Đề cử thành công!")
+        setTimeout(() => {
+            window.location.reload()
+        }, 1000);
+    }
+    else {
+        voteDialog.value = false
+        noEnoughCoinDialog.value = true
+        toast.error(res.data.message)
+    }
+}
+async function onRate() {
+    const res = await rateStory(route.params.id, auth.userId, rateValue.value, rateComment.value);
+    if (res.status == 201) {
+        toast.success("Đã gửi đánh giá truyện")
+        setTimeout(() => {
+            window.location.reload()
+        }, 1000);
+    }
+}
 onMounted(async () => {
     await updateReadingUser()
     await fetchChapter();
@@ -491,6 +678,18 @@ nextTick(() => {
 <style scoped>
 .story * {
     color: var(--text-color) !important;
+}
+
+.btn-option {
+    padding: 5px 10px;
+    border-radius: 30px;
+    font-weight: 700;
+
+    border: solid 1px #e7e9eb;
+}
+
+.btn-option:hover {
+    cursor: pointer;
 }
 </style>
 <style>
@@ -610,7 +809,7 @@ nextTick(() => {
 
 .unlock-span span {
     margin: 0 20px;
-    border: solid 1px var(--text-color) !important;
+
     padding: 5px 20px;
     border-radius: 30px;
     display: flex;
@@ -676,5 +875,31 @@ nextTick(() => {
 
 .yellow-filter {
     filter: sepia(1) saturate(8) hue-rotate(36deg) brightness(1.1);
+}
+
+@media (max-width: 768px) {
+    .tab-bar {
+        padding: 10px 20px;
+    }
+
+    .bottom-bar button {
+        padding: 10px 20px;
+        margin-top: 30px;
+    }
+
+    .unlock-span {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .unlock-span span {
+        width: calc(50% - 10px);
+        margin: 0;
+        padding: 10px;
+    }
+    .pb-150-mb
+    {
+        padding-bottom: 150px !important;
+    }
 }
 </style>

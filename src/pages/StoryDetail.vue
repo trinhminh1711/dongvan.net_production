@@ -33,12 +33,11 @@
                         <el-descriptions-item label="Tác giả"><span class="fw-bold text-16 text-mb-14">{{
                             storyData?.author_name
                                 }}</span></el-descriptions-item>
-                        <el-descriptions-item label="Thể loại"><span class="fw-bold text-16 text-mb-14">Ngôn
-                                tình</span></el-descriptions-item>
-                        <el-descriptions-item label="Trạng thái"><span class="fw-bold text-16 text-mb-14">Hoàn
-                                thành</span></el-descriptions-item>
-                        <el-descriptions-item label="Gói cước"><span class="fw-bold text-16 text-mb-14">Miễn
-                                phí</span></el-descriptions-item>
+                        <el-descriptions-item label="Thể loại"><span class="fw-bold text-16 text-mb-14">{{
+                            storyData?.genre_name
+                                }}</span></el-descriptions-item>
+                        <el-descriptions-item label="Trạng thái"><span class="fw-bold text-16 text-mb-14">{{ storyData?.is_final == 1 ? 'Đã hoàn thành' : 'Đang sáng tác' }}</span></el-descriptions-item>
+                        <el-descriptions-item label="Gói cước"><span class="fw-bold text-16 text-mb-14">{{ storyData?.is_vip == 1 ? 'Vip' : 'Miễn phí' }}</span></el-descriptions-item>
                     </el-descriptions>
                 </div>
                 <div class="el-descriptions-storyinfo border-top border-bottom border-opacity-50 pt-3">
@@ -57,7 +56,7 @@
                         class="btn-option d-flex align-items-center gap-2">
                         <img src="@/assets/icon/coin2.png" alt="">
                         <span class="fw-bold" v-if="!coinVoted">Đề cử</span>
-                        <span class="fw-bold" v-if="coinVoted">Đã vote {{ coinVoted }} phiếu</span>
+                        <span class="fw-bold" v-if="coinVoted"><span class="fw-bold hide-mobile">Đã vote</span> {{ coinVoted }} phiếu</span>
                     </div>
                     <div class="btn-option " @click="auth.userId ? likeStory(storyData.story_id) : loginModal.open()">
                         <div v-if="!isFavorite" class="d-flex align-items-center gap-2">
@@ -165,7 +164,7 @@
     <div class="container">
         <h3 class="fw-bold"> Độc giả nói gì về {{ storyData?.story_title }}</h3>
         <div>
-            <el-tabs class="mt-3" v-model="activeName">
+            <el-tabs class="mt-3 tab-mb-full" v-model="activeName">
                 <el-tab-pane label="User" name="first">
                     <template #label>
                         <span @click="!auth.userId && loginModal.open()" class="custom-tab">
@@ -194,13 +193,13 @@
                 <li>Đề cử sẽ giúp truyện lên “Top Người đọc đề cử” trên Bảng Xếp Hạng</li>
                 <li>Top đại gia hàng tháng hoặc mỗi khi lên hạng người đọc sẽ được tặng phiếu đề cử</li>
             </ul>
-            <button @click="onVote()" style="width: 100%; height: 40px;" class="btn-alert mt-3"><span class="py-2">Đề
+            <button @click="onVote()" style="width: 100%; height: 40px;" class="btn-alert mt-3"><span class="py-2 text-16">Đề
                     cử</span></button>
         </el-dialog>
         <el-dialog v-model="noEnoughCoinDialog" title="Không đủ Tang Diệp" width="500">
             <span class="text-color_primary text-md ">Vui lòng nạp thêm Tang Diệp để tiếp tục!</span>
             <button @click="router.push({ name: 'payment' })" style="width: 100%; height: 40px;"
-                class="btn-alert mt-3"><span class="py-2">Nạp Tang Diệp</span></button>
+                class="btn-alert mt-3"><span class="py-2 text-16">Nạp Tang Diệp</span></button>
         </el-dialog>
         <el-dialog v-model="rateDialog" title="Đánh giá và nhận xét" width="500">
             <div class="d-flex align-items-center gap-2">
@@ -213,13 +212,13 @@
                 <el-input class="mt-2" v-model="rateComment" type="textarea" :rows="5"
                     placeholder="Hãy cho chúng mình vài nhận xét và đóng góp ý kiến nhé!" />
             </div>
-            <button @click="onRate()" style="width: 100%; height: 40px;" class="btn-alert mt-3"><span class="py-2">Gửi
+            <button @click="onRate()" style="width: 100%; height: 40px;" class="btn-alert mt-3"><span class="py-2 text-16">Gửi
                     nhận
                     xét</span></button>
         </el-dialog>
         <el-dialog v-model="giftDialog" title="Ủng hộ tác giả" width="500">
             <div class="gap-2">
-                <span>Số lượng Tang diệp ủng hộ</span>
+                <span class="fw-semibold">Số lượng Tang diệp ủng hộ</span>
                 <span>
                     <el-tooltip class="box-item" effect="dark" :content="'Số tang diệp của bạn: ' + coinUser"
                         placement="top">
@@ -231,12 +230,12 @@
                 <el-input v-model="giftValue" class="mt-2" type="input" />
             </div>
             <div class="mt-2">
-                <span>Lời nhắn (nếu có)</span>
+                <span class="fw-semibold">Lời nhắn (nếu có)</span>
                 <el-input v-model="giftMessenger" class="mt-2" type="textarea" :rows="5"
                     placeholder="Gửi lời nhắn đến tác giả bạn yêu thích..." />
             </div>
             <button @click="onGift()" style="width: 100%; height: 40px;" class="btn-alert mt-3">
-                <span class="py-2">Gửi ủng hộ</span>
+                <span class="py-2 text-16">Gửi ủng hộ</span>
             </button>
         </el-dialog>
     </div>
@@ -364,7 +363,6 @@ async function onGift() {
         giftMessenger.value = "Gửi tặng tác giả, truyện rất hay"
     }
     const res = await giveSupport(auth.userId, storyData.value.user_id, giftValue.value, giftMessenger.value)
-    console.log(res);
     if (res.success) {
         toast.success("Gửi thành công " + giftValue.value + " Tang diệp")
         setTimeout(() => {
@@ -632,5 +630,6 @@ watch
     .btn-option {
         font-size: 12px;
     }
+
 }
 </style>

@@ -1,10 +1,10 @@
 <template>
-    <div class="container bank-info">
+    <div class="container bank-info ">
         <el-form label-position="top">
             <div class="row">
-                <div class="col-md-6 mb-3">
+                <div class="col-md-6 mb-3 px-0-mb">
                     <el-form-item label="Ngân hàng">
-                        <el-input class="w-80" v-model="form.name" readonly>
+                        <el-input class="w-80 input-disable-bg" v-model="form.name" readonly>
                             <template #suffix>
                                 <el-icon @click="copyToClipboard(form.name)" class="cursor-pointer" :size="25">
                                     <CopyDocument />
@@ -13,9 +13,9 @@
                         </el-input>
                     </el-form-item>
                 </div>
-                <div class="col-md-6 mb-3">
+                <div class="col-md-6 mb-3 px-0-mb">
                     <el-form-item label="Số tài khoản">
-                        <el-input class="w-80" v-model="form.email" readonly>
+                        <el-input class="w-80 input-disable-bg" v-model="form.email" readonly>
                             <template #suffix>
                                 <el-icon @click="copyToClipboard(form.email)" class="cursor-pointer" :size="25">
                                     <CopyDocument />
@@ -26,9 +26,9 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6 mb-3">
+                <div class="col-md-6 mb-3 px-0-mb">
                     <el-form-item label="Chủ tài khoản">
-                        <el-input class="w-80" v-model="form.phone" readonly>
+                        <el-input class="w-80 input-disable-bg" v-model="form.phone" readonly>
                             <template #suffix>
                                 <el-icon @click="copyToClipboard(form.phone)" class="cursor-pointer" :size="25">
                                     <CopyDocument />
@@ -37,9 +37,9 @@
                         </el-input>
                     </el-form-item>
                 </div>
-                <div class="col-md-6 mb-3">
+                <div class="col-md-6 mb-3 px-0-mb">
                     <el-form-item label="Nội dung chuyển khoản">
-                        <el-input @click="copyToClipboard(form.address)" class="w-80" v-model="form.address"
+                        <el-input @click="copyToClipboard(form.address)" class="w-80 input-disable-bg" v-model="form.address"
                             readonly></el-input>
                     </el-form-item>
                 </div>
@@ -102,6 +102,12 @@ const handleSend = async () => {
 };
 </script>
 <style>
+.input-disable-bg .el-input__wrapper
+{
+ background-color: #FAFAFA; /* màu nền */
+ border: solid 1px #E4E7EC;
+ border-radius: 8px;
+}
 .bank-info .el-input__inner {
     font-weight: 700;
     /* đậm chữ */
@@ -136,4 +142,15 @@ ul.payment-note
     color: #1877F2;
     line-height: 2;
 }
+@media (max-width: 768px) {
+    .bank-info
+    {
+        padding: 0 !important;
+    }
+  ul.payment-note
+    {
+          padding: 0 12px !important; 
+    }
+}
+
 </style>

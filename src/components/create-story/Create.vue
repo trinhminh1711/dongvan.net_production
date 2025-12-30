@@ -42,16 +42,18 @@
                     </span>
                 </template>
                 <div>
-                    <div class="d-flex">
-                        <el-upload :on-change="handleFileChange" class="upload-demo" action="#" :limit="1"
-                            :auto-upload="false" list-type="picture-card" accept=".jpg,.png"
-                            v-model:file-list="fileList">
-                            <template #trigger>
-                                <button v-if="fileList.length === 0" class="btn-selectfile" type="button">Chọn
-                                    tệp</button>
-                            </template>
-                        </el-upload>
-                        <p v-if="fileList.length === 0" class="ps-2">Chưa có tệp nào được chọn</p>
+                    <div class="d-flex align-items-center upload-demo-mobile">
+                        <div class="d-flex w-mb-full">
+                            <el-upload :on-change="handleFileChange" class="upload-demo" action="#" :limit="1"
+                                :auto-upload="false" list-type="picture-card" accept=".jpg,.png"
+                                v-model:file-list="fileList">
+                                <template #trigger>
+                                    <button v-if="fileList.length === 0" class="btn-selectfile" type="button">Chọn
+                                        tệp</button>
+                                </template>
+                            </el-upload>
+                            <p v-if="fileList.length === 0" class="ps-2">Chưa có tệp nào được chọn</p>
+                        </div>
                         <img :src="dialogImageUrl" class="el-upload-list__item-thumbnail" alt="" />
                     </div>
                     <div>
@@ -63,14 +65,18 @@
                                         :class="{ active: selectedImage === imgUrl }" @click="selectPreset(imgUrl)" />
                                 </el-carousel-item>
                             </el-carousel>
-
-                            <!-- Mobile carousel: 1 ảnh 1 slide -->
-                            <el-carousel class="d-block d-md-none" :autoplay="false" arrow="always">
-                                <el-carousel-item v-for="imgUrl in presetImagesFlat" :key="imgUrl">
-                                    <img :src="imgUrl" class="preset-img mx-2"
-                                        :class="{ active: selectedImage === imgUrl }" @click="selectPreset(imgUrl)" />
-                                </el-carousel-item>
-                            </el-carousel>
+                            <div class="d-block d-md-none preset-swiper">
+                                <Swiper :slides-per-view="1" :space-between="20" :grab-cursor="true"
+                                    class="mobile-swiper">
+                                    <SwiperSlide v-for="(group, index) in presetImagesFlat" :key="index">
+                                        <div class="slide-row">
+                                            <img v-for="imgUrl in group" :key="imgUrl" :src="imgUrl" class="preset-img"
+                                                :class="{ active: selectedImage === imgUrl }"
+                                                @click="selectPreset(imgUrl)" />
+                                        </div>
+                                    </SwiperSlide>
+                                </Swiper>
+                            </div>
 
                         </div>
                     </div>
@@ -91,7 +97,7 @@
     </template>
 
 <script lang="ts" setup>
-import { reactive, ref , computed} from 'vue'
+import { reactive, ref, computed } from 'vue'
 import { genFileId } from 'element-plus'
 import type { UploadInstance, UploadProps, UploadRawFile, UploadFile } from 'element-plus'
 import { createStory } from "@/api/stories"
@@ -99,7 +105,8 @@ import type { FormInstance, FormRules } from 'element-plus'
 import { useAuthStore } from "@/stores/auth";
 import { toast } from "vue3-toastify";
 import { useLoginModal } from '@/stores/useLoginModal'
-
+import { Swiper, SwiperSlide } from 'swiper/vue'
+import 'swiper/css'
 import { useRouter } from "vue-router";
 const emit = defineEmits(["created-success"])
 const router = useRouter();
@@ -112,7 +119,7 @@ interface RuleForm {
     storyAuthor: string,
     storyDesc: string,
     storyLinkForum: string,
-    pen_name:string,
+    pen_name: string,
     cover: UploadRawFile | null
 }
 const fileList = ref([])
@@ -157,7 +164,7 @@ const ruleForm = reactive<RuleForm>({
     storyName: '',
     storyGenre: '',
     storyAuthor: userId,
-    pen_name: auth.user?.username || '', 
+    pen_name: auth.user?.username || '',
     storyDesc: '',
     cover: null,
     storyLinkForum: ''
@@ -231,7 +238,15 @@ const selectPreset = async (imgUrl) => {
 const presetImagesDesktop = computed(() => Object.values(presetImages))
 
 // Mobile carousel flatten tất cả ảnh → 1 ảnh/slide
-const presetImagesFlat = computed(() => Object.values(presetImages).flat())
+const presetImagesFlat = computed(() => {
+    const flat = Object.values(presetImages).flat()
+    const result = []
+    const groupSize = 4
+    for (let i = 0; i < flat.length; i += groupSize) {
+        result.push(flat.slice(i, i + groupSize))
+    }
+    return result
+})
 
 
 </script>
@@ -320,10 +335,48 @@ const presetImagesFlat = computed(() => Object.values(presetImages).flat())
         display: flex;
         flex-direction: column;
     }
-    .list-imageupload .el-carousel__item img
-    {
+
+    .list-imageupload .el-carousel__item img {
         width: 100%;
         max-width: 100%;
+    }
+
+    .upload-demo-mobile {
+        flex-wrap: wrap;
+    }
+
+    .w-mb-full {
+        width: 100%;
+    }
+
+    .mobile-swiper {
+        width: 100%;
+        overflow: visible;
+    }
+
+    /* Một hàng 4 ảnh, không chồng nhau */
+    .slide-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+    }
+
+    /* Ảnh căn đều trong 1 slide */
+    .preset-img {
+        width: 27%;
+        /* 4 ảnh x 24% = 96% */
+        border-radius: 4px;
+        object-fit: cover;
+        flex-shrink: 0;
+        cursor: pointer;
+        transition: transform 0.2s ease, outline 0.2s ease;
+    }
+
+    .preset-img.active {
+        border: solid 2px #bf2c24 !important;
+
     }
 }
 </style>

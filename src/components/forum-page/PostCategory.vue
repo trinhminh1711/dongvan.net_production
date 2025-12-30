@@ -1,5 +1,7 @@
 <template>
     <div>
+        <h2 class="fw-bold">Diễn đàn truyện</h2>
+        <p>Khám phá và chia sẻ những câu chuyện tuyệt vời!</p>
         <PostCard v-for="(post, index) in paginatedPosts" :key="index" :title="post.title" :content="post.content"
             :username="post.username" :user_id="post.user_id" :created_at="timeAgo(post.created_at)" :hashtag="post.hashtag"
             :postId="post.post_id"

@@ -29,7 +29,7 @@
     </div>
   </div>
   <div class="list-comment">
-    <div v-for="comment in rateData" class="mt-5 d-flex gap-4">
+    <div v-for="comment in rateData" class="mt-5 d-flex gap-4 mb-4">
       <div>
         <img   style="width: 45px; height: 45px; border-radius: 50%;"  :src="comment.link_thumbnail" alt="">
       </div>
@@ -38,9 +38,11 @@
           <p class="fw-bold">{{ comment.username }}</p>
           <p style="color: #667085;">06/05/2025</p>
         </div>
-        <div class="mt-2 d-flex align-items-center justify-content-between">
-          <p class="pe-5" style="color: #344054; font-size: 14px; text-align: justify">{{ comment.comment }}</p>
-          <el-rate v-model="comment.rating" disabled text-color="#ff9900" />
+        <div class="mt-2 d-flex flex-column">
+          <p class="order-2" style="color: #344054; font-size: 14px; text-align: justify">{{ comment.comment }}</p>
+          <div class="order-1">
+             <el-rate v-model="comment.rating" disabled text-color="#ff9900" />
+          </div>
         </div>
       </div>
     </div>
@@ -55,8 +57,7 @@
       <el-input class="mt-2" v-model="rateComment" type="textarea" :rows="5"
         placeholder="Hãy cho chúng mình vài nhận xét và đóng góp ý kiến nhé!" />
     </div>
-    <button @click="onRate()" style="width: 100%; height: 40px;" class="btn-alert mt-3"><span class="py-2">Gửi nhận
-        xét</span></button>
+    <button @click="onRate()" style="width: 100%; height: 40px;" class="btn-alert mt-3"><span class="py-2 text-16">Gửi nhận xét</span></button>
   </el-dialog>
 </template>
 
@@ -147,5 +148,10 @@ onMounted(async () => {
   border-radius: 10px;
   padding: 20px;
   flex: 1;
+}
+.card
+{
+  background-color: #F9FAFB;
+  border-radius: 8px;
 }
 </style>

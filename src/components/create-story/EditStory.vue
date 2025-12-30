@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <el-form class="form-createstory mt-5" ref="ruleFormRef" :model="ruleForm" :rules="rules" label-width="auto">
+        <el-form class="form-createstory" ref="ruleFormRef" :model="ruleForm" :rules="rules" label-width="auto">
             <!-- Tên truyện -->
             <el-form-item prop="storyName">
                 <template #label>
@@ -19,7 +19,7 @@
                 <template #label>
                     <span class="form-createstory__label">Tác giả</span>
                 </template>
-                <el-input size="large" :value="auth.user.username" disabled />
+                <el-input size="large" :value="ruleForm.storyAuthorName" disabled />
             </el-form-item>
 
             <!-- Thể loại -->
@@ -41,15 +41,19 @@
                     v-model="ruleForm.storyDesc" type="textarea" />
             </el-form-item>
 
-            <!-- Ảnh bìa -->
             <el-form-item class="list-imageupload">
                 <template #label>
                     <span class="form-createstory__label">Ảnh bìa</span>
                 </template>
+
                 <div>
-                    <div class="d-flex align-items-end gap-2">
+                    <!-- Upload ảnh -->
+                    <div class="d-flex align-items-end gap-2 upload-demo-mobile">
+                        <!-- Preview ảnh hiện tại -->
                         <img v-if="fileList.length === 0 && dialogImageUrl" :src="dialogImageUrl"
-                            class="el-upload-list__item-thumbnail" alt="" />
+                            class="el-upload-list__item-thumbnail" alt="Preview" />
+
+                        <!-- Upload mới -->
                         <el-upload :on-change="handleFileChange" class="upload-demo" action="#" :limit="1"
                             :auto-upload="false" list-type="picture-card" accept=".jpg,.png"
                             v-model:file-list="fileList">
@@ -66,15 +70,33 @@
                         </el-upload>
                     </div>
 
+                    <!-- Preset ảnh -->
                     <div>
                         <p class="my-3">Hoặc chọn một poster dưới đây</p>
                         <div class="preset-images">
-                            <el-carousel :autoplay="false" arrow="always">
+                            <!-- Desktop: Carousel -->
+                            <el-carousel class="d-none d-md-block" :autoplay="false" arrow="always">
                                 <el-carousel-item v-for="(carosel, index) in presetImages" :key="index">
-                                    <img v-for="imgUrl in carosel" :src="imgUrl" class="preset-img mx-2"
+                                    <img v-for="imgUrl in carosel" :key="imgUrl" :src="imgUrl" class="preset-img mx-2"
                                         :class="{ active: selectedImage === imgUrl }" @click="selectPreset(imgUrl)" />
                                 </el-carousel-item>
                             </el-carousel>
+
+                            <!-- Mobile: Swiper -->
+                            <div class="d-block d-md-none preset-swiper">
+                                <div class="mobile-swiper-wrapper">
+                                    <Swiper :slides-per-view="1" :space-between="20" :grab-cursor="true"
+                                        class="mobile-swiper">
+                                        <SwiperSlide v-for="(group, index) in presetImagesFlat" :key="index">
+                                            <div class="slide-row">
+                                                <img v-for="imgUrl in group" :key="imgUrl" :src="imgUrl"
+                                                    class="preset-img" :class="{ active: selectedImage === imgUrl }"
+                                                    @click="selectPreset(imgUrl)" />
+                                            </div>
+                                        </SwiperSlide>
+                                    </Swiper>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -97,12 +119,14 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, onMounted } from "vue"
+import { reactive, ref, onMounted, computed } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useAuthStore } from "@/stores/auth"
 import { toast } from "vue3-toastify"
 import { getStoryById, updateStory } from "@/api/stories"
 import type { UploadRawFile, UploadFile } from "element-plus"
+import { Swiper, SwiperSlide } from "swiper/vue"
+import "swiper/css"
 import { genFileId } from "element-plus"
 import type { FormInstance, FormRules } from "element-plus"
 
@@ -116,6 +140,7 @@ interface RuleForm {
     storyName: string
     storyGenre: number | null
     storyAuthor: number | null
+    storyAuthorName: string,
     storyDesc: string
     storyLinkForum: string
     cover: UploadRawFile | null
@@ -130,6 +155,7 @@ const ruleForm = reactive<RuleForm>({
     storyName: "",
     storyGenre: null,
     storyAuthor: Number(auth.userId) || null,
+    storyAuthorName: "",
     storyDesc: "",
     storyLinkForum: "",
     cover: null,
@@ -179,10 +205,11 @@ onMounted(async () => {
     if (storyId) {
         const res = await getStoryById(storyId)
         if (res) {
-            const data = res[0]
+            const data = res
             dialogImageUrl.value = data.urlImg
             ruleForm.storyName = data.title
             ruleForm.storyDesc = data.description
+            ruleForm.storyAuthorName = data.pen_name
             ruleForm.storyGenre = data.genres_id
             ruleForm.storyAuthor = data.author_id
             ruleForm.storyLinkForum = data.link_forum
@@ -196,7 +223,15 @@ const handleFileChange = (file: UploadFile) => {
         ruleForm.cover = file.raw as UploadRawFile
     }
 }
-
+const presetImagesFlat = computed(() => {
+    const flat = Object.values(presetImages).flat()
+    const result: string[][] = []
+    const groupSize = 4
+    for (let i = 0; i < flat.length; i += groupSize) {
+        result.push(flat.slice(i, i + groupSize))
+    }
+    return result
+})
 // --- select preset image ---
 const selectPreset = async (imgUrl: string) => {
     selectedImage.value = imgUrl
@@ -270,5 +305,62 @@ const submitForm = async () => {
 
 .preset-img.active {
     border: solid 6px #bf2c24;
+}
+
+@media (max-width: 768px) {
+    .form-createstory .el-form-item {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .list-imageupload .el-carousel__item img {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .upload-demo-mobile {
+        flex-wrap: wrap;
+    }
+
+    .w-mb-full {
+        width: 100%;
+    }
+
+    .mobile-swiper-wrapper {
+        width: 100%;
+        overflow: hidden;
+        box-sizing: border-box;
+    }
+
+    /* Một hàng 4 ảnh, không chồng nhau */
+    .slide-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+    }
+
+    /* Ảnh căn đều trong 1 slide */
+    .preset-img {
+        width: 27%;
+        /* 4 ảnh x 24% = 96% */
+        border-radius: 4px;
+        object-fit: cover;
+        flex-shrink: 0;
+        cursor: pointer;
+        transition: transform 0.2s ease, outline 0.2s ease;
+    }
+
+    .preset-img.active {
+        border: solid 2px #bf2c24 !important;
+
+    }
+
+    .form-createstory .custom-textarea .el-textarea__inner {
+        min-height: 300px !important;
+        max-height: 100% !important;
+        line-height: 20px;
+    }
 }
 </style>

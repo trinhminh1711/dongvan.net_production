@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="row">
-            <el-tabs v-model="activeName"  @tab-change="handleTabChange" class="tab-name__center">
+            <el-tabs v-model="activeName"  @tab-change="handleTabChange" class="tab-name__center px-mb-0">
                 <el-tab-pane label="Đăng truyện mới" name="first">
                     <Create @created-success="handleTabChange" />
                 </el-tab-pane>
@@ -85,5 +85,24 @@ watch(
 .el-tabs__nav {
   position: relative;
   border-bottom: 2px solid #e4e7ed; /* line chỉ dài bằng nhóm tab */
+}
+@media (max-width: 768px) {
+.el-tabs__nav-wrap{
+  padding: 0 !important;
+}
+.el-tabs__nav-prev, .el-tabs__nav-next
+{
+  display: none !important;
+}
+.tab-name__center .el-tabs__item
+{
+  padding: 0 10px !important;
+  font-size: 16px ;
+}
+.tab-name__center .el-tabs__nav-scroll
+{
+  justify-content: start;
+  overflow: scroll
+}
 }
 </style>

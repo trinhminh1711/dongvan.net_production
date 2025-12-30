@@ -1,5 +1,5 @@
 <template>
-    <div v-if="authStore.userId" v-loading="loading" class="comment-box comment-area-post px-3 pb-2 pt-3 reply-thread">
+    <div v-if="authStore.userId" v-loading="loading" class="comment-box comment-area-post px-md-3 pb-2 pt-3 reply-thread">
         <div class="post-main__info d-flex justify-content-between gap-3">
             <div class="d-flex align-items-start">
                 <img @click="goToProfile(authStore.userId)" style="width: 50px; height: 50px; border-radius: 50%;"

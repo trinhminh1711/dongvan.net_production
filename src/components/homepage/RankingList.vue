@@ -11,7 +11,7 @@
         <img class="top-icon me-2" v-if="index == 2" :src="rankingIcon3" alt="" srcset="">
         <span v-if="index > 2" class="color-gray fw-bold mx-2"> {{ index < 9 ? '0' + (index + 1) : index + 1 }}</span>
             <div>
-              <p class="hover-link ps-12 ps-md-16" @click="goToStory(item.story_id)">{{ item.story_title || item.title }}</p>
+              <p class="hover-link" @click="goToStory(item.story_id)">{{ item.story_title || item.title }}</p>
               <p @click="profileUser(item.author_id)" class="text-sm text-color__tertiary hover-link" v-if="index == 0">
                 Tác giả: {{ item.pen_name || item.author_name }}
               </p>

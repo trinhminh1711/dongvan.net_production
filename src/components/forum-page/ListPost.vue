@@ -2,7 +2,7 @@
     <div class="d-md-flex align-items-center justify-content-between">
         <div>
             <h3 class="text-color_primary fw-bold">{{ tableData[0]?.topicTitle }}</h3>
-            <p>Trao đổi chia sẻ những câu truyện hay nào!</p>
+            <p class="py-2 text-16">Trao đổi chia sẻ những câu truyện hay nào!</p>
         </div>
         <div>
             <button @click="dialogVisible = true" class="btn-alert"><el-icon class="align-middle">
@@ -10,7 +10,7 @@
                 </el-icon> <span class="align-middle py-2">Đăng bài mới</span></button>
         </div>
     </div>
-    <div class="mt-4" style="border: solid 1px #E4E7EC; border-radius: 10px;">
+    <div class="mt-4 hide-mobile" style="border: solid 1px #E4E7EC; border-radius: 10px;">
         <el-table :data="tableData" style="width: 100%">
             <!-- Cột 1: Tên -->
             <el-table-column label="Chủ đề" prop="name" width="500">
@@ -32,9 +32,9 @@
                                     :class="getTopicColor(scope.row.topicTitle).text">
                                     <span class="dot" :class="getTopicColor(scope.row.topicTitle).dot"></span>
                                     {{ scope.row.topicTitle }}
-                                    </span> <span @click="goToPost(scope.row.postId)"
-                                        class="text-md fw-bold color-blue hover_link">{{
-                                            scope.row.name }}</span>
+                                </span> <span @click="goToPost(scope.row.postId)"
+                                    class="text-md fw-bold color-blue hover_link">{{
+                                        scope.row.name }}</span>
                             </p>
                             <div class="d-flex gap-3 align-items-center mt-2">
                                 <p class="d-flex gap-1 align-items-center">
@@ -59,10 +59,13 @@
                 <template #default="scope">
                     <p class="like-share d-flex gap-4 py-4">
                         <span @click="likeShare(scope.row.postId)">
- 
-<svg width="22" height="20" viewBox="0 0 22 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path fill-rule="evenodd" clip-rule="evenodd" d="M10.9932 3.13771C8.9938 0.800292 5.65975 0.171535 3.15469 2.31191C0.649644 4.45228 0.296968 8.03087 2.2642 10.5623C3.89982 12.667 8.84977 17.106 10.4721 18.5427C10.6536 18.7035 10.7444 18.7838 10.8502 18.8154C10.9426 18.843 11.0437 18.843 11.1361 18.8154C11.2419 18.7838 11.3327 18.7035 11.5142 18.5427C13.1365 17.106 18.0865 12.667 19.7221 10.5623C21.6893 8.03087 21.3797 4.42976 18.8316 2.31191C16.2835 0.194049 12.9925 0.800292 10.9932 3.13771Z" stroke="#667085" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
+
+                            <svg width="22" height="20" viewBox="0 0 22 20" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M10.9932 3.13771C8.9938 0.800292 5.65975 0.171535 3.15469 2.31191C0.649644 4.45228 0.296968 8.03087 2.2642 10.5623C3.89982 12.667 8.84977 17.106 10.4721 18.5427C10.6536 18.7035 10.7444 18.7838 10.8502 18.8154C10.9426 18.843 11.0437 18.843 11.1361 18.8154C11.2419 18.7838 11.3327 18.7035 11.5142 18.5427C13.1365 17.106 18.0865 12.667 19.7221 10.5623C21.6893 8.03087 21.3797 4.42976 18.8316 2.31191C16.2835 0.194049 12.9925 0.800292 10.9932 3.13771Z"
+                                    stroke="#667085" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
                             {{ scope.row.like }}</span>
                         <span @click="goToPost(scope.row.postId)"><el-icon :size="24">
                                 <ChatRound />
@@ -94,12 +97,59 @@
                 </template>
             </el-table-column>
         </el-table>
-
     </div>
-        <div class="example-pagination-block d-flex justify-content-center mt-2">
-            <el-pagination :page-size="5" v-model:current-page="currentPage" layout="prev, pager, next"
-                :total="totalPage" />
+    <div class="mt-4 hide-desktop post-list">
+        <div v-for="(item, index) in tableData" :key="index"
+            class="post-item d-flex align-items-center gap-3 border-bottom py-3">
+            <!-- Avatar -->
+            <div class="imgAuthor">
+                <el-tooltip popper-class="custom-tooltip" placement="left-start">
+                    <template #content>
+                        <UserInfoCard :idUserComment="item.user_id" />
+                    </template>
+                    <img class="cursor-pointer user-avatar" @click="goToProfile(item.user_id)" :src="item.avatarImg"
+                        alt="" />
+                </el-tooltip>
+            </div>
+
+            <!-- Nội dung bài viết -->
+            <div class="info flex-grow-1">
+                <p class="mb-1 d-flex align-items-start">
+                    <span class="text-sm fw-semibold post-topic  text-nowrap" :class="getTopicColor(item.topicTitle).text">
+                        <span class="dot" :class="getTopicColor(item.topicTitle).dot"></span>
+                        {{ item.topicTitle }}
+                    </span>
+                    <span class="text-md fw-bold color-blue hover_link ms-2  text-1-line" @click="goToPost(item.postId)">
+                        {{ item.name }}
+                    </span>
+                </p>
+                <div class="d-flex gap-2 align-items-center text-sm color-primary_gray mt-2">
+                    <p class="d-flex align-items-center gap-1">
+                        <el-icon>
+                            <User />
+                        </el-icon>
+                        <span class="hover-link" @click="goToProfile(item.user_id)">
+                            {{ item.author }}
+                        </span>
+                    </p>
+                    <p class="d-flex align-items-center gap-1">
+                        <el-icon>
+                            <Calendar />
+                        </el-icon> {{ item.time }}
+                    </p>
+                    <p class="d-flex align-items-center gap-1">
+                        <el-icon>
+                            <ChatRound />
+                        </el-icon> {{ item.comment }}
+                    </p>
+                </div>
+            </div>
         </div>
+    </div>
+    <div class="example-pagination-block d-flex justify-content-center mt-2">
+        <el-pagination :page-size="5" v-model:current-page="currentPage" layout="prev, pager, next"
+            :total="totalPage" />
+    </div>
 
     <el-dialog v-model="dialogVisible" width="500">
         <CreatePostForum />
@@ -170,7 +220,7 @@ const getTopicColor = (title: string): TopicColor => {
 
 async function getAllPostByTopic(page) {
     console.log(route.params.id);
-    
+
     const res = await getPostForumByTopic(route.params.id, page, 5);
     listPostTopic.value = res.data;
     totalPage.value = res.totalPage;
@@ -263,18 +313,63 @@ watch(currentPage, (newPage) => {
 })
 </script>
 <style scoped>
-.border-color-blue { color: #007bff; border: solid 1px #007bff !important}
-.border-color-red { color: #dc3545;border: solid 1px #dc3545 !important }
-.border-color-green { color: #28a745;border: solid 1px #28a745 !important }
-.border-color-pink { color: #C11574;border: solid 1px #C11574 !important }
-.border-color-gray { color: #6c757d;border: solid 1px #6c757d !important }
-.border-color-orange{ color: #B93815; border: solid 1px #B93815 !important; }
-.dot-blue { background-color: #007bff !important;; }
-.dot-red { background-color: #dc3545 !important;; }
-.dot-green { background-color: #28a745 !important;; }
-.dot-pink { background-color: #C11574 !important; }
-.dot-orange { background-color: #B93815 !important; }
-.dot-gray { background-color: #6c757d !important;  }
+.border-color-blue {
+    color: #007bff;
+    border: solid 1px #007bff !important
+}
+
+.border-color-red {
+    color: #dc3545;
+    border: solid 1px #dc3545 !important
+}
+
+.border-color-green {
+    color: #28a745;
+    border: solid 1px #28a745 !important
+}
+
+.border-color-pink {
+    color: #C11574;
+    border: solid 1px #C11574 !important
+}
+
+.border-color-gray {
+    color: #6c757d;
+    border: solid 1px #6c757d !important
+}
+
+.border-color-orange {
+    color: #B93815;
+    border: solid 1px #B93815 !important;
+}
+
+.dot-blue {
+    background-color: #007bff !important;
+    ;
+}
+
+.dot-red {
+    background-color: #dc3545 !important;
+    ;
+}
+
+.dot-green {
+    background-color: #28a745 !important;
+    ;
+}
+
+.dot-pink {
+    background-color: #C11574 !important;
+}
+
+.dot-orange {
+    background-color: #B93815 !important;
+}
+
+.dot-gray {
+    background-color: #6c757d !important;
+}
+
 .like-share span {
     display: flex;
     align-items: center;
@@ -330,5 +425,41 @@ watch(currentPage, (newPage) => {
 .hover_link:hover {
     cursor: pointer;
     color: #ff6114;
+}
+@media (max-width: 768px) {
+.post-list {
+  width: 100%;
+}
+
+.post-item {
+  border-bottom: 1px solid #e5e7eb;
+  
+}
+
+.user-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.color-primary_gray
+{
+    color: #667085;
+}
+.post-topic {
+  background-color: #f0f7ff;
+  padding: 4px 8px;
+  border-radius: 8px;
+  color: #1d4ed8;
+}
+
+.hover_link {
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.hover_link:hover {
+  color: #2563eb;
+}
 }
 </style>

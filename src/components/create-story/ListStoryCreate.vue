@@ -1,5 +1,5 @@
 <template>
-    <el-form class="form-createstory mt-5" ref="ruleFormRef" :model="ruleForm" :rules="rules" label-width="auto">
+    <el-form class="form-createstory" ref="ruleFormRef" :model="ruleForm" :rules="rules" label-width="auto">
         <el-form-item prop="storyName">
             <template #label>
                 <span class="form-createstory__label">

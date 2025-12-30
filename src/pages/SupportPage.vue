@@ -1,7 +1,7 @@
 <template>
     <div class="container mt-3">
         <div class="row gap-4 flex-md-nowrap">
-            <div class="col-md-4x order-md-1 order-2 ">
+            <div class="col-md-4 order-md-1 order-2 ">
                 <div class="infor-contact">
                     <div class="p-4">
                         <h4 class="fw-bold color-alert"> Thông tin liên hệ</h4>
@@ -21,7 +21,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="infor-contact mt-5 ">
+                <div class="infor-contact mt-4 mt-md-5 ">
                     <div class="p-4">
                         <h4 class="fw-bold color-alert"> Câu hỏi thường gặp</h4>
                         <a @click="router.push({ name: 'instruct' })">

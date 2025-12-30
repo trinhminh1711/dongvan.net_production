@@ -45,7 +45,7 @@ border-top-right-radius: 10px;" class="py-3">
                                         </defs>
                                     </svg>
                                 </p>
-                                <p>
+                                <p  class="text-mb-14">
                                     Quét mã QR
                                 </p>
                             </div>
@@ -68,7 +68,7 @@ border-top-right-radius: 10px;" class="py-3">
                                     </svg>
 
                                 </p>
-                                <p>
+                                <p class="text-mb-14">
                                     Chuyển khoản
                                 </p>
                             </div>
@@ -84,8 +84,7 @@ border-top-right-radius: 10px;" class="py-3">
                 <p class="mt-3 text-center text-16 text-color_primary">Đã thanh toán thành công, để Tang diệp có thể về
                     tài khoản
                     sớm nhất!</p>
-                <button class="fw-bold mt-3 py-2 btn-alert btn-sendpayment" @click="sendRequest()">Gửi yêu cầu duyệt
-                    ngay</button>
+                <button class="fw-bold mt-3 py-2 btn-alert btn-sendpayment text-mb-14" @click="sendRequest()">Gửi yêu cầu duyệt ngay</button>
             </div>
         </div>
     </div>
@@ -136,7 +135,7 @@ async function sendRequest() {
     if (priceSelect.value && valueSelect.value) {
         const res = await createRequest(auth.userId, priceSelect.value, valueSelect.value)
         if (res.success) {
-            toast.success("Đã gửi yêu cầu duyệt cho Admin. Tang Diệp sẽ được cộng vào tài khoản sau 1-5 phút")
+            toast.success("Bạn đã gửi yêu cầu duyệt Tang Diệp thành công. Tang Diệp sẽ được cộng vào tài khoản sau 1-5 phút")
         }
         else {
             toast.error("Chức năng nạp tiền đang bảo trì, vui lòng thử lại sau")
@@ -145,7 +144,7 @@ async function sendRequest() {
     else if (inputValue.value) {
         const res = await createRequest(auth.userId, inputValue.value, valueSelect.value)
         if (res.success) {
-            toast.success("Đã gửi yêu cầu duyệt cho Admin. Tang Diệp sẽ được cộng vào tài khoản sau 1-5 phút")
+            toast.success("Bạn đã gửi yêu cầu duyệt Tang Diệp thành công. Tang Diệp sẽ được cộng vào tài khoản sau 1-5 phút")
         }
         else {
             toast.error("Chức năng nạp tiền đang bảo trì, vui lòng thử lại sau")
@@ -185,7 +184,7 @@ const inputValue = ref()
 }
 
 .btn-sendpayment {
-    padding: 30px;
+    padding: 40px;
     line-height: 1.5;
 }
 
@@ -274,6 +273,17 @@ const inputValue = ref()
     .popular-payment {
         left: 50%;
         padding: 5px 15px;
+    }
+    .el-tabs--card>.el-tabs__header .el-tabs__nav
+    {
+        border-radius: 8px;
+    }
+    .el-tabs--card>.el-tabs__header .el-tabs__item
+    {
+                max-width: 50%;
+    }
+    .btn-sendpayment {
+        min-height: 50px;
     }
 }
 </style>

@@ -1,9 +1,9 @@
 <template>
   <div>
     <img style="max-width: 70%; display:block ; margin: 0 auto;" :src="qrSrc" alt="VietQR" />
-    <p class="text-center fw-semibold text-lg text-secondary">Sử dụng ứng dụng ngân hàng để quét mã QR và thanh toán</p>
+    <p class="text-center fw-semibold text-lg text-secondary text-mb-14">Sử dụng ứng dụng ngân hàng để quét mã QR và thanh toán</p>
     <p class="text-center mt-3">
-      <button @click="downloadQR" class="btn-outline__alert text-center text-24"> <el-icon>
+      <button style="border: solid 1px #E60000;" @click="downloadQR" class="btn-outline__alert text-center text-24 text-mb-14"> <el-icon>
           <Download />
         </el-icon> Tải mã QR
       </button>

@@ -11,7 +11,7 @@
                     <div>
                         <img :src="auth.user.link_thumbnail" alt="" srcset="">
                     </div>
-                    <div>
+                    <div class="infomation_avatar-content">
                         <h2 class="fw-bold text-color_primary mt-2">{{ auth.user.username }}</h2>
                         <p class="text-secondary">ID:2025{{ auth.user.user_id }}</p>
                         <p class="text-secondary">{{ auth.user.user_description }}</p>
@@ -23,13 +23,13 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-8">
+        <div class="row mt-5 mt-md-0">
+            <div class="col-12">
                 <div class="profile-info">
                     <!-- Tabs -->
-                    <el-tabs class="tab-diable__line" v-model="activeTab">
+                    <el-tabs class="tab-diable__line tab-mb-full tab-w-full" v-model="activeTab">
                         <el-tab-pane label="Thông tin cá nhân" name="personal">
-                            <div class="mt-3">
+                            <div class="mt-3 col-md-8">
                                 <el-form class="form-infomation" :model="user" label-width="200px">
                                     <el-form-item label="Tên tài khoản">
                                         <el-input v-model="user.username"></el-input>
@@ -45,8 +45,7 @@
 
                                     <el-form-item label="Ảnh đại diện">
                                         <div class="d-flex edit-avatar" style="align-items: center; gap: 10px;">
-                                            <img :src="user.link_thumbnail || defaultAvatar" alt="Avatar"
-                                                style="width: 100px; height: 100px; border-radius: 10px; object-fit: cover;" />
+                                            <img :src="user.link_thumbnail || defaultAvatar" alt="Avatar" style=" width: 100px; height: 100px; border-radius: 50%; object-fit: cover; " />
 
                                             <div class="d-flex" style="gap: 10px;">
                                                 <el-button type="text" @click="removeAvatar">Xóa</el-button>
@@ -72,85 +71,89 @@
                                 </el-form>
                             </div>
                         </el-tab-pane>
+                        <div class="col-md-8">
+                            <el-tab-pane label="Cấp độ" name="level">
+                                <el-descriptions :column="1" label-width="200px">
+                                    <el-descriptions-item>
+                                        <template #label>
+                                            <p class="d-flex align-items-center gap-1 fw-bold">
+                                                Cấp độ người đọc
+                                                <el-tooltip class="box-item" effect="dark"
+                                                    content="<p>Để lên hạng Cấp 2 (Độc giả Tiềm Năng)<br> và được tặng 50 Tang Diệp, bạn cần đạt <br>1000 điểm đọc.</p>"
+                                                    placement="top-start" raw-content>
+                                                    <el-icon>
+                                                        <InfoFilled />
+                                                    </el-icon>
+                                                </el-tooltip>
+                                            </p>
+                                        </template>
+                                        Cấp 1 (Độc giả mới)</el-descriptions-item>
+                                    <el-descriptions-item>
+                                        <template #label>
+                                            <p class="d-flex align-items-center gap-1 fw-bold">
+                                                Cấp độ tác giả
+                                                <el-tooltip class="box-item" effect="dark"
+                                                    content="<p>Để lên hạng Cấp 1 (Tân Bút)<br> và tác phẩm được ưu tiên hiển thị và quảng bá, <br> bạn cần đăng ít nhất 1 chương truyện.</p>"
+                                                    placement="top-start" raw-content>
+                                                    <el-icon>
+                                                        <InfoFilled />
+                                                    </el-icon>
+                                                </el-tooltip>
+                                            </p>
+                                        </template>Chưa có</el-descriptions-item>
+                                    <el-descriptions-item>
+                                        <template #label>
+                                            <p class="d-flex align-items-center gap-1 fw-bold">
+                                                Số Tang Diệp đang có
+                                            </p>
+                                        </template><span>
+                                            {{ user.coin_balance }} <img src="@/assets/icon/tamdiep-icon.png">
+                                        </span>
+                                    </el-descriptions-item>
+                                </el-descriptions>
+                            </el-tab-pane>
+                        </div>
 
-                        <el-tab-pane label="Cấp độ" name="level">
-                            <el-descriptions :column="1" label-width="200px">
-                                <el-descriptions-item>
-                                    <template #label>
-                                        <p class="d-flex align-items-center gap-1 fw-bold">
-                                            Cấp độ người đọc
-                                            <el-tooltip class="box-item" effect="dark"
-                                                content="<p>Để lên hạng Cấp 2 (Độc giả Tiềm Năng)<br> và được tặng 50 Tang Diệp, bạn cần đạt <br>1000 điểm đọc.</p>"
-                                                placement="top-start" raw-content>
-                                                <el-icon>
-                                                    <InfoFilled />
-                                                </el-icon>
-                                            </el-tooltip>
-                                        </p>
-                                    </template>
-                                    Cấp 1 (Độc giả mới)</el-descriptions-item>
-                                <el-descriptions-item>
-                                    <template #label>
-                                        <p class="d-flex align-items-center gap-1 fw-bold">
-                                            Cấp độ tác giả
-                                            <el-tooltip class="box-item" effect="dark"
-                                                content="<p>Để lên hạng Cấp 1 (Tân Bút)<br> và tác phẩm được ưu tiên hiển thị và quảng bá, <br> bạn cần đăng ít nhất 1 chương truyện.</p>"
-                                                placement="top-start" raw-content>
-                                                <el-icon>
-                                                    <InfoFilled />
-                                                </el-icon>
-                                            </el-tooltip>
-                                        </p>
-                                    </template>Chưa có</el-descriptions-item>
-                                <el-descriptions-item>
-                                    <template #label>
-                                        <p class="d-flex align-items-center gap-1 fw-bold">
-                                            Số Tang Diệp đang có
-                                        </p>
-                                    </template><span>
-                                        {{ user.coin_balance }} <img src="@/assets/icon/tamdiep-icon.png">
-                                    </span>
-                                </el-descriptions-item>
-                            </el-descriptions>
-                        </el-tab-pane>
+                        <div class="col-md-8">
+                            <el-tab-pane label="Tài khoản & Bảo mật" name="account">
+                                <el-form :model="otherInfo" label-position="left" label-width="200px"
+                                    class="form-infomation">
+                                    <el-form-item label="Email">
+                                        <el-input disabled v-model="otherInfo.email"
+                                            placeholder="Nhập email"></el-input>
+                                    </el-form-item>
+                                    <el-form-item label="Số điện thoại">
+                                        <el-input v-model="otherInfo.phone" placeholder="Nhập số điện thoại"></el-input>
+                                    </el-form-item>
+                                    <div v-if="changPasswordOpen">
+                                        <el-form-item label="Mật khẩu">
+                                            <el-input v-model="otherInfo.password" type="password" show-password
+                                                placeholder="Nhập mật khẩu">
+                                            </el-input>
+                                        </el-form-item>
+                                        <el-form-item label="Mật khẩu mới">
+                                            <el-input v-model="otherInfo.newPassword" type="password" show-password
+                                                placeholder="Nhập mật khẩu mới">
+                                            </el-input>
+                                        </el-form-item>
 
-                        <el-tab-pane label="Tài khoản & Bảo mật" name="account">
-                            <el-form :model="otherInfo" label-position="left" label-width="200px"
-                                class="form-infomation">
-                                <el-form-item label="Email">
-                                    <el-input disabled v-model="otherInfo.email" placeholder="Nhập email"></el-input>
-                                </el-form-item>
-                                <el-form-item label="Số điện thoại">
-                                    <el-input v-model="otherInfo.phone" placeholder="Nhập số điện thoại"></el-input>
-                                </el-form-item>
-                                <div v-if="changPasswordOpen">
-                                    <el-form-item label="Mật khẩu">
-                                        <el-input v-model="otherInfo.password" type="password" show-password
-                                            placeholder="Nhập mật khẩu">
-                                        </el-input>
-                                    </el-form-item>
-                                    <el-form-item label="Mật khẩu mới">
-                                        <el-input v-model="otherInfo.newPassword" type="password" show-password
-                                            placeholder="Nhập mật khẩu mới">
-                                        </el-input>
-                                    </el-form-item>
-
-                                    <el-form-item label="Xác nhận mật khẩu">
-                                        <el-input v-model="otherInfo.confirmPassword" type="password" show-password
-                                            placeholder="Xác nhận mật khẩu">
-                                        </el-input>
-                                    </el-form-item>
-                                </div>
-                                <div class="d-flex justify-content-between">
-                                    <span @click="changPasswordOpen = !changPasswordOpen" class="text-link">
-                                        {{ changPasswordOpen ? "Hủy bỏ" : "Đổi mật khẩu" }}
-                                    </span>
-                                    <button v-if="changPasswordOpen" class="btn-alert" @click=" updatePassword()">
-                                        Đổi mật khẩu
-                                    </button>
-                                </div>
-                            </el-form>
-                        </el-tab-pane>
+                                        <el-form-item label="Xác nhận mật khẩu">
+                                            <el-input v-model="otherInfo.confirmPassword" type="password" show-password
+                                                placeholder="Xác nhận mật khẩu">
+                                            </el-input>
+                                        </el-form-item>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <span @click="changPasswordOpen = !changPasswordOpen" class="text-link">
+                                            {{ changPasswordOpen ? "Hủy bỏ" : "Đổi mật khẩu" }}
+                                        </span>
+                                        <button v-if="changPasswordOpen" class="btn-alert" @click=" updatePassword()">
+                                            Đổi mật khẩu
+                                        </button>
+                                    </div>
+                                </el-form>
+                            </el-tab-pane>
+                        </div>
                     </el-tabs>
                 </div>
             </div>
@@ -330,6 +333,31 @@ onMounted(() => {
 .el-tabs__item:hover {
     color: #BF2C24;
 }
+
+.tab-w-full .el-tabs__nav {
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    .form-infomation .el-form-item {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+    }
+
+    .form-infomation {
+        padding-bottom: 40px;
+    }
+
+    .form-infomation .el-form-item__label {
+        width: 100% !important;
+        text-align: left !important;
+        margin-bottom: 5px;
+    }
+
+    .form-infomation .el-form-item__content {
+        width: 100% !important;
+    }
+}
 </style>
 <style scoped>
 .profile-info {
@@ -339,6 +367,7 @@ onMounted(() => {
 .infomation {
     display: flex;
     justify-content: space-between;
+    padding: 0 10px;
 }
 
 .infomation_avatar {
@@ -352,10 +381,7 @@ onMounted(() => {
     justify-content: space-between;
 }
 
-.edit-avatar img {
-    max-width: 70px;
-    border-radius: 50%;
-}
+
 
 .infomation_avatar img {
     width: 150px;
@@ -366,18 +392,47 @@ onMounted(() => {
     top: -50px;
 
 }
+
 .btn-outline-gray {
-  border: solid 1px #E4E7Ec;
-  border-radius: 20px;
-  padding: 8px 20px;
-  font-size: 16px;
-  background: none;
-  color: #3f5a93;
-}
-.btn-outline:hover {
-  background-color: #3f5a93;
-  cursor: pointer;
-  color: #fff;
+    border: solid 1px #E4E7Ec;
+    border-radius: 20px;
+    padding: 8px 20px;
+    font-size: 16px;
+    background: none;
+    color: #3f5a93;
 }
 
+.btn-outline:hover {
+    background-color: #3f5a93;
+    cursor: pointer;
+    color: #fff;
+}
+
+@media (max-width: 768px) {
+    .infomation {
+        flex-direction: column;
+    }
+
+    .infomation_avatar {
+        padding: 0;
+        flex-direction: column;
+
+    }
+
+    .infomation_avatar-content {
+        padding-top: 20px;
+    }
+
+    .infomation_avatar img {
+        width: 100px;
+        height: 100px;
+        border: solid 3px #fff;
+        border-radius: 50%;
+        position: absolute;
+        top: unset;
+        bottom: 150px;
+    }
+
+
+}
 </style>

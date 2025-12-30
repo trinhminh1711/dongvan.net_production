@@ -10,7 +10,7 @@
                     <div>
                         <img :src="userData.link_thumbnail" alt="" srcset="">
                     </div>
-                    <div>
+                    <div class="mt--50-mb">
                         <h2 class="fw-bold text-color_primary mt-2">{{ userData.username }}</h2>
                         <p class="text-secondary">ID: 2025{{ userData?.user_id }}</p>
                         <p class="text-secondary">{{ userData?.user_description }}</p>
@@ -20,7 +20,7 @@
         </div>
         <div class="container">
             <div class="row align-items-start gx-3">
-                <div class="col-3 ">
+                <div class="col-md-3 ">
                     <div class="user-info">
                         <h4 class="title-info">Thông tin cơ bản</h4>
                         <ul>
@@ -32,8 +32,8 @@
                         </ul>
                     </div>
                 </div>
-                <div class="col-9">
-                    <div class=" story-info">
+                <div class="col-md-9">
+                    <div class=" story-info mt-4 mt-md-0">
                         <h4 class="title-info d-flex align-items-center gap-2">
                             <svg width="28" height="29" viewBox="0 0 28 29" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
@@ -43,7 +43,7 @@
                             </svg>
                             Truyện đã xuất bản
                         </h4>
-                        <ListStory :userId="userData.user_id"/>
+                        <ListStory :userId="userData.user_id" />
                     </div>
                 </div>
             </div>
@@ -93,11 +93,15 @@ onMounted(() => {
     padding: 20px 30px;
     border: solid 1px #E4E7EC;
     border-radius: 15px;
+    box-shadow: 0px 4px 6px -2px rgba(0, 0, 0, 0.25);
+
 }
 
 .story-info {
     padding: 20px 30px;
     border: solid 1px #E4E7EC;
+    box-shadow: 0px 4px 6px -2px rgba(0, 0, 0, 0.25);
+    margin-bottom: 30px;
     border-radius: 15px;
 }
 
@@ -138,10 +142,6 @@ onMounted(() => {
     justify-content: space-between;
 }
 
-.edit-avatar img {
-    max-width: 70px;
-    border-radius: 50%;
-}
 
 .infomation_avatar img {
     width: 150px;
@@ -150,6 +150,29 @@ onMounted(() => {
     border-radius: 50%;
     position: relative;
     top: -50px;
+
+}
+
+@media (max-width: 768px) {
+    .infomation_avatar {
+        flex-direction: column;
+        padding-bottom: 20px;
+    }
+
+    .mt--50-mb {
+        margin-top: -50px;
+    }
+    .title-info
+    {
+        padding: 0px 10px;
+    }
+    .story-info {
+        padding: 20px 5px;
+        border: solid 1px #E4E7EC;
+        box-shadow: 0px 4px 6px -2px rgba(0, 0, 0, 0.25);
+        margin-bottom: 30px;
+        border-radius: 15px;
+    }
 
 }
 </style>
