@@ -76,8 +76,9 @@ const descriptions = [
   "Lều chõng là tiểu thuyết phóng sự của Ngô Tất Tố, ra mắt năm 1939 tại Hà Nội.",
   'Tác phẩm "Vỡ đê" của Vũ Trọng Phụng ra đời năm 1936',
   'Truyện "Giông Tố" phản ánh xã hội Việt Nam những năm 1930',
-  "Mô tả cho ảnh 9",
-  "Mô tả cho ảnh 10",
+  "Chân trời cũ có thể được coi là một trong những tác phẩm hay nhất của nhà văn Hồ Dzếnh. Tác phẩm được viết theo kiểu hồi ký, là những câu chuyện nhỏ xoay quanh cuộc đời của chính tác giả và gia đình.",
+  "Trống Mái được xem là tiểu thuyết đặc sắc của trào lưu Tự lực văn đoàn. Nội dung tiểu thuyết đi sâu vào việc phân tích, mổ xẻ thế giới nội tâm nhân vật",
+  "Tố Tâm chủ yếu đề cập đến tiểu thuyết cùng tên của Hoàng Ngọc Phách (1896-1973), một tác phẩm kinh điển, được coi là một trong những tiểu thuyết hiện đại đầu tiên của Việt Nam"
 ];
 
 const title = [
@@ -88,9 +89,9 @@ const title = [
   "Lều chõng",
   "Tiêu Sơn Tráng Sĩ",
   "Giông tố",
-  "Mô tả cho ảnh 8",
-  "Mô tả cho ảnh 9",
-  "Mô tả cho ảnh 10",
+  "Chân trời cũ",
+  "Trống mái",
+  "Tố tâm",
 ];
 
 // Chỉ mục slide hiện tại

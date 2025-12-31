@@ -127,3 +127,14 @@ export const updatePostStatus = async (postId, status) => {
     return { success: false, message: err.message };
   }
 };
+
+
+export const updatePostCreateAt = async (postId) => {
+  try {
+    const res = await axiosClient.put(`${API_URL}/post-forum/${postId}/update-time`);
+    return res.data;
+  } catch (err) {
+    console.error("Lỗi updatePostStatus:", err);
+    return { success: false, message: err.message };
+  }
+};

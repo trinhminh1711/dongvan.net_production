@@ -1,5 +1,5 @@
 <template>
-    <p v-if="authStore.userId">Bình luận</p>
+    <p class="fw-bold text-18" v-if="authStore.userId">Bình luận ({{ listComment.length }})</p>
     <div :style="listComment.length == 0 ? 'margin-bottom: 100px;' : ''" v-if="authStore.userId" v-loading="loading"
         class="comment-box pb-2 pt-3 mt-3">
         <div class="post-main__info d-flex justify-content-between gap-2">
@@ -63,26 +63,24 @@ async function fetchComment() {
 }
 const commentContent = ref('')
 async function postComment() {
-    if (!commentContent.value.trim()) return; // chặn gửi rỗng
-    loading.value = true;
+  if (!commentContent.value.trim()) return;
+  loading.value = true;
 
-    const payload = {
-        userId: authStore.user?.user_id, // ID người đang đăng nhập
-        content: commentContent.value.trim(),
-    };
+  const payload = {
+    userId: authStore.user?.user_id,
+    content: commentContent.value.trim(),
+  };
 
-    const res = await postCommentChapter(props.chapter_id, props.story_id, payload);
+  const res = await postCommentChapter(props.chapter_id, props.story_id, payload);
 
-    if (res.success) {
-        commentContent.value = ""; // reset input
-        setTimeout(() => {
-            loading.value = false;
-            window.location.reload();
-        }, 1000);
-    } else {
-        loading.value = false;
-        console.error("Server trả về lỗi:", res.message || res.error);
-    }
+  if (res.success) {
+    commentContent.value = "";
+    await fetchComment(); // ✅ gọi lại API để cập nhật comment mới nhất
+  } else {
+    console.error("Server trả về lỗi:", res.message || res.error);
+  }
+
+  loading.value = false;
 }
 function linkifyText(text) {
     if (!text) return "";
