@@ -15,10 +15,10 @@
         </div>
         <div class="post-main p-3 mt-3">
             <div class="post-main__info d-flex align-items-center gap-1">
-                <img style="width: 50px; height: 50px; border-radius: 50%;" :src="postData[0].post_link_thumbnail"
+                <img @click="goToProfile(postData[0].user_id)" class="hover-pointer" style="width: 50px; height: 50px; border-radius: 50%;" :src="postData[0].post_link_thumbnail"
                     alt="">
                 <div class="ms-3">
-                    <p class="fw-bold">{{ postData[0].post_username }}</p>
+                    <p  @click="goToProfile(postData[0].user_id)" class="fw-bold  hover-link">{{ postData[0].post_username }}</p>
                     <p class="text-sm"> <el-icon>
                             <Calendar />
                         </el-icon> {{ timeAgo(postData[0].created_at) }}</p>
@@ -39,8 +39,7 @@
                             </svg>
                             {{ listLiked?.total_likes || 0 }}
                         </span>
-                        <span @click="!auth.userId && loginModal.open()"
-                            class="d-flex align-items-center gap-2 text-md cursor-pointer">
+                        <span @click="handleReplyClick" class="d-flex align-items-center gap-2 text-md cursor-pointer">
                             <svg width="21" height="20" viewBox="0 0 21 20" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path
@@ -60,8 +59,7 @@
         </div>
     </div>
     <div class="post__comment py-4 py-md-0">
-
-        <div class="user-comment">
+        <div ref="userComment" class="user-comment">
             <InputCommentPost :postId="Number(route.params.id)" />
         </div>
     </div>
@@ -90,9 +88,25 @@ const postData = ref();
 const listLiked = ref()
 const listComment = ref([])
 const router = useRouter()
-
+const userComment = ref(null);
 function goBack() {
     router.back()
+}
+const handleReplyClick = () => {
+    if (!auth.userId) {
+        // ❌ chưa đăng nhập → mở modal
+        loginModal.open();
+        return;
+    }
+
+    // ✅ đã đăng nhập → scroll mượt đến vùng comment
+    userComment.value?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+    });
+};
+function goToProfile(params) {
+    router.push({ name: 'user', params: { id: params } })
 }
 onMounted(async () => {
     const postId = route.params.id;

@@ -55,8 +55,8 @@ onUnmounted(() => {
       <Header />
     </header>
     <main class="pd-desktop-100 pd-mb-0" :class="[
-      !['payment', 'login', 'chap-detail'].includes(route.name) ? 'mt-mid-4' : '',
-      !['payment', 'login', 'chap-detail'].includes(route.name) ? 'main' : '',
+      !['payment', 'login', 'chap-detail', 'Home'].includes(route.name) ? 'mt-mid-4' : '',
+      !['payment', 'login', 'chap-detail', 'Home'].includes(route.name) ? 'main' : '',
       route.name === 'payment' ? 'payment-bg' : ''
     ]">
       <RouterView />
@@ -64,35 +64,37 @@ onUnmounted(() => {
     <footer v-if="route.name !== 'chap-detail'" class="bg-footer border-top">
       <Footer />
     </footer>
-     <ScrollTop />
+    <ScrollTop />
   </div>
   <el-dialog v-model="loginModal.isVisible" width="400" destroy-on-close append-to-body>
     <LoginPage />
   </el-dialog>
-  
+
 </template>
 <style scoped>
 @media (max-width: 768px) {
   .mobile-sticky-header {
     position: sticky;
     top: 0;
-    z-index: 999;
+    z-index: 9999;
     background: #fff;
 
     transition: transform 0.5s ease, box-shadow 0.5s ease;
   }
-  .pd-mb-0
-  {
+
+  .pd-mb-0 {
     padding-bottom: 0 !important;
   }
+
   .mobile-sticky-header.hide {
     transform: translateY(-100%);
   }
 }
-.pd-desktop-100
-{
+
+.pd-desktop-100 {
   padding-bottom: 100px;
 }
+
 .layout {
   display: flex;
   flex-direction: column;

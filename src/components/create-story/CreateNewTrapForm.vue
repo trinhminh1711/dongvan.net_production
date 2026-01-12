@@ -53,7 +53,7 @@
                 Đăng chương
             </button>
         </div>
-        <el-dialog v-model="isCreateChapVip" width="500">
+        <el-dialog v-model="isCreateChapVip" width="500" append-to-body>
             <template #title>
                 <h3 class="text-color_primary fw-bold">Bạn chưa đủ điều kiện đăng chương VIP!</h3>
             </template>
@@ -194,6 +194,8 @@ const submitForm = async () => {
         if (valid) {
             newChapForm.story_id = Number(route.params.storyId)
             newChapForm.countWords = countWordsFromHtml(newChapForm.chapContent)
+            console.log(newChapForm.chapContent);
+            
             const res = await postNewChapter(newChapForm);
             if (res.success) {
                 toast.remove(toastAddChapter);

@@ -54,7 +54,7 @@ const top3IconSrc = top3Icon
 .list-item {
     text-align: left;
     display: flex;
-    padding: 10px 0;
+    padding: 14px 0;
     justify-content: space-between;
     border-bottom: solid 1px #E4E7EC;
 }

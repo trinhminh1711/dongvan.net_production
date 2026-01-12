@@ -86,6 +86,7 @@ onMounted(async () => {
     position: absolute;
     top: 12px;
     left: -35px;
+        z-index: 999;
     /* dịch ra để canh chéo */
     width: 120px;
     text-align: center;
@@ -103,6 +104,7 @@ onMounted(async () => {
     position: absolute;
     top: 12px;
     left: -35px;
+        z-index: 999;
     /* dịch ra để canh chéo */
     width: 120px;
     text-align: center;

@@ -1,10 +1,10 @@
 <template>
-    <h3 class="list-title text-color_primary border-b mb-4 pb-2">{{ content }}</h3>
+    <h3 class="list-title text-color_primary border-b mb-4 pb-2">{{ props.content }}</h3>
     <div class="row">
         <div v-for="(item, index) in items" class="list-container col-md-6">
             <div  :key="index" class="list-item">
                 <span @click="goToStory(item.story_id)" class="hover-link text-one-line">{{ item.title }}</span>
-                <span class="text-color__tertiary text-nowrap">{{ formatDateTime(item.create_at) }}</span>
+                <span class="text-color__tertiary text-nowrap px-2">{{ item.username }}</span>
             </div>
         </div>
     </div>
@@ -14,17 +14,15 @@
 import top2Icon from '@/assets/icon/icon-top2-author.png'
 import top3Icon from '@/assets/icon/icon-top3-author.png'
 import { useRouter } from 'vue-router'
+import { onMounted } from 'vue'
 const router = useRouter()
 function goToStory(post_id) {
-    router.push({
-        name: 'story',   // Tên route bạn đã định nghĩa trong router/index.js
-        params: { id: post_id }       // Truyền param id
-    })
+  router.push(`/story-detail/${post_id}`)
 }
 // 🧩 Định nghĩa props
 const props = defineProps({
   items: {
-    type: Array,
+      type: [Array, Object],
     default: () => []
   },
   content: {
@@ -48,6 +46,10 @@ function formatDateTime(dateString) {
 
   return `${hours}:${minutes} ${day}/${month}`
 }
+onMounted(() => {
+ console.log(props);
+ 
+})
 </script>
 
 <style>
@@ -69,7 +71,7 @@ function formatDateTime(dateString) {
 .list-item {
     text-align: left;
     display: flex;
-    padding: 10px 0;
+    padding: 14px 0;
     justify-content: space-between;
     border-bottom: solid 1px #E4E7EC;
 }

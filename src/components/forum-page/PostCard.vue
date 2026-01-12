@@ -42,7 +42,7 @@
                     {{ topic_title }}
                 </button>
             </div>
-            <div v-if="auth.user.role == 'master_admin' || auth.user.role == 'content_admin'">
+            <div v-if="auth.user?.role === 'master_admin' || auth.user?.role === 'content_admin'">
                 <el-dropdown trigger="click">
                     <span class="dropdown-trigger">
                         <el-icon>
@@ -98,7 +98,7 @@
                 </el-icon>{{ total_comments }}</span>
         </p>
     </div>
-    <el-dialog v-model="dialogVisible" width="800px">
+    <el-dialog v-model="dialogVisible" width="800px" append-to-body>
         <div class="px-3">
             <h2 class="fw-bold">Xác nhận thay đổi</h2>
             <p>Xóa bài viết
@@ -183,12 +183,13 @@ async function updateTime(postId) {
     window.location.reload();
 }
 onMounted(async () => {
-    await nextTick()
-    const el = contentRef.value
-    if (el.scrollHeight > el.clientHeight) {
-        isOverflowing.value = true
-    }
+  await nextTick()
+  const el = contentRef.value
+  if (el && el.scrollHeight > el.clientHeight) {
+    isOverflowing.value = true
+  }
 })
+
 </script>
 
 <style scoped>

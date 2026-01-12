@@ -4,11 +4,14 @@
         <div @click="gotoChapDetail(item.story_id, item.chap_number)" v-for="(item, index) in items?.slice(0,8)" :key="index"
             class="list-item">
             <div class="item-img">
+                <div class="book-cover-small">
                 <img :src="item.story_img" alt="">
+                </div>
+
             </div>
             <div class="item-text">
-                <span class="text-one-line">{{ item.title }}</span>
-                <span class="text-color__tertiary">Chương {{ item.chap_number }}</span>
+                <span class="text-one-line">{{ item.story_title }}</span>
+                <span class="text-color__tertiary text-one-line">Chương {{ item.chap_number }}: {{ item.title}}</span>
             </div>
         </div>
     </div>
@@ -54,7 +57,7 @@ onMounted(async () => {
 .list-item {
     text-align: left;
     display: flex;
-    padding: 10px 0;
+    padding: 12px 0;
     justify-content: space-between;
     border-bottom: solid 1px #E4E7EC;
 }
@@ -66,10 +69,13 @@ onMounted(async () => {
 }
 
 .text-one-line {
-    max-width: 70%;
-    text-wrap: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    max-width: 100%;
+  display: -webkit-box;          /* ✅ cần thiết */
+  -webkit-box-orient: vertical;  /* ✅ cần thiết */
+  -webkit-line-clamp: 1;         /* ✅ số dòng muốn hiển thị */
+  overflow: hidden;              /* ✅ cần thiết */
+  text-overflow: ellipsis;       /* ⚠️ không bắt buộc, nhưng nên có */
+  white-space: normal;           /* ✅ đảm bảo text có thể wrap */
 }
 .list-item .item-img {
   flex: 0 0 20%;  /* không co, không giãn, 20% */

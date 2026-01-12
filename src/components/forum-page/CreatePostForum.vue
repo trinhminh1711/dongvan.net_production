@@ -18,7 +18,8 @@
             <QuillEditor v-model:content="postData.content" contentType="html" :options="editorOptions"
                 class="editor" />
         </div>
-        <button @click="upPost()" style="width: 100%;" class="btn-alert mt-3 text-mb-16 btn-mb-alert"> Đăng bài </button>
+        <button @click="upPost()" style="width: 100%;" class="btn-alert mt-3 text-mb-16 btn-mb-alert"> Đăng bài
+        </button>
     </div>
 </template>
 
@@ -28,6 +29,7 @@ import { ref, reactive } from "vue";
 import { toast } from "vue3-toastify";
 const content = ref("");
 const previewContent = ref("");
+const emit = defineEmits(['closeDialog'])
 import { useRouter } from "vue-router";
 const router = useRouter()
 import Quill from "quill";
@@ -80,15 +82,18 @@ async function upPost() {
     const toastAddChapter = toast.loading("Đang xử lý...");
     const userId = auth.userId
     postData.value.user_id = userId
+    console.log(postData.value.topic_id);
+    
     const res = await createPost(postData.value)
     if (res.success) {
         setTimeout(() => {
             toast.remove(toastAddChapter);
             toast.success("Đăng bài thành công");
-            router.push({
-                name: "list-post", // đúng route name của Component A
-            });
+            router.push(`/forum/list-post/${postData.value.topic_id}`)
+
+            emit('closeDialog')
         }, 2000);
+
     }
 
 }
@@ -148,6 +153,4 @@ async function upPost() {
 .ql-snow .ql-picker.ql-size .ql-picker-item[data-value="36px"]::before {
     content: "36";
 }
-
-
 </style>

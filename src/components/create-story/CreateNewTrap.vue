@@ -2,7 +2,9 @@
     <div v-if="categoryList?.length > 0" class="container">
         <div class="row mt-4">
             <div v-for="stories in categoryList" :key="stories.id" class="box-left__content col-md-6">
-                <img class="img-cover" :src="stories.urlImg" alt="">
+                <div class="book-cover book-cover-medium">
+                     <img class="img-cover" :src="stories.urlImg" alt="">
+                </div>
                 <div class="left-content">
                     <h4 class="text-color_primary fw-bold hover_link" @click="gotoStory(stories.story_id)">
                         {{ stories.title }}

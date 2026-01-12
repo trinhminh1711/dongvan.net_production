@@ -2,7 +2,7 @@
     <div class="pt-100">
         <h2 class="fw-semibold hide-mobile">Top Tác Giả Mới Của Tuần</h2>
         <h3 class="list-title fw-semibold text-color_primary border-b pb-2 title-mobile hide-desktop">Top Tác Giả Mới Của Tuần</h3>
-        <div class="row gap-3 flex-md-nowrap mt-4 hide-mobile">
+        <div style="gap:20px; justify-content: space-between;" class="row  flex-md-nowrap mt-4 hide-mobile">
             <div :style="{
                 backgroundImage: `url(${getBgImage(index)})`,
                 backgroundSize: 'cover',
@@ -115,6 +115,8 @@ onMounted(async () => {
     padding: 20px;
     border: solid 1px #E4E7EC;
     border-radius: 10px;
+   width: calc(100% / 3 - 20px);
+
 }
 
 

@@ -32,9 +32,9 @@
 
                 </div>
                 <div class="list-img d-none d-md-grid">
-                    <img src="@/assets/image/img-cateory3.png" />
-                    <img src="@/assets/image/img-cateory1.png" />
-                    <img src="@/assets/image/img-cateory2.png" />
+                    <img src="@/assets/image/img-category-1.png" />
+                    <img src="@/assets/image/img-category-2.png" />
+                    <img src="@/assets/image/img-category-3.png" />
 
                 </div>
             </div>
@@ -54,7 +54,7 @@
                         </ul>
                     </div>
 
-                    <img style="width: 100%;" src="@/assets/image/image-banner2.png" alt="">
+                    <img style="width: 100%;" src="@/assets/image/img-banner-3.png" alt="">
                 </div>
 
             </div>
@@ -151,13 +151,13 @@ const loadAll = () => {
         { value: 'babel', link: 'https://github.com/babel/babel' },
     ]
 }
-const labels = ['TTV Translate', 'Lâm Uyên Hành', 'Vạn Cổ Tối Cường', 'Quỷ Bí Chi Chủ', 'Phàm Nhân Tu Tiên']
+const labels = ['Việt Điện U Linh Tập', 'Lam Sơn Thực Lục', 'Lĩnh Nam Chích Quái', 'Thượng Kinh Ký Sự', 'Tang Thương Ngẫu Lục']
 const backgrounds = [
-    'https://res.cloudinary.com/djr4f7ceu/image/upload/v1761756647/Link_qm0djn.jpg',
-    'https://www.quehuong.org.vn/wp-content/uploads/2018/07/dung-noi-chuyen-voi-co-ay.jpg',
-    'https://cdn-media.sforum.vn/storage/app/media/wp-content/uploads/2024/01/hinh-nen-anime-thumb.jpg',
-    'https://i.pinimg.com/736x/3a/20/8e/3a208e3d33f2d65b18588a3f2060d65a.jpg',
-    'https://www.quehuong.org.vn/wp-content/uploads/2018/07/dung-noi-chuyen-voi-co-ay.jpg',
+    'https://res.cloudinary.com/djr4f7ceu/image/upload/v1768153759/banner-bg-1_pkvzju.png',
+    'https://res.cloudinary.com/djr4f7ceu/image/upload/v1768153900/banner-bg-2_tnyii9.png',
+    'https://res.cloudinary.com/djr4f7ceu/image/upload/v1768153899/banner-bg-3_yrrjyd.png',
+    'https://res.cloudinary.com/djr4f7ceu/image/upload/v1768153906/banner-bg-4_ajlmjw.png',
+    'https://res.cloudinary.com/djr4f7ceu/image/upload/v1768153900/banner-bg-5_dpd5bc.png',
 ]
 
 const currentIndex = ref(0)
@@ -234,32 +234,77 @@ onUnmounted(() => clearTimeout(timer))
     height: 250px;
     background-size: 100% 100%;
     background-position: center;
+    overflow: hidden;
+    transition: transform 0.5s ease;
     background-repeat: no-repeat;
     position: relative;
+
 }
+.banner-top::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -50%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(120deg,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0.3) 50%,
+            rgba(255, 255, 255, 0) 100%);
+    transform: skewX(-20deg);
+    pointer-events: none;
+    /* không chặn click */
+
+    /* Animation ánh sáng chạy liên tục */
+    animation: sweep 3s linear infinite;
+}
+
+/* Keyframes ánh sáng lướt qua */
+@keyframes sweep {
+    0% {
+        left: -50%;
+    }
+
+    100% {
+        left: 100%;
+    }
+}
+
+/* Keyframes zoom nhẹ */
+@keyframes zoom {
+    0% {
+        transform: scale(1);
+    }
+
+    100% {
+        transform: scale(1.05);
+    }
+}
+
 .banner-top .dots {
-  position: absolute;
-  bottom: 12px;
-  left: 50%;
-  transform: translateX(-50%);
-  gap: 8px;
-  align-items: center;
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    gap: 8px;
+    align-items: center;
 }
 
 .banner-top .dots span {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #fff;
-  transition: all 0.3s ease;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #fff;
+    transition: all 0.3s ease;
 }
 
 .banner-top .dots span.active {
-  width: 12px;
-  height: 12px;
-  border-radius: 10px;
-  background: #BF2C24;
+    width: 12px;
+    height: 12px;
+    border-radius: 10px;
+    background: #BF2C24;
 }
+
 .el-menu-story .list-img {
     display: grid;
     grid-template-columns: repeat(3, 1fr);

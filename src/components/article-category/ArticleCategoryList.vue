@@ -13,15 +13,15 @@
     </div>
     <div v-if="categoryList?.length > 0" class="container">
         <div class="row mt-4">
-            <div @click="goToStory(stories.story_id)" v-for="stories in pagedStories" :key="stories.id"
+            <div  v-for="stories in pagedStories" :key="stories.id"
                 class="box-left__content col-md-4 mt-3 cursor-pointer">
-                <img style="width: 150px; height: 240px;object-fit: cover; flex-shrink: 0; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* bóng mờ nhẹ */ border-radius: 8px;"
+                <img @click="goToStory(stories.story_id)" style="width: 150px; height: 240px;object-fit: cover; flex-shrink: 0; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* bóng mờ nhẹ */ border-radius: 8px;"
                     :src="stories.urlImg" alt="">
                 <div class="left-content px-4">
                     <h4 @click="goToStory(stories.story_id)"
-                        class="text-color_primary text-24 fw-bold hover_link text-three-line text-mb-16">{{
+                        class="text-color_primary text-24 fw-bold text-limit-2 hover_link text-mb-16">{{
                             stories.title }}</h4>
-                    <p class="left-content__author text-color__tertiary">{{ stories.pen_name ||
+                    <p @click="goToProfile(stories.author_id)" class="left-content__author text-color__tertiary hover_link">{{ stories.pen_name ||
                         stories.username }}</p>
                     <p data-v-a3bb3c86="" class="color-red fst-italic"><span data-v-a3bb3c86=""
                             class="fw-bold text-md">{{ stories.latest_chapter || 'chương' }}</span><span
@@ -141,6 +141,9 @@ function goToStory(post_id) {
         params: { id: post_id }       // Truyền param id
     })
 }
+function goToProfile(params) {
+    router.push({ name: 'user', params: { id: params } })
+}
 watch(
     () => route.params.id,
     (newId) => {
@@ -175,7 +178,7 @@ watch(
 .left-content__desc {
     display: -webkit-box;
     /* cần cho multi-line clamp */
-    -webkit-line-clamp: 4;
+    -webkit-line-clamp: 3;
     /* số dòng muốn hiển thị */
     -webkit-box-orient: vertical;
     /* hướng hộp */

@@ -13,7 +13,7 @@
                     <div class="mt--50-mb">
                         <h2 class="fw-bold text-color_primary mt-2">{{ userData.username }}</h2>
                         <p class="text-secondary">ID: 2025{{ userData?.user_id }}</p>
-                        <p class="text-secondary">{{ userData?.user_description }}</p>
+                        <p class="text-secondary"> {{ userDescription }}</p>
                     </div>
                 </div>
             </div>
@@ -53,7 +53,7 @@
 
 <script setup>
 import ListStory from './ListStoryUser.vue';
-import { reactive, ref, watch, onMounted } from 'vue';
+import { reactive, ref, watch, onMounted, computed } from 'vue';
 import { getUserInfomation } from '@/api/other.user';
 import { useRoute } from 'vue-router'
 const userData = ref()
@@ -76,6 +76,11 @@ function formatDateTime(dateString) {
 
     return `${hours}:${minutes} ${day}/${month}`;
 }
+const userDescription = computed(() =>
+  userData?.user_description
+    ? userData.user_description
+    : "Hi, 1 newbie mới vào hy vọng sẽ tìm được nhiều truyện hay ho để đọc :VV"
+)
 onMounted(() => {
     getUserInfo()
 })

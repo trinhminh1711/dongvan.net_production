@@ -56,7 +56,7 @@
             <el-pagination @current-change="handlePageChange" v-model:current-page="currentPage" :page-size="10"
                 :pager-count="11" layout="prev, pager, next" :total="23" />
         </div>
-        <el-dialog v-model="dialogVisible" title="Duyệt giao dịch" width="500">
+        <el-dialog v-model="dialogVisible" title="Duyệt giao dịch" width="500" append-to-body>
             <span class="text-xl">Duyệt giao dịch Tang diệp sẽ được chuyển về tài khoản người dùng</span>
             <template #footer>
                 <div class="dialog-footer">

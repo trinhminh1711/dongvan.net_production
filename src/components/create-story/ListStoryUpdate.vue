@@ -1,4 +1,5 @@
 <template>
+    <LoadingSpiner :show="loading" />
     <div class="mt-4">
         <!-- Thanh tìm kiếm toàn bảng -->
         <div class="hide-mobile d-flex justify-content-between">
@@ -23,7 +24,8 @@
                     </template>
                     <template #default="scope">
                         <div class="d-flex align-items-center gap-2">
-                            <img class="story-thumnail" :src="scope.row.urlImg" alt="">
+                            <img class="story-thumnail"
+                                :src="scope.row.urlImg || 'https://via.placeholder.com/150?text=No+Image'" alt="">
                             {{ scope.row.title }}
                         </div>
                     </template>
@@ -161,14 +163,14 @@
             <el-pagination v-model:current-page="currentPage" v-model:page-size="pageSize" :page-sizes="[5, 10, 20, 50]"
                 :total="tableData.length" layout=" prev, pager, next" />
         </div>
-        <el-dialog v-model="dialogVisible" width="500">
+        <el-dialog v-model="dialogVisible" width="500" append-to-body>
             <span class="text-color_primary fw-bold text-18">Gửi yêu cầu hỗ trợ</span>
             <p class="text-sm mt-2">Trước khi gửi câu hỏi, vui lòng đọc hết mục <span @click="goToSupportPage()"
                     class="text-underline fw-semibold cursor-pointer">Hướng dẫn</span> , nếu bạn vẫn không tìm thấy
                 câu trả
                 lời,
                 hãy gửi câu hỏi cho chúng tôi.</p>
-            <el-form label-position="top" class="mt-3">
+            <el-form label-position="top" :model="form" class="mt-3" ref="formRef">
                 <!-- Input 1: Text -->
                 <el-form-item label="Liên quan đến truyện">
                     <el-input v-model="form.name" />
@@ -177,10 +179,11 @@
                 <!-- Input 2: Select -->
                 <el-form-item label="Vấn đề cần hỗ trợ">
                     <el-select v-model="form.category" placeholder="Chọn danh mục" style="width: 100%;">
-                        <el-option label="Yêu cầu quảng cáo truyện" value="1" />
-                        <el-option label="Yêu cầu làm poster riêng cho truyện" value="2" />
-                        <el-option label="Yêu cầu bật thu phí" value="3" />
-                        <el-option label="Vấn đề khác" value="4" />
+                        <el-option label="Yêu cầu quảng cáo truyện" value="Yêu cầu quảng cáo truyện" />
+                        <el-option label="Yêu cầu làm poster riêng cho truyện"
+                            value="Yêu cầu làm poster riêng cho truyện" />
+                        <el-option label="Yêu cầu bật thu phí" value="Yêu cầu bật thu phí" />
+                        <el-option label="Vấn đề khác" value="Vấn đề khác" />
                     </el-select>
                 </el-form-item>
 
@@ -190,7 +193,7 @@
                 </el-form-item>
                 <el-upload ref="upload" class="upload-demo"
                     action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15" :limit="1"
-                    :on-exceed="handleExceed" :auto-upload="false">
+                    :on-exceed="handleExceed" :auto-upload="false" v-model:file-list="form.fileList">
                     <template #trigger>
                         <p class="text-color_primary fw-bold"><el-icon>
                                 <Paperclip />
@@ -206,8 +209,8 @@
                     </ul>
                 </div>
                 <div class="mt-4">
-                    <button style="border-radius: 5px; width: 100%;" class="btn-alert fw-bold py-2-5 text-16"
-                        type="button">Gửi
+                    <button @click="submitForm" style="border-radius: 5px; width: 100%;"
+                        class="btn-alert fw-bold py-2-5 text-16" type="button">Gửi
                         yêu
                         cầu</button>
                 </div>
@@ -222,24 +225,61 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, reactive } from 'vue'
 import { useRouter } from "vue-router"
 import { genFileId } from 'element-plus'
 import type { UploadInstance, UploadProps, UploadRawFile } from 'element-plus'
 import { getStory } from "@/api/stories"
-
+import { toast } from 'vue3-toastify';
 import { useAuthStore } from "@/stores/auth";
+import { createSupportRequest } from "@/api/mail";
+import { useLoginModal } from '@/stores/useLoginModal';
+import LoadingSpiner from "../loadding/LoadingSpiner.vue";
+const loading = ref(false)
 const auth = useAuthStore();
 const router = useRouter()
 const tableData = ref<Story[]>([])
 const upload = ref<UploadInstance>()
 const selectRef = ref(null)
-
+const loginModal = useLoginModal()
+const formRef = ref()
 const handleFilter = () => {
     // Kiểm tra phần tử tồn tại
     if (selectRef.value) {
         // Dùng API nội bộ của Element Plus để mở dropdown
         selectRef.value.toggleMenu() // mở hoặc đóng menu
+    }
+}
+const submitForm = async () => {
+    loading.value = true
+    if (auth.userId) {
+        await formRef.value.validate(async (valid) => {
+            if (valid) {
+                const formData = new FormData();
+                formData.append("name", form.value.name);
+                formData.append("email", auth.user.email);
+                formData.append("title", "Gửi yêu cầu hỗ trợ truyện");
+                formData.append("issue", form.value.category);
+                formData.append("description", form.value.description);
+                if (form.value.fileList[0]) {
+                    formData.append("file", form.value.fileList[0].raw);
+                }
+                const res = await createSupportRequest(formData);
+                if (res.success) {
+                    toast.success("Gửi yêu cầu thành công");
+                    loading.value = false;
+                    dialogVisible.value = false
+                }
+                else {
+                    toast.error("Có lỗi xảy ra");
+                    loading.value = false
+                    dialogVisible.value = false
+                }
+            }
+        });
+    } else {
+        toast.info("Vui lòng đăng nhập để tiếp tục!");
+        loginModal.open()
     }
 }
 interface Story {
@@ -253,10 +293,15 @@ interface Story {
     total_view_count: Number
 }
 const form = ref({
-    name: '',
-    category: '',
-    description: '',
+    name: "",
+    email: "",
+    title: "",
+    issue: "",
+    description: "",
+    category: "",
+    fileList: []
 })
+
 const options = [
     { value: 'all', label: 'Tất cả' },
     { value: 'pending', label: 'Đang chờ duyệt' },
@@ -291,7 +336,8 @@ const handleExceed: UploadProps['onExceed'] = (files) => {
 }
 
 onMounted(async () => {
-    getDataStoryApi('all')
+    getDataStoryApi('all');
+
 })
 async function getDataStoryApi(status) {
     const res = await getStory(auth.userId, status)
@@ -539,8 +585,8 @@ function goToSupportPage() {
         border: solid 1px #E4E7EC;
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
     }
-    .py-2-5 
-    {
+
+    .py-2-5 {
         padding: 14px 0;
         border-radius: 8px !important;
     }

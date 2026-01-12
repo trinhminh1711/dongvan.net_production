@@ -68,7 +68,7 @@
                 <p style="text-align: center;">Không có dữ liệu</p>
             </div>
         </div>
-        <el-dialog v-model="dialogVisible" :title="dialogTitle" width="400px">
+        <el-dialog v-model="dialogVisible" :title="dialogTitle" width="400px" append-to-body>
             <p>{{ dialogMessage }}</p>
 
             <template #footer>

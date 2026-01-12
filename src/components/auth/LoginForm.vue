@@ -50,6 +50,8 @@ import type { FormInstance, FormRules } from 'element-plus'
 import authService from "@/api/authService";
 import iconEyeOff from "@/assets/icon/icon-user.svg";
 import iconEye from "@/assets/icon/icon-eye-off.svg";
+import { useLoginModal } from '@/stores/useLoginModal';
+const loginModal = useLoginModal()
 const ruleFormRef = ref<FormInstance>()
 const router = useRouter();
 const auth = useAuthStore();
@@ -97,7 +99,7 @@ const handleCredentialResponse = async (response: any) => {
         auth.setAuth(res.data.token, res.data.user.user_id);
         await auth.fetchProfile();
         toast.success("Đăng nhập Google thành công!");
-        window.location.reload()
+        router.push('/');
     } catch (err) {
         console.error(err);
         toast.error("Đăng nhập Google thất bại!");
@@ -127,27 +129,30 @@ const submitForm = (formEl: FormInstance | undefined) => {
 }
 const handleLogin = async () => {
     try {
-        const res = await authService.login(
-            {
-                email: ruleForm.email,
-                password: ruleForm.password
-            })
+        const res = await authService.login({
+            email: ruleForm.email,
+            password: ruleForm.password,
+        });
 
-        // Lưu token + userId vào store (và localStorage)
         auth.setAuth(res.data.token, res.data.user.user_id);
-        // fetch lại user info
         await auth.fetchProfile();
-        toast.loading("Đang xử lý...");
-        setTimeout(() => {
-            router.push({ name: "Home" }).then(() => {
-                window.location.reload(); // reload sau khi điều hướng
-            });
-        }, 2000); // đợi toast chạy xong
-    } catch (err) {
-        toast.error(err.response.data.error);
 
+        const toastId = toast.loading("Đang xử lý...");
+
+        setTimeout(() => {
+            toast.update(toastId, {
+                render: "Đăng nhập thành công!",
+                type: "success",
+                isLoading: false,
+                autoClose: 1000,
+                onClose: () => router.go(0),
+            });
+        }, 500);
+    } catch (err) {
+        toast.error(err?.response?.data?.error || "Đăng nhập thất bại!");
     }
 };
+
 onMounted(() => {
     google.accounts.id.initialize({
         client_id: "838745549366-bh964pq8dc6888q0g1ker5bcl0ctcgl8.apps.googleusercontent.com",

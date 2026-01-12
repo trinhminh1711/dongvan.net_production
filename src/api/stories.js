@@ -155,10 +155,13 @@ export const getStoryRandom = async (limit) => {
   }
 };
 
-export const getStoryComplete = async (limit) => {
+export const getStoryComplete = async (limit, offset = 0) => {
   try {
     const res = await axiosClient.get(`${API_URL}/complete/story`, {
-      params: { limit }   // query param ?limit=10
+      params: { 
+        limit,
+        offset   // thêm offset vào query string
+      }
     });
     return res.data;
   } catch (err) {

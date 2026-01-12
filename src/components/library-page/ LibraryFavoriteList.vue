@@ -5,7 +5,9 @@
                 <div class="book-card">
                     <div v-if="!stories" class="ribbon">FULL</div>
                     <div v-if="stories" class="ribbon-vip">VIP</div>
-                    <img style="width: 150px; height: 100%; border-radius: 10px;" :src="stories.urlImg" alt=""></img>
+                        <div class="book-cover book-cover-medium">
+                            <img style="width: 150px; height: 100%; border-radius: 10px;" :src="stories.urlImg" alt=""></img>
+                        </div>
                 </div>
                 <div class="left-content">
                     <p @click="goToStory(stories.story_id)" class="text-color_primary fw-bold text-lg hover-link">{{
@@ -116,6 +118,7 @@ async function handleChange(storyId, event) {
     text-align: center;
     background: #16a34a;
     /* xanh lá */
+        z-index: 999;
     color: #fff;
     font-weight: bold;
     transform: rotate(-45deg);
@@ -128,6 +131,7 @@ async function handleChange(storyId, event) {
     position: absolute;
     top: 12px;
     left: -35px;
+        z-index: 999;
     /* dịch ra để canh chéo */
     width: 120px;
     text-align: center;

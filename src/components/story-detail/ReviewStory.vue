@@ -47,7 +47,7 @@
       </div>
     </div>
   </div>
-  <el-dialog v-model="rateDialog" title="Đánh giá và nhận xét" width="500">
+  <el-dialog v-model="rateDialog" title="Đánh giá và nhận xét" width="500" append-to-body>
     <div class="d-flex align-items-center gap-2">
       <span class="fw-bold">Đánh giá</span>
       <el-rate v-model="rateValue" :texts="['Chưa hay', 'Bình thường', 'Tạm được', 'Khá hay', 'Tuyệt vời']" show-text />
@@ -100,8 +100,6 @@ async function onRate() {
 }
 async function getRateting() {
   const res = await getStoryRate(props.story_id);
-  console.log(res.data);
-  
   rateData.value = res.data || [];
   rateDataStar.value = avgRating(res.data)
   ratingCounts.value = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };

@@ -16,6 +16,149 @@ html,
     color: #000000 !important;
   }
 }
+.book-cover {
+  position: relative;
+  display: inline-block;
+  max-width: 300px;
+  perspective: 800px; /* tạo chiều sâu */
+  overflow: hidden; /* để ánh sáng không tràn ra ngoài */
+  border-radius: 12px; /* bo trực tiếp vào container */
+}
+.book-cover-medium {
+  max-width: 200px;
+  max-height: 300px;
+}
+.book-cover-small {
+  max-width: 70px;
+  max-height: 150px;
+}
+.book-cover-medium::before {
+  width: 14px !important;
+}
+.book-cover-small::before {
+  width: 8px !important;
+}
+/* Ảnh chính */
+.book-cover img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+  border-radius: 2px;
+
+  transform: rotateY(-8deg);
+  transition: all 0.4s ease;
+}
+
+/* Gáy sách bên phải */
+.book-cover::before {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 20px;
+  height: 100%;
+  background: linear-gradient(to left, #cfcfcf, #e2e2e2, #f5f5f5);
+  transform: translateZ(-1px);
+  transform-origin: left center; /* hoặc right center tùy góc nghiêng */
+  transform: rotateY(-8deg); /* cùng góc với ảnh */
+  z-index: 1;
+}
+
+/* Ánh sáng quét qua */
+.book-cover::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0.35) 0%,
+    transparent 80%
+  );
+  transform: skewX(-20deg);
+  transition: left 0.8s ease;
+  z-index: 2;
+}
+
+/* Khi hover */
+.book-cover:hover img {
+  transform: rotateY(-2deg) scale(1.03);
+  box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.4);
+  border-radius: 12px;
+}
+
+.book-cover:hover::after {
+  left: 130%;
+}
+.book-cover-small {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  perspective: 200px; /* giảm để 3D nhẹ hơn */
+  overflow: hidden;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+/* Ảnh chính */
+.book-cover-small img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+  border-radius: inherit; /* kế thừa từ container */
+  transform: rotateY(-8deg);
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+  display: block;
+}
+
+/* Gáy sách bên phải */
+.book-cover-small::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: -2px;
+  width: 2px; /* scale theo 30px */
+  height: 100%;
+  background: linear-gradient(to left, #cfcfcf, #e2e2e2, #f5f5f5);
+  transform: translateZ(-0.5px) rotateY(-8deg);
+  transform-origin: left center;
+  z-index: 1;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+}
+
+/* Ánh sáng quét qua */
+.book-cover-small::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0.35) 0%,
+    transparent 80%
+  );
+  transform: skewX(-20deg);
+  transition: left 0.5s ease;
+  z-index: 2;
+}
+
+/* Hover */
+.book-cover-small:hover img {
+  transform: rotateY(-2deg) scale(1.05);
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.book-cover-small:hover::after {
+  left: 130%;
+}
 .text-justify {
   text-align: justify;
 }
@@ -112,8 +255,7 @@ html,
 .el-tab-pane {
   height: 100%; /* chiếm toàn bộ chiều cao của tab content */
 }
-.el-dialog__title
-{
+.el-dialog__title {
   font-weight: 500;
 }
 /* Nếu muốn cả header và footer cũng bo tròn */
@@ -581,15 +723,14 @@ a,
   .ql-toolbar.ql-snow .ql-formats {
     margin-left: 0 !important;
   }
-      .tab-mb-full{
-        display: flex;
-    }
-    .tab-mb-full .el-tabs__nav ,.tab-mb-full .el-tabs--top
-    {
-        width: 100% !important;
-    }
-    .tab-mb-full .el-tabs__nav .el-tabs__item
-    {
-      width: 50%;
-    }
+  .tab-mb-full {
+    display: flex;
+  }
+  .tab-mb-full .el-tabs__nav,
+  .tab-mb-full .el-tabs--top {
+    width: 100% !important;
+  }
+  .tab-mb-full .el-tabs__nav .el-tabs__item {
+    width: 50%;
+  }
 }

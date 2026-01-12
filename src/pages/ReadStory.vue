@@ -5,11 +5,11 @@
     <div class="pb-150-mb" style="margin-top: -15px; padding-bottom: 100px;" :style="{ backgroundColor: backgroundColor, transition: 'all 0.3s ease' }"
         v-if="!loading">
         <div class="tab-bar">
-            <button class="hover_link" @click="goBack"><el-icon style="color: white; font-size: 24px;">
+            <button class="hover_link" @click="gotoStory(chapterData?.story_id)"><el-icon style="color: white; font-size: 24px;">
                     <ArrowLeft />
                 </el-icon>
             </button>
-
+            <p class="fw-bold text-one-line px-2" style="color: white; font-size: 16px;">{{chapterData?.title}}</p>
             <div class="button-function">
                 <button class="hover_link cursor-pointer" @click="addBookMark()">
 
@@ -399,7 +399,8 @@ async function unlockChapter() {
     }
 
 }
-const scrollPercentLabel = computed(() => scrollPercent.value.toFixed(0));
+const scrollPercentLabel = computed(() => Number(scrollPercent.value || 0).toFixed(0));
+
 function setLayout(value) {
     isTwoColumn.value = value;
 }
@@ -578,33 +579,41 @@ function onSeek() {
     window.scrollTo({ top: scrollTo, behavior: "auto" }); // có thể dùng "smooth"
 }
 watch(
-    () => [route.params.chapId, route.query.scroll],
-    async ([newChap, newScroll], old = []) => {
-        const [oldChap = null, oldScroll = null] = old  // giá trị mặc định
+  () => [route.params.chapId, route.query.scroll],
+  async ([newChap, newScroll], old = []) => {
+    const [oldChap = null, oldScroll = null] = old
 
-        try {
-            newChap = newChap ?? null
-            newScroll = Number(newScroll ?? 0)
+    try {
+      // 🚧 1️⃣ Chặn nếu không phải đang ở trang đọc chương
+      if (route.name !== 'chap-detail') return
 
-            if (newChap !== oldChap) {
-                currentChap.value = Number(newChap)
-                await fetchChapter()
-                await getChaptersAround()
-                initReadingTracker()
-                console.log("🔁 Chuyển sang chương:", newChap)
-            }
+      // 🚧 2️⃣ Nếu chapId không tồn tại → dừng luôn
+      if (!newChap) return
 
-            if (newScroll !== oldScroll && newScroll > 0) {
-                await nextTick()
-                window.scrollTo({ top: newScroll, behavior: 'smooth' })
-                console.log("⏬ Scroll đến vị trí:", newScroll)
-            }
+      const chapNumber = Number(newChap)
+      const scrollPos = Number(newScroll ?? 0)
 
-        } catch (err) {
-            console.error("❌ Lỗi trong watcher chapId/scroll:", err)
-        }
-    },
-    { immediate: true }
+      // 🚀 3️⃣ Khi chuyển sang chương mới
+      if (chapNumber !== Number(oldChap)) {
+        currentChap.value = chapNumber
+        await fetchChapter()          // tải nội dung chương mới
+        await getChaptersAround()     // tải danh sách chương kế cận
+        initReadingTracker()          // khởi tạo tracker (nếu có)
+        console.log("🔁 Chuyển sang chương:", chapNumber)
+      }
+
+      // ⏬ 4️⃣ Khi có query scroll → scroll đến vị trí lưu
+      if (scrollPos !== Number(oldScroll) && scrollPos > 0) {
+        await nextTick()
+        window.scrollTo({ top: scrollPos, behavior: 'smooth' })
+        console.log("⏬ Scroll đến vị trí:", scrollPos)
+      }
+
+    } catch (err) {
+      console.error("❌ Lỗi trong watcher chapId/scroll:", err)
+    }
+  },
+  { immediate: true }
 )
 async function scrollToBookmark() {
     // chờ DOM render xong
@@ -829,7 +838,12 @@ nextTick(() => {
     text-align: justify;
 
 }
-
+.story-content img{
+ max-width: 50%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
 .story-content.two-column {
     column-count: 2;
     /* Khi bật chế độ 2 cột */
@@ -901,5 +915,11 @@ nextTick(() => {
     {
         padding-bottom: 150px !important;
     }
+    .story-content img{
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 0 auto;
+        }
 }
 </style>

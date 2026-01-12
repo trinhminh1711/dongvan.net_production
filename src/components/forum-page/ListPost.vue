@@ -151,8 +151,8 @@
             :total="totalPage" />
     </div>
 
-    <el-dialog v-model="dialogVisible" width="500">
-        <CreatePostForum />
+    <el-dialog v-model="dialogVisible" width="500" append-to-body>
+        <CreatePostForum @closeDialog="dialogVisible = false" />
     </el-dialog>
 </template>
 
@@ -219,8 +219,6 @@ const getTopicColor = (title: string): TopicColor => {
 }
 
 async function getAllPostByTopic(page) {
-    console.log(route.params.id);
-
     const res = await getPostForumByTopic(route.params.id, page, 5);
     listPostTopic.value = res.data;
     totalPage.value = res.totalPage;

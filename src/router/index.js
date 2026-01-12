@@ -58,8 +58,17 @@ const routes = [
     { path: '/transaction-history', name: 'transaction-history', component: TransactionHistory },
     { path: '/instruct-page', name: 'instruct', component: InstructPage },
     { path: '/support', name: 'support', component: SupportPage },
-    { path: '/story-detail/:id', name: 'story', component: StoryDetail },
-    { path: '/story-detail/:id/chap/:chapId', name: 'chap-detail', component: ReadStory },
+{
+  path: '/story-detail/:id',
+  name: 'story',
+  component: StoryDetail,
+  pathToRegexpOptions: { end: true }, // chặn match đường dài hơn
+},
+{
+  path: '/story-detail/:id/chap/:chapId',
+  name: 'chap-detail',
+  component: ReadStory
+},
     {
         path: '/create-story', name: 'create-story', component: CreateStory, children:
             [{

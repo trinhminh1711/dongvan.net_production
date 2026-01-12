@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <h3 class="text-color_primary fw-bold mb-4 mt-5">Truyện Đã Hoàn Thành</h3>
-        <div v-if="storyComplete" class="row d-flex align-items-center">
+        <div v-if="storyComplete" class="row d-md-flex d-none  mt-4">
             <div class="col-md-3">
                 <div @click="gotoStory(storyComplete?.[0].story_id)"
                     class="box-img__vertical d-flex flex-column gap-2 px-4 cursor-pointer">
@@ -20,29 +20,35 @@
                     <p class="text-center mt-2"> <button class="btn-alert__rounded">Đọc ngay</button></p>
                 </div>
             </div>
-            <div class="list-container col-md-9">
-                <div class="row">
-                    <div v-for="(item, index) in listStoryCompleteWithCategory"
-                        class="card-story-completed col-md-4 px-4 pb-3">
-                        <p class="d-flex align-items-center d-flex justify-content-between border-bottom mb-3">
-                            <span class="fw-bold text-18">{{ item.category_name }}</span>
-                            <img :src="item.image" alt="">
-                        </p>
-                        <div>
-                            <p class="content-title " v-for="(detail, key) in item.content">
-                                <span @click="goToProfile(detail.author_id)" class="text-16 hover-link left">[{{
-                                    detail.author }}]</span>
-                                <span @click="gotoStory(detail.story_id)"
-                                    class="text-color_primary fw-bold text-16 right text-link_alert ms-1">{{ detail.name
-                                    }}</span>
+            <div class="list-container col-9">
+                <div class="row g-3">
+                    <div @click="goToStory(stories.story_id)" v-for="stories in listStoryCompleteWithCategory2"
+                        :key="stories.id" class="box-left__content col-md-4 cursor-pointer">
+                        <div class="book-cover book-cover-medium">
+                            <img style="" :src="stories.urlImg" alt="">
+                        </div>
+                        <div class="left-content px-4">
+                            <h4 @click="goToStory(stories.story_id)"
+                                class="text-color_primary text-16 fw-bold text-limit-2 hover_link text-mb-16">{{
+                                    stories.title }}</h4>
+                            <p class="left-content__author text-color__tertiary">{{ stories.pen_name ||
+                                stories.username }}</p>
+                            <p data-v-a3bb3c86="" class="color-red fst-italic"><span data-v-a3bb3c86=""
+                                    class="fw-bold text-md">{{ stories.chap_number || 'chương' }}</span><span
+                                    data-v-a3bb3c86="" class="text-md">
+                                    chương</span></p>
+                            <p><img src="@/assets/icon/quote.png" alt="">
+                                <desc style="text-align: justify;" class="left-content__desc text-sm">
+                                    {{ stories.description }}
+                                </desc>
                             </p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div v-if="storyComplete" class="row d-md-flex d-none align-items-center  mt-4">
-            <div class="col-3">
+        <div v-if="storyComplete" class="row d-md-flex d-none  mt-5">
+            <div class="col-md-3">
                 <div @click="gotoStory(storyComplete?.[1].story_id)"
                     class="box-img__vertical box-img__vertical2 d-flex flex-column gap-2 px-4 cursor-pointer">
                     <div class="d-flex">
@@ -62,20 +68,28 @@
                 </div>
             </div>
             <div class="list-container col-9">
-                <div class="row">
-                    <div v-for="(item, index) in listStoryCompleteWithCategory"
-                        class="card-story-completed col-4 px-4 pb-3">
-                        <p class="d-flex align-items-center d-flex justify-content-between border-bottom mb-3">
-                            <span class="fw-bold text-18">{{ item.category_name }}</span>
-                            <img :src="item.image" alt="">
-                        </p>
-                        <p class="d-flex content-title" v-for="(detail, key) in item.content">
-                            <span @click="goToProfile(detail.author_id)" class="text-16 hover-link left">[{{
-                                detail.author
-                            }}]</span> <span class="text-color_primary fw-bold  text-one-line right text-16">{{
-                                    detail.name
-                                }}</span>
-                        </p>
+                <div class="row g-3">
+                    <div @click="goToStory(stories.story_id)" v-for="stories in listStoryCompleteWithCategory"
+                        :key="stories.id" class="box-left__content col-md-4 cursor-pointer">
+                        <div class="book-cover book-cover-medium">
+                            <img style="" :src="stories.urlImg" alt="">
+                        </div>
+                        <div class="left-content px-4">
+                            <h4 @click="goToStory(stories.story_id)"
+                                class="text-color_primary text-16 fw-bold text-limit-2 hover_link text-mb-16">{{
+                                    stories.title }}</h4>
+                            <p class="left-content__author text-color__tertiary">{{ stories.pen_name ||
+                                stories.username }}</p>
+                            <p data-v-a3bb3c86="" class="color-red fst-italic"><span data-v-a3bb3c86=""
+                                    class="fw-bold text-md">{{ stories.chap_number || 'chương' }}</span><span
+                                    data-v-a3bb3c86="" class="text-md">
+                                    chương</span></p>
+                            <p><img src="@/assets/icon/quote.png" alt="">
+                                <desc style="text-align: justify;" class="left-content__desc text-sm">
+                                    {{ stories.description }}
+                                </desc>
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -86,6 +100,7 @@
                 v-for="(item, index) in storyCompletedBottom">
                 <img style="max-width: 70px; height: 100px; box-shadow: rgba(0, 0, 0, 0.25) 0px 3px 10px; border-radius: 5px;"
                     :src="item.urlImg" alt="">
+
                 <p class="text-color_primary fw-bold text-md text-one-line hover-link px-3">{{ item.title }}</p>
                 <small class="d-block"> {{ item.genre_name }} </small>
                 <button @click="gotoStory(item.story_id)" class="btn-outline">Đọc ngay</button>
@@ -102,6 +117,7 @@ const router = useRouter()
 
 const storyCompletedBottom = ref([])
 const storyComplete = ref(null)
+const storyComplete2 = ref(null)
 const storyCompleted1 = ref([
     {
         category: 1,
@@ -172,14 +188,18 @@ const storyCompleted1 = ref([
 
 ])
 const listStoryCompleteWithCategory = ref([])
+const listStoryCompleteWithCategory2 = ref([])
 async function getStoryData() {
     const res = await getStoryRandom(7);
     storyCompletedBottom.value = res
 }
 async function getAllStoryComplete() {
-    const res = await getStoryComplete(10);
+    const res = await getStoryComplete(9, 0);
+    const res2 = await getStoryComplete(9, 9);
     storyComplete.value = res
-    listStoryCompleteWithCategory.value = (mapStoriesToCategories(storyCompleted1.value, storyComplete.value));
+    listStoryCompleteWithCategory.value = res
+    storyComplete2.value = res
+    listStoryCompleteWithCategory2.value = res2
 }
 function mapStoriesToCategories(categories, stories) {
     return categories.map(cat => {
@@ -198,7 +218,7 @@ function mapStoriesToCategories(categories, stories) {
     })
 }
 
-function gotoStory(params) {
+function goToStory(params) {
     router.push({ name: 'story', params: { id: params } })
 }
 function goToProfile(params) {
@@ -211,6 +231,35 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+.box-left__content {
+    display: flex;
+
+}
+
+.box-left__content .book-cover {
+    width: 30%;
+    height: 150px;
+}
+
+.box-left__content .left-content {
+
+    width: 70%;
+}
+
+.box-left__content .book-cover::before {
+    width: 10px !important;
+}
+
+.left-content__desc {
+    display: -webkit-box;
+    /* cần cho multi-line clamp */
+    -webkit-line-clamp: 3;
+    /* số dòng muốn hiển thị */
+    -webkit-box-orient: vertical;
+    /* hướng hộp */
+    overflow: hidden;
+}
+
 .box-img__vertical img {
     max-width: 100px;
     display: block;
@@ -219,6 +268,7 @@ onMounted(async () => {
 
 .box-img__vertical {
     padding: 40px 0;
+    height: 100%;
     border-radius: 10px;
     background: linear-gradient(to bottom,
             #E2EBF3 0%,
@@ -227,6 +277,7 @@ onMounted(async () => {
 }
 
 .box-img__vertical2 {
+    height: 100%;
     padding: 40px 0;
     border-radius: 10px;
     background: linear-gradient(to bottom,
@@ -296,12 +347,13 @@ onMounted(async () => {
 }
 
 .text-one-line {
+    max-width: 100%;
     display: -webkit-box;
-    -webkit-line-clamp: 1;
-    /* số dòng muốn hiển thị */
     -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: normal;
 }
 
 .coverflow {
@@ -354,7 +406,7 @@ onMounted(async () => {
     }
 
     .bottom-card-image>.flex-column {
-       width: calc(50% - 10px);
+        width: calc(50% - 10px);
         flex: unset;
     }
 }

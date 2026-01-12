@@ -69,7 +69,7 @@
         <RankingList :items="topStoryRead">
           <template #header>
             <img class="vote-icon__yellow" src="@/assets/icon/icon-top-3.svg" alt="">
-            <h3 style="color: #EA8759;" class="topvote-title color-light-blue">Đọc nhiều trong tuần</h3>
+            <h3 style="color: #EA8759;" class="topvote-title color-light-blue">Nhiều Tuần</h3>
             <img class="vote-icon__yellow" src="@/assets/icon/icon-top-4.svg" alt="">
           </template>
         </RankingList>
@@ -80,7 +80,7 @@
         <RankingList :items="topStoryMonthRead">
           <template #header>
             <img class="vote-icon__yellow" src="@/assets/icon/top-icon-8.svg" alt="">
-            <h3 style="color:#EAAE00 ;" class="topvote-title color-light-blue">Đọc nhiều trong tháng </h3>
+            <h3 style="color:#EAAE00 ;" class="topvote-title color-light-blue">Nhiều Tháng </h3>
             <img style="  transform: scaleX(-1);" class="vote-icon__yellow" src="@/assets/icon/top-icon-8.svg" alt="">
           </template>
         </RankingList>
@@ -91,7 +91,7 @@
         <RankingListUser :items="topAuthorWeek">
           <template #header>
             <img class="vote-icon__yellow" src="@/assets/icon/icon-top-8.svg" alt="">
-            <h3 class="topvote-title color-light-blue">Top tác giả của tuần</h3>
+            <h3 class="topvote-title color-light-blue">Tác Giả Top</h3>
             <img class="vote-icon__yellow" src="@/assets/icon/icon-top-7.svg" alt="">
           </template>
         </RankingListUser>
@@ -160,7 +160,7 @@
         </SwiperSlide>
       </Swiper>
     </div>
-    <div class="row align-items-start mt-5 justify-content-between order-5 order-md-3">
+    <div class="row  mt-5 justify-content-between order-5 order-md-3">
       <div class="col-md-3 px-md-3">
         <TopListUser v-if="topUserReadersStory && topUserReadersStory.length > 0" :items="topUserReadersStory">
           <template #author-top3>
@@ -175,14 +175,14 @@
                 </p>
               </div>
               <div>
-                <img style="width: 50px; height: 100%;" :src="topUserReadersStory[0].link_thumbnail" alt="">
+                <img style="width: 50px; height: 80px;" :src="topUserReadersStory[0].link_thumbnail" alt="">
               </div>
             </div>
           </template>
         </TopListUser>
       </div>
       <div class="col-md-6 px-md-3 hide-mobile">
-        <TopListUpdate :items="topStoryUpdatedNew" :content="'Truyện mới cập nhật'" />
+        <TopListUpdate :items="topStoryUpdatedNew" :content="'Review tác phẩm'" />
       </div>
       <div class="col-md-3 px-md-3 pt-mobile-2">
         <TopListUserSpending v-if="topSpendingUsers" :items="topSpendingUsers" :content="'Top đại gia'">
@@ -199,7 +199,7 @@
                 </p>
               </div>
               <div>
-                <img style="width: 50px; height: 100%;" :src="topSpendingUsers[0].link_thumbnail" alt="">
+                <img style="width: 50px; height: 80px;" :src="topSpendingUsers[0].link_thumbnail" alt="">
               </div>
             </div>
           </template>
@@ -219,7 +219,9 @@
     </div>
   </div>
   <div class="container-fluid hide-mobile">
-    <img style="max-width: 100%;display: block;margin: 0 auto;" src="@/assets/image/img-bottom.jpg" alt="">
+   <div class="container px-0">
+ <img style="width: 100%;display: block;margin: 0 auto;" src="@/assets/image/img-bottom-2.png" alt="">
+   </div>
   </div>
   <div class="container-fluid bg-successfull-story hide-mobile">
     <StoryCompleted />
@@ -250,6 +252,7 @@ import { Swiper, SwiperSlide } from 'swiper/vue'
 import { Pagination } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/pagination'
+import { getPostForumByTopic } from '@/api/forum'
 import { getTopStoryReaded, getTopStoryReadedMonth, getTopAuthorWeek, getTopUserReaders, getListStoryUpdatedNew, getTopStoryRecomment, getTopUserSpending } from '../api/stories'
 const activeName = ref('first')
 import { useRouter } from 'vue-router'
@@ -293,7 +296,8 @@ async function getTopUserReader() {
   topUserReadersStory.value = await getTopUserReaders(10);
 }
 async function getTopStoryUpdate() {
-  topStoryUpdatedNew.value = await getListStoryUpdatedNew(24);
+  const res  = await getPostForumByTopic(2,1,24);
+  topStoryUpdatedNew.value = res.data
 }
 async function getTopRecomment() {
   topUserReadersRecoment.value = await getTopStoryRecomment();
@@ -374,7 +378,7 @@ const dataPropose = [
 }
 
 .author-card__img {
-  padding: 25px 0;
+  padding: 35px 0;
 }
 
 .author-card__img img {

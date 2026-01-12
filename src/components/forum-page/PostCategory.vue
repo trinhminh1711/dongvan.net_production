@@ -12,8 +12,8 @@
                 v-model:current-page="currentPage" @current-change="handlePageChange" />
         </div>
     </div>
-    <el-dialog v-model="dialogVisible" width="500">
-        <CreatePostForum />
+    <el-dialog v-model="dialogVisible" width="500" append-to-body>
+        <CreatePostForum @closeDialog="dialogVisible = false" />
     </el-dialog>
 </template>
 

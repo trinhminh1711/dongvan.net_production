@@ -6,17 +6,23 @@
             </div>
             <!-- Cột ảnh bìa -->
             <div v-if="!loading" class="col-md-4 text-center">
-                <img :src="storyData?.urlImg" fit="cover"
-                    style="width: 70%; border-radius: 12px; height: 400px; border: solid 2px #e4e7ec;" />
+                <div class="book-cover">
+                    <img story
+                        :src="storyData?.urlImg ? storyData.urlImg : 'https://res.cloudinary.com/djr4f7ceu/image/upload/v1767774141/Frame_2144769426_cm29g7.png'"
+                        alt="Ảnh truyện" fit="cover"
+                        style="width: 70%; border-radius: 12px; height: 400px; border: solid 2px #e4e7ec;" />
+                </div>
             </div>
 
             <!-- Cột nội dung -->
             <div v-if="!loading" class="col-md-8">
                 <!-- Tiêu đề + rating -->
                 <h3 class="fw-bold text-center text-md-start text-20">{{ storyData?.story_title }}</h3>
-                <div class="d-flex align-items-center mb-3 justify-content-md-start justify-content-center">
-                    <el-rate v-model="rating" disabled show-score text-color="#ff9900" />
-                    <span class="ms-3 text-muted">0 đánh giá</span>
+                <div class="d-flex align-items-center mb-3 justify-content-md-start justify-content-centerr">
+                    <div class="hover-pointer">
+                        <el-rate @click="auth.userId ? rateDialog = true : loginModal.open()"  v-model="rateDataStar" show-score text-color="#ff9900" />
+                    </div>
+                    <span class="ms-3 text-muted">{{ rateData.length > 0 ? rateData.length : 'Chưa có' }} đánh giá</span>
                 </div>
 
                 <!-- Tag -->
@@ -30,14 +36,19 @@
                 <div class="el-descriptions-storyinfo">
                     <el-descriptions label-width="150px" :column="4" direction="vertical" size="small"
                         class="mb-3 desc-center">
-                        <el-descriptions-item label="Tác giả"><span class="fw-bold text-16 text-mb-14">{{
-                            storyData?.author_name
+                        <el-descriptions-item label="Tác giả"><span @click="goToProfile(storyData?.user_id)"
+                                class="fw-bold text-16 text-mb-14 hover-link">{{
+                                    storyData?.author_name
                                 }}</span></el-descriptions-item>
-                        <el-descriptions-item label="Thể loại"><span class="fw-bold text-16 text-mb-14">{{
-                            storyData?.genre_name
+                        <el-descriptions-item label="Thể loại"><span @click="goToGenres(storyData?.genres_id)"
+                                class="fw-bold text-16 text-mb-14 hover-link">{{
+                                    storyData?.genre_name
                                 }}</span></el-descriptions-item>
-                        <el-descriptions-item label="Trạng thái"><span class="fw-bold text-16 text-mb-14">{{ storyData?.is_final == 1 ? 'Đã hoàn thành' : 'Đang sáng tác' }}</span></el-descriptions-item>
-                        <el-descriptions-item label="Gói cước"><span class="fw-bold text-16 text-mb-14">{{ storyData?.is_vip == 1 ? 'Vip' : 'Miễn phí' }}</span></el-descriptions-item>
+                        <el-descriptions-item label="Trạng thái"><span class="fw-bold text-16 text-mb-14">{{
+                            storyData?.is_final == 1 ? 'Đã hoàn thành' : 'Đang sáng tác'
+                                }}</span></el-descriptions-item>
+                        <el-descriptions-item label="Gói cước"><span class="fw-bold text-16 text-mb-14">{{
+                            storyData?.is_vip == 1 ? 'Vip' : 'Miễn phí' }}</span></el-descriptions-item>
                     </el-descriptions>
                 </div>
                 <div class="el-descriptions-storyinfo border-top border-bottom border-opacity-50 pt-3">
@@ -56,7 +67,8 @@
                         class="btn-option d-flex align-items-center gap-2">
                         <img src="@/assets/icon/coin2.png" alt="">
                         <span class="fw-bold" v-if="!coinVoted">Đề cử</span>
-                        <span class="fw-bold" v-if="coinVoted"><span class="fw-bold hide-mobile">Đã vote</span> {{ coinVoted }} phiếu</span>
+                        <span class="fw-bold" v-if="coinVoted"><span class="fw-bold hide-mobile">Đã vote</span> {{
+                            coinVoted }} phiếu</span>
                     </div>
                     <div class="btn-option " @click="auth.userId ? likeStory(storyData.story_id) : loginModal.open()">
                         <div v-if="!isFavorite" class="d-flex align-items-center gap-2">
@@ -135,24 +147,27 @@
                             </el-table-column>
                         </el-table>
                         <div v-if="chapters[0]?.chap_number" class="hide-desktop list-chap__mb">
-                            <div style="border-radius: 10px; margin: 10px 0;" class="bg-lightblue" v-for="chapData in pagedChapters">
+                            <div style="border-radius: 10px; margin: 10px 0;" class="bg-lightblue"
+                                v-for="chapData in pagedChapters">
                                 <div class="px-3 py-3">
-                                <p class="text-mb-14 fw-semibold">{{ chapData.chapter_title }} ({{ chapData.chap_number }})</p>
-                                <div class="d-flex align-items-center justify-content-between py-2">
-                                    <span class="text-mb-12"> {{ chapData.word_count }} chữ </span>
-                                    <span @click="goReadChap(chapData.chap_number)" class="color-alert">Đọc ngay
-                                        <svg width="6" height="10" viewBox="0 0 6 10" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M0.5 9.5L5 5L0.5 0.5" stroke="#BF2C24" stroke-linecap="round"
-                                                stroke-linejoin="round" />
-                                        </svg>
-                                    </span>
-                                </div>
+                                    <p class="text-mb-14 fw-semibold">{{ chapData.chapter_title }} ({{
+                                        chapData.chap_number }})</p>
+                                    <div class="d-flex align-items-center justify-content-between py-2">
+                                        <span class="text-mb-12"> {{ chapData.word_count }} chữ </span>
+                                        <span @click="goReadChap(chapData.chap_number)" class="color-alert">Đọc ngay
+                                            <svg width="6" height="10" viewBox="0 0 6 10" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M0.5 9.5L5 5L0.5 0.5" stroke="#BF2C24" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
+                                            </svg>
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
 
                         </div>
-                        <div v-if="chapters[0]?.chap_number" class="mt-3 d-flex justify-content-center justify-content-md-end">
+                        <div v-if="chapters[0]?.chap_number"
+                            class="mt-3 d-flex justify-content-center justify-content-md-end">
                             <el-pagination layout="prev, pager, next" :page-size="pageSize" :current-page="currentPage"
                                 :total="chapters.length" @current-change="handlePageChange" />
                         </div>
@@ -193,7 +208,8 @@
                 <li>Đề cử sẽ giúp truyện lên “Top Người đọc đề cử” trên Bảng Xếp Hạng</li>
                 <li>Top đại gia hàng tháng hoặc mỗi khi lên hạng người đọc sẽ được tặng phiếu đề cử</li>
             </ul>
-            <button @click="onVote()" style="width: 100%; height: 40px;" class="btn-alert mt-3"><span class="py-2 text-16">Đề
+            <button @click="onVote()" style="width: 100%; height: 40px;" class="btn-alert mt-3"><span
+                    class="py-2 text-16">Đề
                     cử</span></button>
         </el-dialog>
         <el-dialog v-model="noEnoughCoinDialog" title="Không đủ Tang Diệp" width="500">
@@ -212,7 +228,8 @@
                 <el-input class="mt-2" v-model="rateComment" type="textarea" :rows="5"
                     placeholder="Hãy cho chúng mình vài nhận xét và đóng góp ý kiến nhé!" />
             </div>
-            <button @click="onRate()" style="width: 100%; height: 40px;" class="btn-alert mt-3"><span class="py-2 text-16">Gửi
+            <button @click="onRate()" style="width: 100%; height: 40px;" class="btn-alert mt-3"><span
+                    class="py-2 text-16">Gửi
                     nhận
                     xét</span></button>
         </el-dialog>
@@ -242,6 +259,7 @@
 </template>
 
 <script setup>
+import { getStoryRate } from "@/api/author";
 import Comment from "@/components/story-detail/Comment.vue"
 import ReviewStory from "@/components/story-detail/ReviewStory.vue"
 import { voteStory, rateStory, giveSupport } from "@/api/author";
@@ -282,6 +300,9 @@ const currentPage = ref(1)
 const pageSize = 10
 const giftMessenger = ref()
 const isTopReader = ref(0)
+const rateData = ref([]);
+const ratingCounts = ref({ 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 });
+const rateDataStar = ref(0);
 const chapters = ref([
     { title: "Tập 46 - Chương 24: Ngoại truyện", words: "839 chữ" },
     { title: "Tập 46 - Chương 23: Ngoại truyện", words: "819 chữ" },
@@ -300,6 +321,28 @@ function goReadChap(chapNumber) {
             chapId: chapNumber
         }
     });
+}
+function goToGenres(params) {
+    router.push({ name: 'article', params: { id: params } })
+}
+
+function goToProfile(params) {
+    router.push({ name: 'user', params: { id: params } })
+}
+async function getRateting() {
+    const res = await getStoryRate(route.params.id);
+    rateData.value = res.data || [];
+    rateDataStar.value = avgRating(res.data)
+    ratingCounts.value = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+    rateData.value.forEach(r => {
+        ratingCounts.value[r.rating] = (ratingCounts.value[r.rating] || 0) + 1;
+    });
+}
+function avgRating(ratings) {
+  if (!Array.isArray(ratings) || ratings.length === 0) return 0;
+  const total = ratings.reduce((sum, item) => sum + (item.rating || 0), 0);
+  const avg = total / ratings.length;
+  return parseFloat(avg.toFixed(1)); // ép về số
 }
 async function getTopUserRead() {
     const res = await getTopStoryReadedMonth(10);
@@ -408,6 +451,7 @@ onMounted(async () => {
     await getData();
     await getAllVote()
     await getTopUserRead()
+    await getRateting()
 });
 watch
 </script>

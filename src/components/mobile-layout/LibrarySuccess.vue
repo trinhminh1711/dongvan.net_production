@@ -118,6 +118,7 @@ async function handleChange(storyId, event) {
 .ribbon {
     position: absolute;
     top: 12px;
+        z-index: 999;
     left: -35px;
     /* dịch ra để canh chéo */
     width: 120px;
@@ -136,6 +137,7 @@ async function handleChange(storyId, event) {
     position: absolute;
     top: 12px;
     left: -35px;
+        z-index: 999;
     /* dịch ra để canh chéo */
     width: 120px;
     text-align: center;

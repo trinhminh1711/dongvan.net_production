@@ -5,7 +5,9 @@
                 <div class="book-card">
                     <div v-if="!stories.is_vip_story" class="ribbon">FULL</div>
                     <div v-if="stories.is_vip_story" class="ribbon-vip">VIP</div>
-                    <img style="width: 150px; height: 100%" :src="stories.link_img" alt=""></img>
+                    <div class="book-cover book-cover-medium">
+                         <img style="width: 150px; height: 100%" :src="stories.link_img" alt=""></img>
+                    </div>
                 </div>
                 <div class="left-content">
                     <p @click="goToStory(stories.story_id)" class="text-color_primary fw-bold text-lg hover-link">{{
@@ -89,6 +91,7 @@ onMounted(async () => {
 .ribbon {
     position: absolute;
     top: 12px;
+        z-index: 999;
     left: -35px;
     /* dịch ra để canh chéo */
     width: 120px;
@@ -106,6 +109,7 @@ onMounted(async () => {
 .ribbon-vip {
     position: absolute;
     top: 12px;
+        z-index: 999;
     left: -35px;
     /* dịch ra để canh chéo */
     width: 120px;

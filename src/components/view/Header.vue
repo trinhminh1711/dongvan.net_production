@@ -298,7 +298,7 @@
 
                                 </el-menu-item>
                                 <el-menu-item index="2">
-                                    <RouterLink @click="drawer = false" to="/"
+                                    <RouterLink @click="goHomeMb" to="/"
                                         class="d-flex align-items-center gap-2 bg-transparent border-0 router-link text-16">
                                         Bảng xếp hạng
                                     </RouterLink>
@@ -401,7 +401,7 @@
                             background-color="#3D3E43" text-color="#fff" active-text-color="#ffd04b">
                             <!-- Dùng index = name của route -->
                             <el-menu-item index="/forum">Diễn đàn</el-menu-item>
-                            <el-menu-item index="/ranking" @click="goHome">Bảng xếp hạng</el-menu-item>
+                             <el-menu-item index="/ranking" @click="goHome">Bảng xếp hạng</el-menu-item>
                             <el-menu-item index="/support">Hỗ trợ</el-menu-item>
                         </el-menu>
                     </div>
@@ -424,7 +424,7 @@
             </div>
         </div>
     </div>
-    <el-dialog v-model="dialogVisible" width="350">
+    <el-dialog v-model="dialogVisible" width="350" append-to-body>
         <LoginPage />
     </el-dialog>
 </template>
@@ -480,10 +480,20 @@ const state = ref('')
 const links = ref<LinkItem[]>([])
 const notiNumber = ref()
 function goHome() {
+    router.push({ name: 'Home' }).then(() => 
+    { setTimeout(() => { document.getElementById('ranking')?.scrollIntoView({ behavior: 'smooth' }) }, 
+    300) })
+}
+function goHomeMb() {
+    drawer.value = false // nếu bạn dùng ref
     router.push({ name: 'Home' }).then(() => {
         setTimeout(() => {
-            document.getElementById('ranking')?.scrollIntoView({ behavior: 'smooth' })
-        }, 300)
+            // scroll xuống 500px từ đầu trang
+            window.scrollTo({
+                top: 1700,
+                behavior: 'smooth' // mượt
+            })
+        }, 500) // delay cho DOM render xong
     })
 }
 const loadAll = () => {
@@ -945,14 +955,16 @@ onMounted(async () => {
         transform: translateX(-50%) !important;
         /* dịch nửa chiều ngang để canh giữa */
     }
-.el-popper__arrow, .el-popper__arrow:before
-{
-    height: 10px;
-    position: absolute;
-    width: 10px;
-    z-index: -1;
-    left: 15px;
-}
+
+    .el-popper__arrow,
+    .el-popper__arrow:before {
+        height: 10px;
+        position: absolute;
+        width: 10px;
+        z-index: -1;
+        left: 15px;
+    }
+
     .menu-vertical .el-drawer__body {
         padding: 0 !important;
     }
