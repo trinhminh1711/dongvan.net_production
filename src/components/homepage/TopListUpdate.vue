@@ -3,7 +3,7 @@
     <div class="row">
         <div v-for="(item, index) in items" class="list-container col-md-6">
             <div  :key="index" class="list-item">
-                <span @click="goToStory(item.story_id)" class="hover-link text-one-line">{{ item.title }}</span>
+                <span @click="goToPost(item.post_id)" class="hover-link text-one-line">{{ item.title }}</span>
                 <span class="text-color__tertiary text-nowrap px-2">{{ item.username }}</span>
             </div>
         </div>
@@ -16,8 +16,11 @@ import top3Icon from '@/assets/icon/icon-top3-author.png'
 import { useRouter } from 'vue-router'
 import { onMounted } from 'vue'
 const router = useRouter()
-function goToStory(post_id) {
-  router.push(`/story-detail/${post_id}`)
+function goToPost(id) {
+    router.push({
+        name: "post-detail",
+        params: { id: id }
+    });
 }
 // 🧩 Định nghĩa props
 const props = defineProps({

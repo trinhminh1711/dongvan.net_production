@@ -1,4 +1,5 @@
 <template>
+    <loading-spiner v-if="loadding" />
     <el-form ref="ruleFormRef" style="max-width: 800px" :model="ruleForm" status-icon :rules="rules" label-width="auto"
         class="demo-ruleForm">
         <el-form-item prop="userName">
@@ -47,31 +48,66 @@
             Đăng ký
         </el-button>
     </el-form>
+    <el-dialog v-model="showVerifyDialog" title="Xác thực địa chỉ email" width="400px">
+        <p class="mb-2">
+            Để xác minh email của bạn, chúng tôi đã gửi mật khẩu dùng một lần (OTP) đến địa chỉ <b>{{ ruleForm.email
+            }}</b>
+        </p>
+        <p>Nhập mã bảo mật</p>
+        <el-input v-model="verifyCode" maxlength="6" style="margin-bottom: 12px"></el-input>
+
+        <div class="flex items-center justify-between text-sm mb-2">
+            <span v-if="countdown > 0">
+                Mã sẽ hết hạn sau: <b>{{ countdown }}s</b>
+            </span>
+        </div>
+
+        <div class="flex justify-end gap-2 mt-2">
+            <el-button type="primary" class="btn-login" @click="handleVerify">Xác nhận</el-button>
+            <el-button class="btn-huy" type="primary" link @click="resendCode">
+                Gửi lại mã
+            </el-button>
+        </div>
+    </el-dialog>
 </template>
 
 <script lang="ts" setup>
 import { useRouter } from "vue-router"
 const router = useRouter()
 import authService from "@/api/authService";
-import { reactive, ref, nextTick } from 'vue'
+import { reactive, ref, onUnmounted } from 'vue'
 import { toast } from "vue3-toastify"
 import { useAuthStore } from "@/stores/auth";
 import iconEyeOff from "@/assets/icon/icon-user.svg";
 import iconEye from "@/assets/icon/icon-eye-off.svg";
 import type { FormInstance, FormRules } from 'element-plus'
+import LoadingSpiner from "../loadding/LoadingSpiner.vue";
 const auth = useAuthStore()
+const loadding = ref(false);
 const success = ref();
 const error = ref("");
 const errorMsg = ref("");
-
+const showVerifyDialog = ref(false);
+const verifyCode = ref("");
 const showPassword = ref(false);
 const showRetypePassword = ref(false);
+const countdown = ref(0);
+let countdownTimer: any = null;
 
+// Khi mở dialog xác nhận
+const startCountdown = (seconds = 60) => {
+    countdown.value = seconds;
+    clearInterval(countdownTimer);
+    countdownTimer = setInterval(() => {
+        countdown.value--;
+        if (countdown.value <= 0) clearInterval(countdownTimer);
+    }, 1000);
+};
 function togglePassword() {
-  showPassword.value = !showPassword.value;
+    showPassword.value = !showPassword.value;
 }
 function toggleRetypePassword() {
-  showRetypePassword.value = !showRetypePassword.value;
+    showRetypePassword.value = !showRetypePassword.value;
 }
 const ruleFormRef = ref<FormInstance>()
 
@@ -134,50 +170,87 @@ const submitForm = (formEl: FormInstance | undefined) => {
     })
 }
 const handleRegister = async () => {
+     const loadingToast = toast.loading("⏳ Đang xử lý, vui lòng đợi...");
     try {
         const res = await authService.register({
             username: ruleForm.userName,
             email: ruleForm.email,
-            password: ruleForm.password
+            password: ruleForm.password,
         });
 
-        success.value = res.data.success; // ví dụ backend trả "Registered successfully"
-        toast.success("Đăng ký thành công 🎉")
-        const loginRes = await authService.login(
-            {
-                email: ruleForm.email,
-                password: ruleForm.password
-            })
-        auth.setAuth(loginRes.data.token, loginRes.data.user.user_id);
-        await auth.fetchProfile();
-        setTimeout(() => {
-            router.push({ name: "Home" }).then(() => {
-                window.location.reload(); // reload sau khi điều hướng
-            });
-        }, 2000); // đợi toast chạy xong
-    } catch (err) {
-        success.value = false;
-        if (err.response) {
-            // Server trả lỗi với status code
-            if (err.response.status === 400) {
-                errorMsg.value = " Dữ liệu không hợp lệ";
-            } else if (err.response.status === 409) {
-                errorMsg.value = " Email đã tồn tại";
-            } else if (err.response.status === 500) {
-                errorMsg.value = " Lỗi server, vui lòng thử lại sau";
-            } else {
-                errorMsg.value = err.response.data.error || "Có lỗi xảy ra";
-            }
-        } else if (err.request) {
-            // Request đã gửi nhưng không có phản hồi
-            errorMsg.value = " Không thể kết nối đến server";
-        } else {
-            // Lỗi khác (setup Axios, v.v.)
-            errorMsg.value = ` Lỗi: ${err.message}`;
+        if (res.data.success) {
+             toast.remove(loadingToast);
+            toast.success("Đăng ký thành công! Vui lòng kiểm tra email để lấy mã xác nhận 🔐");
+            showVerifyDialog.value = true;
+            startCountdown(60); // bắt đầu đếm 60s
         }
-        toast.error(errorMsg.value)
+    } catch (err) {
+        toast.remove(loadingToast);
+        if (err.response) {
+            const status = err.response.status;
+
+            if (status === 400) {
+                toast.error("Dữ liệu không hợp lệ, vui lòng kiểm tra lại.");
+            } else if (status === 409) {
+                toast.error("Email đã tồn tại trong hệ thống. Vui lòng đăng nhập hoặc dùng email khác.");
+            } else if (status === 500) {
+                toast.error("Lỗi server, vui lòng thử lại sau.");
+            } else {
+                toast.error(err.response.data?.error || "Đăng ký thất bại!");
+            }
+
+        } else if (err.request) {
+            // Gửi request nhưng server không phản hồi
+            toast.error("Không thể kết nối đến server.");
+        } else {
+            // Lỗi khác (ví dụ lỗi cú pháp, axios, v.v.)
+            toast.error(`Lỗi: ${err.message}`);
+        }
     }
 };
+
+// Gửi lại mã khi countdown = 0
+const resendCode = async () => {
+    try {
+        const res = await authService.resendCode({
+            email: ruleForm.email
+        });
+        if (res.data.success) {
+            toast.success("Đã gửi lại mã xác nhận mới!");
+            startCountdown(60);
+        }
+    } catch (err) {
+        toast.error("Gửi lại mã thất bại");
+    }
+};
+const handleVerify = async () => {
+    try {
+        const res = await authService.verifyEmail({
+            email: ruleForm.email,
+            code: verifyCode.value
+        });
+
+        if (res.data.success) {
+            toast.success("Xác nhận email thành công 🎉");
+            showVerifyDialog.value = false;
+
+            // ✅ Tự động đăng nhập sau khi xác thực xong
+            const loginRes = await authService.login({
+                email: ruleForm.email,
+                password: ruleForm.password
+            });
+
+            auth.setAuth(loginRes.data.token, loginRes.data.user.user_id);
+            await auth.fetchProfile();
+            window.location.reload()
+        }
+    } catch (err) {
+        toast.error(
+            err.response?.data?.message || "Mã xác nhận không hợp lệ hoặc đã hết hạn"
+        );
+    }
+};
+onUnmounted(() => clearInterval(countdownTimer)); // tránh leak timer
 </script>
 <style>
 .btn-login {
@@ -185,6 +258,13 @@ const handleRegister = async () => {
     width: 100%;
     height: 40px;
     margin-bottom: 10px;
+}
+
+.btn-huy {
+    border: solid 1px #D0D5DD;
+    height: 40px;
+    margin: 0;
+    width: 100%;
 }
 
 .d-block {

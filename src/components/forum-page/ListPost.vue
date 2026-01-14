@@ -224,35 +224,47 @@ async function getAllPostByTopic(page) {
     totalPage.value = res.totalPage;
 
 
-    tableData.value = listPostTopic.value.map(post => {
-        let latestComment = null;
+tableData.value = listPostTopic.value.map(post => {
+  let latestComment = null;
 
-        try {
-            latestComment = post.latest_comment ? JSON.parse(post.latest_comment) : null;
-        } catch (e) {
-            console.warn("Latest comment JSON parse error:", e);
-            latestComment = null;
-        }
+  try {
+    const comment = post.latest_comment;
 
-        return {
-            topicTitle: post.topic_title,
-            postId: post.post_id,
-            avatarImg: post.link_thumbnail ?? null, // avatar post, nếu có
-            name: post.title,
-            user_id: post.user_id,
-            author: post.username,
-            time: post.created_at ? timeAgo(post.created_at) : null,
-            like: post.total_likes ?? 0,
-            comment: post.total_comments ?? 0,
-            closestInteraction: {
-                avatarImg: latestComment?.link_thumbnail ?? null,
-                name: latestComment?.username ?? "Chưa có tương tác",
-                date: latestComment?.created_at ? timeAgo(latestComment.created_at) : null,
-                user_id: latestComment?.user_id ?? null,
-                content: latestComment?.content ?? null
-            }
-        };
-    });
+    if (typeof comment === "string") {
+      // Nếu là chuỗi JSON → parse
+      latestComment = JSON.parse(comment);
+    } else if (typeof comment === "object" && comment !== null) {
+      // Nếu đã là object → dùng luôn
+      latestComment = comment;
+    } else {
+      latestComment = null;
+    }
+
+  } catch (e) {
+    console.warn("Latest comment JSON parse error:", e, post.latest_comment);
+    latestComment = null;
+  }
+
+  return {
+    topicTitle: post.topic_title,
+    postId: post.post_id,
+    avatarImg: post.link_thumbnail ?? null,
+    name: post.title,
+    user_id: post.user_id,
+    author: post.username,
+    time: post.created_at ? timeAgo(post.created_at) : null,
+    like: post.total_likes ?? 0,
+    comment: post.total_comments ?? 0,
+    closestInteraction: {
+      avatarImg: latestComment?.link_thumbnail ?? null,
+      name: latestComment?.username ?? "Chưa có tương tác",
+      date: latestComment?.created_at ? timeAgo(latestComment.created_at) : null,
+      user_id: latestComment?.user_id ?? null,
+      content: latestComment?.content ?? null
+    }
+  };
+});
+
 }
 async function likeShare(postId) {
     if (auth.userId) {

@@ -10,7 +10,7 @@
                     <img story
                         :src="storyData?.urlImg ? storyData.urlImg : 'https://res.cloudinary.com/djr4f7ceu/image/upload/v1767774141/Frame_2144769426_cm29g7.png'"
                         alt="Ảnh truyện" fit="cover"
-                        style="width: 70%; border-radius: 12px; height: 400px; border: solid 2px #e4e7ec;" />
+                        style="width: 100%; border-radius: 12px; height: 500px; border: solid 2px #e4e7ec;" />
                 </div>
             </div>
 
